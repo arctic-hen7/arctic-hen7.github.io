@@ -6,9 +6,5 @@
     "repository": "git@github.com:arctic-hen7/arctic-hen7.github.io.git",
     "author": "arctic_hen7 <arctic_hen7@pm.me>",
     "license": "MIT",
-    "private": true,
-    "dependencies": {
-        "@11ty/eleventy": "^0.12.1",
-        "global": "^4.4.0"
-    }
+    "private": true
 }
