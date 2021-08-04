@@ -1,0 +1,10 @@
+{% include "header.njk" %}
+
+<main>
+{% block content %}
+    {{ content | safe }}
+
+{% endblock %}
+</main>
+
+{% include "footer.njk" %}
