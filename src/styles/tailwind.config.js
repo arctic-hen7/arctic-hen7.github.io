@@ -9,7 +9,12 @@ module.exports = {
             "src/**/*.md",
         ],
     },
-    theme: {},
+    darkMode: process.env.NODE_ENV == "production" ? "media" : "class",
+    theme: {
+        fontFamily: {
+            sans: ["Comfortaa", "sans-serif"],
+        },
+    },
     variants: {},
     plugins: [],
 };

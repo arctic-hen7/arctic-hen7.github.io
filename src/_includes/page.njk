@@ -1,10 +1,12 @@
 {% include "header.njk" %}
 
 <main>
-{% block content %}
-    {{ content | safe }}
+    <div class="text-center">
+        {% block content %}
+            {{ content | safe }}
+        {% endblock %}
+    </div>
 
-{% endblock %}
 </main>
 
 {% include "footer.njk" %}
