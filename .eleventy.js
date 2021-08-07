@@ -1,4 +1,9 @@
 module.exports = (cfg) => {
+    // This removes all metadata tags
+    const filterTagsList = (tags) =>
+        (tags || []).filter((tag) => !tag.startsWith("_") && tag !== "all");
+    cfg.addFilter("filterTagsList", filterTagsList);
+
     // We build Tailwind externally, so Eleventy just needs to look on
     cfg.addWatchTarget("./_tmp/style.css");
     cfg.addPassthroughCopy({ "./src/styles/style.css": "./style.css" });
@@ -23,8 +28,7 @@ module.exports = (cfg) => {
                 tags.add(tag);
             })
         );
-        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
-        return filtered;
+        return filterTagsList([...tags]);
     });
     cfg.addCollection("_tags_categoryDev", (coll) => {
         let tags = new Set();
@@ -34,8 +38,7 @@ module.exports = (cfg) => {
                 tags.add(tag);
             })
         );
-        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
-        return filtered;
+        return filterTagsList([...tags]);
     });
     cfg.addCollection("_tags_categoryProd", (coll) => {
         let tags = new Set();
@@ -45,8 +48,7 @@ module.exports = (cfg) => {
                 tags.add(tag);
             })
         );
-        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
-        return filtered;
+        return filterTagsList([...tags]);
     });
     cfg.addCollection("_tags_categorySophos", (coll) => {
         let tags = new Set();
@@ -56,8 +58,7 @@ module.exports = (cfg) => {
                 tags.add(tag);
             })
         );
-        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
-        return filtered;
+        return filterTagsList([...tags]);
     });
 
     return {

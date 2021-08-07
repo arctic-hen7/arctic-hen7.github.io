@@ -1,10 +1,10 @@
-{% macro tagsList(coll) %}
+{% macro tagsList(coll, gridColsClasses="xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5") %}
 <div class="flex justify-center w-full">
-    <ul class="grid grid-cols-1 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 md:max-w-5xl justify-center justify-items-center">
+    <ul class="grid grid-cols-1 {{ gridColsClasses }} md:max-w-5xl justify-center justify-items-center">
         {% for tag in coll %}
         <li class="px-5">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 max-w-sm {{ item.gradientClasses }}" onclick="window.location.href = '/blog/tags/{{ tag }}'">
-                <p class="dark:text-white font-bubble">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 max-w-sm" onclick="window.location.href = '/blog/tags/{{ tag }}'">
+                <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
                     <span>{{ tag }}</span>
                 </p>

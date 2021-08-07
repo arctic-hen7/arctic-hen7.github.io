@@ -1,9 +1,49 @@
-{% include "header.njk" %}
+{% extends "page.njk" %}
 
-<main>
 {% block content %}
-    {{ content | safe }}
-{% endblock %}
-</main>
+<div class="w-full flex justify-center">
+    <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
+        <p class="text-7xl">{{ title }}</p>
+        <p class="mt-2">
+            <span>In</span>
+            {% if page.url.indexOf("/blog/dev") === 0 %}
+            <span class="cursor-pointer font-bubble text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500" onclick="window.location.href = '/blog/dev'">
+                Dev
+            </span>
+            {% elif page.url.indexOf("/blog/prod") === 0 %}
+            <span class="cursor-pointer font-bubble text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-yellow-500 hover:to-pink-500" onclick="window.location.href = '/blog/prod'">
+                Prod
+            </span>
+            {% elif page.url.indexOf("/blog/sophos") === 0 %}
+            <span class="cursor-pointer font-bubble text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-purple-500 hover:from-purple-500 hover:to-red-500" onclick="window.location.href = '/blog/sophos'">
+                Σοφος
+            </span>
+            {% endif %}
+        </p>
+        <p class="text-gray-500 dark:text-gray-400">
+            {{
+                page
+                    .date
+                    .toLocaleDateString()
+            }}
+        </p>
+        <ul class="flex flex-row overflow-x-auto">
+            {% for tag in tags | filterTagsList %}
+            <li class="px-5">
+                <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/{{ tag }}'">
+                    <p class="dark:text-white font-bubble truncate">
+                        <span class="align-bottom material-icons-round">tag</span>
+                        <span>{{ tag }}</span>
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <br>
+        <article>
+            {{ content | safe }}
+        </article>
+    </div>
+</div>
 
-{% include "footer.njk" %}
+{% endblock %}
