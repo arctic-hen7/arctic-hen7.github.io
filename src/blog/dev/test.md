@@ -4,8 +4,9 @@ description: A test post in the Dev section.
 layout: post.njk
 tags:
     - _blog
-    - _category:dev
+    - _categoryDev
     - _pinned
+    - generic
 ---
 
 This is a test post in the Dev section of the blog!

@@ -6,5 +6,8 @@
     "repository": "git@github.com:arctic-hen7/arctic-hen7.github.io.git",
     "author": "arctic_hen7 <arctic_hen7@pm.me>",
     "license": "MIT",
-    "private": true
+    "private": true,
+    "dependencies": {
+        "tailwindcss": "^2.2.7"
+    }
 }

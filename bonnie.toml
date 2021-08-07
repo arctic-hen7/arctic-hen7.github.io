@@ -1,8 +1,13 @@
 version="0.3.1"
 
 [scripts]
+## Cleans up the output folder
+clean = "rm -rf dist/*"
 ## Runs Eleventy for development (assuming Tailwind is ready after `setup`)
-dev = "eleventy --serve"
+dev = [
+    "bonnie clean",
+    "eleventy --serve"
+]
 ## Builds everything for production (the result of this will be served live)
 build = [
     "bonnie build-tailwind-prod",

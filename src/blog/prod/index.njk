@@ -3,15 +3,24 @@ title: Prod Category – Blog
 description: Introduction page for the Prod category of the blog.
 layout: page.njk
 ---
+{%- from "components/postsList.njk" import postsList -%}
+{%- from "components/pageHeader.njk" import pageHeader -%}
 
-<div class="text-center m-8">
-    <span class="text-8xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-yellow-500 hover:to-pink-500">
-        Prod Category
-    </span>
-</div>
+{{ pageHeader(
+    text="Prod Category",
+    gradientClasses="bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-yellow-500 hover:to-pink-500"
+) }}
 <br>
 <div class="flex justify-center">
-    <p class="text-lg max-w-prose">
+    <p class="text-lg max-w-prose dark:text-white">
         Welcome to the Prod section of my blog! Here, you'll find stuff to do with productivity and general life stuff. This is written from the perspective of a programmer and a student, and helps to detail my infinite journey to becoming a better version of myself!
     </p>
 </div>
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Pinned Posts</p>
+{{ postsList(coll=collections._pinned_categoryProd) }}
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Latest Posts</p>
+{{ postsList(coll=collections._categoryProd) }}
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Tags</p>

@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
     purge: {
         mode: "all",
@@ -13,6 +15,10 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ["Comfortaa", "sans-serif"],
+        },
+        screens: {
+            xs: "475px",
+            ...defaultTheme.screens,
         },
     },
     variants: {},

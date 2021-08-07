@@ -1,0 +1,39 @@
+---
+pagination:
+    data: collections
+    size: 1
+    alias: tag
+    filter:
+        # We exclude all the meta tags, one by one (glob support!!!)
+        - all
+        - _blog
+        - _pinned
+        - _categoryDev
+        - _categoryProd
+        - _categorySophos
+        - _pinned_categoryDev
+        - _pinned_categoryProd
+        - _pinned_categorySophos
+permalink: /blog/tags/{{ tag }}/
+eleventyComputed:
+    title: 'Tag: "{{ tag }}"'
+layout: page.njk
+---
+{%- from "components/postsList.njk" import postsList -%}
+{%- from "components/pageHeader.njk" import pageHeader -%}
+
+{# TODO bg image of MUI tag icon here? #}
+{{ pageHeader(
+    text="Tag: " + tag,
+    gradientClasses="bg-gradient-to-r from-yellow-500 via-pink-500 to-indigo-500 hover:from-indigo-500 hover:via-pink-500 hover:to-yellow-500"
+) }}
+<br>
+<div class="flex justify-center w-full">
+    <div class="flex-col text-center max-w-prose">
+        <p class="px-5 text-lg text-center dark:text-white">
+            Here's a list of all the posts in all categories tagged as '{{ tag }}'.
+        </p>
+    </div>
+</div>
+<br>
+{{ postsList(coll=collections[tag]) }}

@@ -1,0 +1,23 @@
+{# TODO add limit parameter #}
+{% macro postsList(coll=collections._blog) %}
+{# We provide the maximum number of columns possible on the screen, not exceeding the number of posts themselves #}
+<div class="w-full flex justify-center">
+    <ol class="grid grid-cols-1 max-w-xs {{ 'sm:grid-cols-2 sm:max-w-2xl' if coll.length >= 2 }} {{ 'md:grid-cols-3 md:max-w-4xl' if coll.length >= 3 }} {{ 'lg:grid-cols-4 md:max-w-7xl' if coll.length >= 4 }} {{ '2xl:grid-cols-5 2xl:max-w-full' if coll.length >= 5 }} justify-items-center">
+        {% for post in coll %}
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-8 max-w-xs" onclick="window.location.href = '{{ post.url }}'">
+                <p class="text-4xl font-bubble dark:text-white">{{ post.data.title }}</p>
+                <p class="text-gray-800 dark:text-gray-100">{{ post.data.description }}</p>
+                <p class="text-gray-500 dark:text-gray-400">
+                    {{
+                        post
+                            .date
+                            .toLocaleDateString()
+                    }}
+                </p>
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+{% endmacro %}

@@ -3,18 +3,27 @@ title: Dev Category – Blog
 description: Introduction page for the Dev category of the blog.
 layout: page.njk
 ---
+{%- from "components/postsList.njk" import postsList -%}
+{%- from "components/pageHeader.njk" import pageHeader -%}
 
-<div class="text-center m-8">
-    <span class="text-8xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500">
-        Dev Category
-    </span>
-</div>
+{{ pageHeader(
+    text="Dev Category",
+    gradientClasses="bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500"
+) }}
 <br>
 <div class="flex justify-center">
-    <p class="text-lg max-w-prose">
+    <p class="text-lg max-w-prose dark:text-white">
         Welcome to the Dev section of my blog! Here, you'll find
         all things programming and development, from frontend to
         backend and all the horrible stuff in between that we all
         pretend doesn't exist!
     </p>
 </div>
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Pinned Posts</p>
+{{ postsList(coll=collections._pinned_categoryDev) }}
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Latest Posts</p>
+{{ postsList(coll=collections._categoryDev) }}
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Tags</p>
