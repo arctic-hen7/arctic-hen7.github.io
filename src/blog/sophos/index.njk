@@ -4,6 +4,7 @@ description: Introduction page for the Sophos category of the blog.
 layout: page.njk
 ---
 {%- from "components/postsList.njk" import postsList -%}
+{%- from "components/tagsList.njk" import tagsList -%}
 {%- from "components/pageHeader.njk" import pageHeader -%}
 
 {{ pageHeader(
@@ -24,3 +25,4 @@ layout: page.njk
 {{ postsList(coll=collections._categorySophos) }}
 <br><br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Tags</p>
+{{ tagsList(coll=collections._tags_categorySophos) }}

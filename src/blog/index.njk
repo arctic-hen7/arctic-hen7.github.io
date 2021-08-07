@@ -4,6 +4,7 @@ description: The landing page for the blog.
 layout: page.njk
 ---
 {%- from "components/postsList.njk" import postsList -%}
+{%- from "components/tagsList.njk" import tagsList -%}
 {%- from "components/pageHeader.njk" import pageHeader -%}
 
 {{ pageHeader(
@@ -61,3 +62,6 @@ layout: page.njk
         {% endfor %}
     </ul>
 </div>
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Tags</p>
+{{ tagsList(coll=collections._tags) }}

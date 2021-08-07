@@ -6,6 +6,7 @@ tags:
     - _blog
     - _categoryProd
     - generic
+    - prodonly
 ---
 
 This is a test post in the Prod section of the blog!

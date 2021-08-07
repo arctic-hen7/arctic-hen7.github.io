@@ -1,5 +1,5 @@
 {# TODO add limit parameter #}
-{% macro postsList(coll=collections._blog) %}
+{% macro postsList(coll) %}
 {# We provide the maximum number of columns possible on the screen, not exceeding the number of posts themselves #}
 <div class="w-full flex justify-center">
     <ol class="grid grid-cols-1 max-w-xs {{ 'sm:grid-cols-2 sm:max-w-2xl' if coll.length >= 2 }} {{ 'md:grid-cols-3 md:max-w-4xl' if coll.length >= 3 }} {{ 'lg:grid-cols-4 md:max-w-7xl' if coll.length >= 4 }} {{ '2xl:grid-cols-5 2xl:max-w-full' if coll.length >= 5 }} justify-items-center">

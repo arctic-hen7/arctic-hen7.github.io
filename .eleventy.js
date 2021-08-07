@@ -15,6 +15,51 @@ module.exports = (cfg) => {
         coll.getFilteredByTags("_pinned", "_categorySophos")
     );
 
+    cfg.addCollection("_tags", (coll) => {
+        let tags = new Set();
+        coll.getAll().map((item) =>
+            // Filter out meta tags (they all start with '_')
+            (item.data.tags || []).forEach((tag) => {
+                tags.add(tag);
+            })
+        );
+        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
+        return filtered;
+    });
+    cfg.addCollection("_tags_categoryDev", (coll) => {
+        let tags = new Set();
+        coll.getFilteredByTag("_categoryDev").map((item) =>
+            // Filter out meta tags (they all start with '_')
+            (item.data.tags || []).forEach((tag) => {
+                tags.add(tag);
+            })
+        );
+        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
+        return filtered;
+    });
+    cfg.addCollection("_tags_categoryProd", (coll) => {
+        let tags = new Set();
+        coll.getFilteredByTag("_categoryProd").map((item) =>
+            // Filter out meta tags (they all start with '_')
+            (item.data.tags || []).forEach((tag) => {
+                tags.add(tag);
+            })
+        );
+        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
+        return filtered;
+    });
+    cfg.addCollection("_tags_categorySophos", (coll) => {
+        let tags = new Set();
+        coll.getFilteredByTag("_categorySophos").map((item) =>
+            // Filter out meta tags (they all start with '_')
+            (item.data.tags || []).forEach((tag) => {
+                tags.add(tag);
+            })
+        );
+        let filtered = [...tags].filter((tag) => !tag.startsWith("_"));
+        return filtered;
+    });
+
     return {
         passthroughFileCopy: true,
         dir: {
