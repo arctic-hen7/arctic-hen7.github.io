@@ -10,7 +10,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Build site
-              run: NODE_ENV=production tailwindcss -c ./src/styles/tailwind.config.js -o ./_tmp/tailwind.css --minify && ELEVENTY_PRODUCTION=true eleventy
+              run: NODE_ENV=production npx tailwindcss -c ./src/styles/tailwind.config.js -o ./_tmp/tailwind.css --minify && ELEVENTY_PRODUCTION=true npx eleventy
             - name: Deploy site to GitHub Pages
               uses: peaceiris/actions-gh-pages@v3
               if: github.ref == 'refs/heads/main'
