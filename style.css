@@ -1,0 +1,21 @@
+.font-bubble {
+    font-family: "Comfortaa", sans-serif;
+}
+
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+header {
+    grid-row: 1;
+    position: fixed;
+    top: 0;
+}
+footer {
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
