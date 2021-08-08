@@ -1,9 +1,11 @@
 {% extends "page.njk" %}
 
+{%- from "components/tagsList.njk" import tagsList -%}
+
 {% block content %}
 <div class="w-full flex justify-center">
     <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
-        <p class="text-7xl">{{ title }}</p>
+        <p class="text-6xl xs:text-7xl sm:text-8xl">{{ title }}</p>
         <p class="mt-2">
             <span>In</span>
             {% if page.url.indexOf("/blog/dev") === 0 %}
@@ -27,22 +29,13 @@
                     .toLocaleDateString()
             }}
         </p>
-        <ul class="flex flex-row overflow-x-auto">
-            {% for tag in tags | filterTagsList %}
-            <li class="px-5">
-                <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/{{ tag }}'">
-                    <p class="dark:text-white font-bubble truncate">
-                        <span class="align-bottom material-icons-round">tag</span>
-                        <span>{{ tag }}</span>
-                    </p>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
         <br>
         <article>
             {{ content | safe }}
         </article>
+        <br><br>
+        <p class="text-center text-xl mb-5">Tags</p>
+        {{ tagsList(coll=tags | filterTagsList) }}
     </div>
 </div>
 

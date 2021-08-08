@@ -14,3 +14,23 @@
 
 </head>
 <body class="bg-white dark:bg-gray-800">
+    <header class="flex justify-between shadow-xl sm:p-2 w-full bg-white dark:bg-gray-800 mb-20">
+        <a href="/" class="justify-self-start m-3 ml-5 text-md sm:text-2xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 hover:from-indigo-600 hover:to-blue-400">
+            The Arctic Site
+        </a>
+        {# TODO use a menu on anything below `sm` breakpoint #}
+        <nav class="hidden xs:flex">
+            <ul class="flex mr-5">
+                <li class="m-3">
+                    <a href="/blog" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-400 hover:from-pink-400 hover:to-blue-400">Blog</a>
+                </li>
+                <li class="m-3 sm:text-lg dark:text-white">
+                    <a href="/projects">Projects</a>
+                </li>
+                <li class="m-3 sm:text-lg dark:text-white">
+                    <a href="/about">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="mt-10 sm:mt-16">

@@ -22,10 +22,13 @@ layout: page.njk
 </div>
 <br><br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Pinned Posts</p>
-{{ postsList(coll=collections._pinned_categoryDev) }}
+{{ postsList(coll=collections._pinned_categoryDev | reverse) }}
 <br><br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Latest Posts</p>
-{{ postsList(coll=collections._categoryDev) }}
+{{ postsList(coll=collections._latest_categoryDev | reverse) }}
 <br><br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Tags</p>
 {{ tagsList(coll=collections._tags_categoryDev) }}
+<br><br>
+<p class="px-5 mb-8 text-5xl font-bubble dark:text-white">All Posts</p>
+{{ postsList(coll=collections._categoryDev | reverse) }}

@@ -24,10 +24,10 @@ layout: page.njk
 </div>
 <br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Pinned Posts</p>
-{{ postsList(coll=collections._pinned) }}
+{{ postsList(coll=collections._pinned | reverse) }}
 <br><br>
 <p class="px-5 mb-8 text-5xl font-bubble dark:text-white">Latest Posts</p>
-{{ postsList(coll=collections._blog) }}
+{{ postsList(coll=collections._latest | reverse) }}
 <br><br>
 <p class="text-5xl font-bubble dark:text-white">Categories</p>
 <div class="flex justify-center w-full">

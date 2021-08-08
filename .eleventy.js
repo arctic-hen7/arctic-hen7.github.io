@@ -1,3 +1,6 @@
+// The number of posts to display as most recent
+const NUM_LATEST_POSTS = 3;
+
 module.exports = (cfg) => {
     // This removes all metadata tags
     const filterTagsList = (tags) =>
@@ -19,6 +22,22 @@ module.exports = (cfg) => {
     cfg.addCollection("_pinned_categorySophos", (coll) =>
         coll.getFilteredByTags("_pinned", "_categorySophos")
     );
+    cfg.addCollection("_latest", (coll) => {
+        let arr = coll.getFilteredByTag("_blog");
+        return arr.slice(arr.length - NUM_LATEST_POSTS, arr.length);
+    });
+    cfg.addCollection("_latest_categoryDev", (coll) => {
+        let arr = coll.getFilteredByTag("_categoryDev");
+        return arr.slice(arr.length - NUM_LATEST_POSTS, arr.length);
+    });
+    cfg.addCollection("_latest_categoryProd", (coll) => {
+        let arr = coll.getFilteredByTag("_categoryProd");
+        return arr.slice(arr.length - NUM_LATEST_POSTS, arr.length);
+    });
+    cfg.addCollection("_latest_categorySophos", (coll) => {
+        let arr = coll.getFilteredByTag("_categorySophos");
+        return arr.slice(arr.length - NUM_LATEST_POSTS, arr.length);
+    });
 
     cfg.addCollection("_tags", (coll) => {
         let tags = new Set();
