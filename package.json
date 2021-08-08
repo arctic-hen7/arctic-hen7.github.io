@@ -9,5 +9,8 @@
     "private": true,
     "dependencies": {
         "tailwindcss": "^2.2.7"
+    },
+    "devDependencies": {
+        "@11ty/eleventy": "^0.12.1"
     }
 }
