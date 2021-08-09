@@ -1,0 +1,23 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>The Arctic Blog: Σοφος</title>
+    <subtitle>All about knowledge and interesting stuff, from philosophy to history to music, and everything in-between.</subtitle>
+    <link href="https://arctic-hen7.github.io/blog/sophos/feed.xml" rel="self"/>
+    <link href="https://arctic-hen7.github.io/blog/sophos"/>
+    <updated>2021-08-09T21:23:43Z</updated>
+    <id>https://arctic-hen7.github.io/blog/sophos</id>
+    <author>
+        <name>arctic_hen7</name>
+        <email>arctic_hen7@pm.me</email>
+    </author>
+    
+    <entry>
+        <title>Test (Σοφος)</title>
+        <link href="https://arctic-hen7.github.io/blog/sophos/test/"/>
+        <updated>2021-08-09T21:23:16Z</updated>
+        <id>https://arctic-hen7.github.io/blog/sophos/test/</id>
+        <content type="html">&lt;p&gt;This is a test post in the Σοφος section of the blog!&lt;/p&gt;
+</content>
+    </entry>
+</feed>

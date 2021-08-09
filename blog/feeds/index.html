@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tag: &quot;mongodb&quot; | The Arctic Site</title>
-    <meta name="description" content="">
+    <title>Feeds | The Arctic Site</title>
+    <meta name="description" content="The Atom feeds for the blog.">
     <link rel="stylesheet" href="/tailwind.css"/>
     <link rel="stylesheet" href="/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
@@ -75,40 +75,64 @@
     <div class="text-center">
         
             
-
 <div class="text-center m-8">
     
-    <span class="text-5xl xs:text-7xl sm:text-8xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-pink-500 to-indigo-500 hover:from-indigo-500 hover:via-pink-500 hover:to-yellow-500" style="-webkit-box-decoration-break: clone;">
-        Tag: mongodb
+    <span class="text-5xl xs:text-7xl sm:text-8xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-teal-500 hover:from-pink-400 hover:to-blue-400" style="-webkit-box-decoration-break: clone;">
+        Feeds
     </span>
 </div>
 
 <br>
+
 <div class="flex justify-center w-full">
-    <div class="flex-col text-center max-w-prose">
-        <p class="px-5 text-lg text-center dark:text-white">
-            Here's a list of all the posts in all categories tagged as 'mongodb'.
+    <div class="flex-col px-5 text-center max-w-prose dark:text-white text-lg">
+        <p>
+            If you use RSS/Atom feeds, you can subscribe to a feed for
+            each category of my blog, or to one if you want to get notified
+            about everything in all categories!
+        </p>
+        <p>
+            If you're new to feeds, they let you get notified whenever
+            I post something new, and you can read posts easily from the
+            comfort of a feed reader, like <a href="https://feedly.com" class="text-fuchsia-400">Feedly</a>!
         </p>
     </div>
 </div>
 <br>
-
-<div class="flex justify-center">
-    <ol class="text-center">
+<div class="flex justify-center w-full">
+    <ul class="flex flex-col md:flex-row justify-center justify-items-center">
         
-        <li class="px-5 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-8 max-w-xs" onclick="window.location.href = '/blog/dev/test/'">
-                <p class="text-4xl font-bubble dark:text-white">Test (Dev)</p>
-                <p class="text-gray-800 dark:text-gray-100">A test post in the Dev section.</p>
-                <p class="text-gray-500 dark:text-gray-400">
-                    8/9/2021
-                </p>
+        
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 mt-8 p-8 max-w-sm bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500" onclick="window.location.href = '/blog/dev/feed.xml'">
+                <p class="text-4xl text-white font-bubble">Dev</p>
+                <p class="font-semibold text-white">All things development. Programming, computer science, web design, etc.</p>
             </div>
         </li>
         
-    </ol>
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 mt-8 p-8 max-w-sm bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-yellow-500 hover:to-pink-500" onclick="window.location.href = '/blog/prod/feed.xml'">
+                <p class="text-4xl text-white font-bubble">Prod</p>
+                <p class="font-semibold text-white">Productivity and my journey to becoming a better version of myself.</p>
+            </div>
+        </li>
+        
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 mt-8 p-8 max-w-sm bg-gradient-to-r from-red-500 to-purple-500 hover:from-purple-500 hover:to-red-500" onclick="window.location.href = '/blog/sophos/feed.xml'">
+                <p class="text-4xl text-white font-bubble">Σοφος</p>
+                <p class="font-semibold text-white">Anything and everything I find intellectually stimulating, from philosophy to physics.</p>
+            </div>
+        </li>
+        
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 mt-8 p-8 max-w-sm bg-gradient-to-r from-blue-400 to-indigo-600 hover:from-indigo-600 hover:to-blue-400" onclick="window.location.href = '/blog/feed.xml'">
+                <p class="text-4xl text-white font-bubble">Everything</p>
+                <p class="font-semibold text-white">Everything on my blog, development, productivity, and knowledge!</p>
+            </div>
+        </li>
+        
+    </ul>
 </div>
-
 
         
     </div>
