@@ -1,6 +1,7 @@
 {% macro pageHeader(text, gradientClasses="") %}
 <div class="text-center m-8">
-    <span class="text-5xl xs:text-7xl sm:text-8xl font-bubble text-transparent bg-clip-textX {{ gradientClasses }}">
+    {# https://stackoverflow.com/a/47819393 details fixing the missing text in Safari #}
+    <span class="text-5xl xs:text-7xl sm:text-8xl font-bubble text-transparent bg-clip-text {{ gradientClasses }}" style="-webkit-box-decoration-break: clone;">
         {{ text }}
     </span>
 </div>
