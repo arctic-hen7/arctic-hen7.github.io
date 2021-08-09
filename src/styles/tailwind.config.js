@@ -36,6 +36,8 @@ module.exports = {
             pink: colors.pink,
             cyan: colors.cyan,
             fuchsia: colors.fuchsia,
+            sky: colors.sky,
+            teal: colors.teal,
         },
     },
     variants: {},

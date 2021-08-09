@@ -1,0 +1,68 @@
+---
+title: Feeds
+description: The Atom feeds for the blog.
+layout: page.njk
+---
+{%- from "components/postsList.njk" import postsList -%}
+{%- from "components/tagsList.njk" import tagsList -%}
+{%- from "components/pageHeader.njk" import pageHeader -%}
+
+{{ pageHeader(
+    text="Feeds",
+    gradientClasses="bg-gradient-to-r from-sky-500 to-teal-500 hover:from-pink-400 hover:to-blue-400"
+) }}
+<br>
+
+<div class="flex justify-center w-full">
+    <div class="flex-col px-5 text-center max-w-prose dark:text-white text-lg">
+        <p>
+            If you use RSS/Atom feeds, you can subscribe to a feed for
+            each category of my blog, or to one if you want to get notified
+            about everything in all categories!
+        </p>
+        <p>
+            If you're new to feeds, they let you get notified whenever
+            I post something new, and you can read posts easily from the
+            comfort of a feed reader, like <a href="https://feedly.com" class="text-fuchsia-400">Feedly</a>!
+        </p>
+    </div>
+</div>
+<br>
+<div class="flex justify-center w-full">
+    <ul class="flex flex-col md:flex-row justify-center justify-items-center">
+        {% set items = [
+            {
+                name: "Dev",
+                description: "All things development. Programming, computer science, web design, etc.",
+                slug: "dev/feed.xml",
+                gradientClasses: "bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500"
+            },
+            {
+                name: "Prod",
+                description: "Productivity and my journey to becoming a better version of myself.",
+                slug: "prod/feed.xml",
+                gradientClasses: "bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-yellow-500 hover:to-pink-500"
+            },
+            {
+                name: "Σοφος",
+                description: "Anything and everything I find intellectually stimulating, from philosophy to physics.",
+                slug: "sophos/feed.xml",
+                gradientClasses: "bg-gradient-to-r from-red-500 to-purple-500 hover:from-purple-500 hover:to-red-500"
+            },
+            {
+                name: "Everything",
+                description: "Everything on my blog, development, productivity, and knowledge!",
+                slug: "feed.xml",
+                gradientClasses: "bg-gradient-to-r from-blue-400 to-indigo-600 hover:from-indigo-600 hover:to-blue-400"
+            }
+        ] %}
+        {% for item in items %}
+        <li class="px-5">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 mt-8 p-8 max-w-sm {{ item.gradientClasses }}" onclick="window.location.href = '/blog/{{ item.slug }}'">
+                <p class="text-4xl text-white font-bubble">{{ item.name }}</p>
+                <p class="font-semibold text-white">{{ item.description }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
