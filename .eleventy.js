@@ -80,6 +80,9 @@ module.exports = (cfg) => {
         return filterTagsList([...tags]);
     });
 
+    // Add plugins
+    cfg.addPlugin(require("@11ty/eleventy-plugin-rss"));
+
     return {
         passthroughFileCopy: true,
         dir: {
