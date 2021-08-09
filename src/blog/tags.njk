@@ -44,4 +44,4 @@ layout: page.njk
     </div>
 </div>
 <br>
-{{ postsList(coll=collections[tag]) }}
+{{ postsList(coll=collections[tag] | reverse) }}
