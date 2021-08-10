@@ -5,7 +5,7 @@
 {% block content %}
 <div class="w-full flex justify-center">
     <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
-        <p class="text-6xl xs:text-7xl sm:text-8xl">{{ title }}</p>
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">{{ title }}</p>
         <p class="mt-2">
             <span>In</span>
             {% if page.url.indexOf("/blog/dev") === 0 %}
@@ -30,7 +30,8 @@
             }}
         </p>
         <br>
-        <article>
+        {# TODO fix Tailwind removal of styles #}
+        <article class="prose dark:prose-dark">
             {{ content | safe }}
         </article>
         <br><br>

@@ -18,6 +18,7 @@ module.exports = {
             sans: ["Comfortaa", "sans-serif"],
         },
         screens: {
+            "2xs": "370px",
             xs: "475px",
             ...defaultTheme.screens,
         },

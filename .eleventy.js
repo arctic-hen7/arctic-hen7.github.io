@@ -82,9 +82,11 @@ module.exports = (cfg) => {
 
     // Add plugins
     cfg.addPlugin(require("@11ty/eleventy-plugin-rss"));
+    cfg.addPlugin(require("@11ty/eleventy-plugin-syntaxhighlight"));
 
     return {
         passthroughFileCopy: true,
+        markdownTemplateEngine: "njk",
         dir: {
             input: "src",
             output: "dist",
