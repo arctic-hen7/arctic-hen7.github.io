@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Dev! | The Arctic Site</title>
-    <meta name="description" content="A brief introduction to the category.">
+    <title>Gradient Text on Safari | The Arctic Site</title>
+    <meta name="description" content="How to fix missing gradient text on Safari.">
     <link rel="stylesheet" href="/tailwind.css"/>
     <link rel="stylesheet" href="/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
@@ -77,7 +77,7 @@
         
 <div class="w-full flex justify-center">
     <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
-        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Welcome to Dev!</p>
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Gradient Text on Safari</p>
         <p class="mt-2">
             <span>In</span>
             
@@ -92,8 +92,12 @@
         <br>
         
         <article class="prose dark:prose-dark">
-            <p>Welcome to the Dev category of my blog!</p>
-<p>This category will be used to document my journeys in programming, across all the languages I use! As of August 2021, I'm mostly working with Rust (if you haven't, try it!), but I've worked extensively with JavaScript in the past, and I'll probably document some JS stuff here too!</p>
+            <h2>Problem</h2>
+<p>You've got some text with a beautiful gradient, it looks fantastic! Then you open your gorgeous new website in Safari, and half your text is missing. This is particularly from using <code>background-clip</code> to create your gradients (as you would with <a href="https://tailwindcss.com">Tailwind</a>), and if the text goes multi-line, Safari will cut the second line off erratically. <a href="https://bugs.webkit.org/show_bug.cgi?id=169125">Here's</a> the bug report filed for WebKit a few years ago, which still hasn't been addressed.</p>
+<h2>Solution</h2>
+<pre class="language-css"><code class="language-css"><span class="token property">-webkit-box-decoration-break</span><span class="token punctuation">:</span> clone<span class="token punctuation">;</span></code></pre>
+<p>Yep, that's all. That will fix the problem completely on Safari! If you want an example, this is in use on this very website in the <code>pageHeader.njk</code> component, which you can see <a href="https://github.com/arctic-hen7/arctic-hen7.github.io/blob/cef3ee6b1715c1fb02f498188e57f2c746997dff/src/_includes/components/pageHeader.njk#L4">here</a>!</p>
+<p>In case this solution didn't work for you, there's a StackOverflow thread <a href="https://stackoverflow.com/questions/44963978/safari-on-ios-not-displaying-text-when-using-background-clip-and-text-fill-color">here</a> with a few other options that will hopefully work for you!</p>
 
         </article>
         <br><br>
@@ -103,10 +107,37 @@
     <ul class="text-center max-w-4xl">
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/welcome'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/tailwind'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>welcome</span>
+                    <span>tailwind</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/cess'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>cess</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/webdev'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>webdev</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/solution'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>solution</span>
                 </p>
             </div>
         </li>
