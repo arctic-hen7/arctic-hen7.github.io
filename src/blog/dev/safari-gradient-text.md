@@ -2,6 +2,7 @@
 title: Gradient Text on Safari
 description: How to fix missing gradient text on Safari.
 layout: post.njk
+date: 2021-08-11
 tags:
     - _blog
     - _categoryDev
