@@ -6,7 +6,7 @@ tags:
     - _blog
     - _categoryDev
     - tailwind
-    - cess
+    - css
     - webdev
     - solution
 ---
