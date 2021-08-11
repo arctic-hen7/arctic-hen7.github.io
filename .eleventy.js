@@ -7,10 +7,9 @@ module.exports = (cfg) => {
         (tags || []).filter((tag) => !tag.startsWith("_") && tag !== "all");
     cfg.addFilter("filterTagsList", filterTagsList);
 
-    // We build Tailwind externally, so Eleventy just needs to look on
-    cfg.addWatchTarget("./_tmp/style.css");
-    cfg.addPassthroughCopy({ "./src/styles/style.css": "./style.css" });
-    cfg.addPassthroughCopy({ "./_tmp/tailwind.css": "./tailwind.css" });
+    // We build CSS externally, so Eleventy just needs to look on
+    cfg.addWatchTarget("./_tmp/");
+    cfg.addPassthroughCopy({ "./_tmp/style.css": "./style.css" });
 
     // Add custom collections for filtering
     cfg.addCollection("_pinned_categoryDev", (coll) =>

@@ -21,6 +21,6 @@ You've got some text with a beautiful gradient, it looks fantastic! Then you ope
 -webkit-box-decoration-break: clone;
 ```
 
-Yep, that's all. That will fix the problem completely on Safari! If you want an example, this is in use on this very website in the `pageHeader.njk` component, which you can see [here](https://github.com/arctic-hen7/arctic-hen7.github.io/blob/cef3ee6b1715c1fb02f498188e57f2c746997dff/src/_includes/components/pageHeader.njk#L4)!
+Yep, that's all. That should fix the problem completely on Safari! If you want an example, this is in use on this very website in the `pageHeader.njk` component, which you can see [here](https://github.com/arctic-hen7/arctic-hen7.github.io/blob/cef3ee6b1715c1fb02f498188e57f2c746997dff/src/_includes/components/pageHeader.njk#L4)!
 
 In case this solution didn't work for you, there's a StackOverflow thread [here](https://stackoverflow.com/questions/44963978/safari-on-ios-not-displaying-text-when-using-background-clip-and-text-fill-color) with a few other options that will hopefully work for you!

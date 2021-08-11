@@ -3,24 +3,25 @@ version="0.3.1"
 [scripts]
 ## Cleans up the output folder
 clean = "rm -rf dist/*"
-## Runs Eleventy for development (assuming Tailwind is ready after `setup`)
+## Runs Eleventy for development (assuming CSS is ready after `setup`)
 dev = [
     "bonnie clean",
     "yarn eleventy --serve"
 ]
 ## Builds everything for production (the result of this will be served live)
 build = [
-    "bonnie build-tailwind-prod",
+    "bonnie build-css-prod",
     "ELEVENTY_PRODUCTION=true yarn eleventy"
 ]
 
-## Builds Tailwind CSS for development (no purging)
-build-tailwind-dev = "yarn tailwindcss -c ./src/styles/tailwind.config.js -o ./_tmp/tailwind.css"
-## Builds Tailwind CSS for production (maximum purging and minification)
-build-tailwind-prod = "NODE_ENV=production yarn tailwindcss -c ./src/styles/tailwind.config.js -o ./_tmp/tailwind.css --minify"
+## Runs PostCSS to build Tailwind etc.
+build-css.cmd = "yarn postcss \"src/styles/**/*.css\" -o ./_tmp/style.css"
+build-css.subcommands.--watch = "find . -name \"*.css\" -not -path \"./node_modules/*\" -not -path \"./_tmp/*\" -not -path \"./dist/*\" | entr -s \"bonnie build-css\""
+build-css.subcommands.-w = "bonnie build-css --watch"
+## Builds CSS for production
+build-css-prod = "NODE_ENV=production bonnie build-css"
 
-## Builds Tailwind CSS for development usage
-setup.subcommands.tailwind = "bonnie build-tailwind-dev"
-setup.subcommands.prompt-tailwind = "echo \"Have you installed the Tailwind CLI globally with 'npm i -g tailwindcss' or 'yarn global add tailwindcss'?\""
-## Tells the user if an error occurs
-setup = "yarn"
+setup = [
+    "yarn",
+    "bonnie build-css"
+]

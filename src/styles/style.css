@@ -1,5 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .font-bubble {
     font-family: "Comfortaa", sans-serif;
+}
+.text-megabold {
+    font-weight: 900;
 }
 
 html {
@@ -22,4 +29,62 @@ footer {
 
 [x-cloak] {
     display: none !important;
+}
+
+/* This styles semantic elements normally for generated Markdown */
+.styled-prose {
+    & > * + *,
+    & li + li,
+    & li > p + p {
+        @apply mt-6;
+    }
+    & strong,
+    bold {
+        font-weight: 900;
+    }
+    & a {
+        @apply text-fuchsia-500;
+    }
+    & h1 {
+        @apply text-4xl my-3;
+    }
+    & h2 {
+        @apply text-3xl my-3;
+    }
+    & h3 {
+        @apply text-2xl my-3;
+    }
+    & h4 {
+        @apply text-xl my-3;
+    }
+    & h5 {
+        @apply text-lg my-3;
+    }
+    & h6 {
+        @apply leading-tight my-3;
+    }
+    & :not(pre) code {
+        @apply rounded-lg p-1;
+        /* Similar styling as the syntax highlighted `pre` blocks */
+        background-color: #2d2d2d;
+        color: #cccccc;
+    }
+    & blockquote {
+        @apply border-l-4 pl-4 italic;
+    }
+    & ul {
+        @apply list-disc pl-5;
+        @screen sm {
+            @apply pl-10;
+        }
+    }
+    & ol {
+        @apply list-decimal pl-5;
+        @screen sm {
+            @apply pl-10;
+        }
+    }
+}
+.markdown pre {
+    @apply rounded-lg;
 }
