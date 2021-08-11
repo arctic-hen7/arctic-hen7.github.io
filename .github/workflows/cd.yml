@@ -12,7 +12,7 @@ jobs:
             - name: Install packages
               run: yarn
             - name: Build site
-              run: NODE_ENV=production yarn tailwindcss -c ./src/styles/tailwind.config.js -o ./_tmp/tailwind.css --minify && ELEVENTY_PRODUCTION=true yarn eleventy
+              run: NODE_ENV=production yarn postcss "src/styles/**/*.css" -o ./_tmp/style.css && ELEVENTY_PRODUCTION=true yarn eleventy
             - name: Deploy site to GitHub Pages
               uses: peaceiris/actions-gh-pages@v3
               if: github.ref == 'refs/heads/main'

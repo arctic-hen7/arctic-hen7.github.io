@@ -10,16 +10,18 @@ dev = [
 ]
 ## Builds everything for production (the result of this will be served live)
 build = [
-    "bonnie build-css-prod",
+    "bonnie build-css --prod",
     "ELEVENTY_PRODUCTION=true yarn eleventy"
 ]
 
 ## Runs PostCSS to build Tailwind etc.
 build-css.cmd = "yarn postcss \"src/styles/**/*.css\" -o ./_tmp/style.css"
+## Builds CSS, watching for file changes
 build-css.subcommands.--watch = "find . -name \"*.css\" -not -path \"./node_modules/*\" -not -path \"./_tmp/*\" -not -path \"./dist/*\" | entr -s \"bonnie build-css\""
 build-css.subcommands.-w = "bonnie build-css --watch"
 ## Builds CSS for production
-build-css-prod = "NODE_ENV=production bonnie build-css"
+build-css.subcommands.--prod = "NODE_ENV=production bonnie build-css"
+build-css.subcommands.-p = "bonnie build-css --prod"
 
 setup = [
     "yarn",
