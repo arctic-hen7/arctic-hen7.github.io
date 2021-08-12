@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gradient Text on Safari | The Arctic Site</title>
-    <meta name="description" content="How to fix missing gradient text on Safari.">
+    <title>Automation with Bonnie | The Arctic Site</title>
+    <meta name="description" content="How to automate repetitive tasks in your projects with Bonnie.">
     <link rel="stylesheet" href="/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@
         
 <div class="w-full flex justify-center">
     <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
-        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Gradient Text on Safari</p>
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Automation with Bonnie</p>
         <p class="mt-2">
             <span>In</span>
             
@@ -90,12 +90,25 @@
         </p>
         <br>
         <article class="styled-prose">
-            <h2>Problem</h2>
-<p>You've got some text with a beautiful gradient, it looks fantastic! Then you open your gorgeous new website in Safari, and half your text is missing. This is particularly from using <code>background-clip</code> to create your gradients (as you would with <a href="https://tailwindcss.com">Tailwind</a>), and if the text goes multi-line, Safari will cut the second line off erratically. <a href="https://bugs.webkit.org/show_bug.cgi?id=169125">Here's</a> the bug report filed for WebKit a few years ago, which still hasn't been addressed.</p>
-<h2>Solution</h2>
-<pre class="language-css"><code class="language-css"><span class="token property">-webkit-box-decoration-break</span><span class="token punctuation">:</span> clone<span class="token punctuation">;</span></code></pre>
-<p>Yep, that's all. That should fix the problem completely on Safari! If you want an example, this is in use on this very website in the <code>pageHeader.njk</code> component, which you can see <a href="https://github.com/arctic-hen7/arctic-hen7.github.io/blob/cef3ee6b1715c1fb02f498188e57f2c746997dff/src/_includes/components/pageHeader.njk#L4">here</a>!</p>
-<p>In case this solution didn't work for you, there's a StackOverflow thread <a href="https://stackoverflow.com/questions/44963978/safari-on-ios-not-displaying-text-when-using-background-clip-and-text-fill-color">here</a> with a few other options that will hopefully work for you!</p>
+            <p>As developers, we're faced with, generally speaking, three kinds of work: <strong>problem solving</strong>, <strong>implementation</strong>, and <strong>mundane tasks</strong>. Problem solving can be hard, but it's extremely rewarding. Implementing code is generally great, except that it inevitably generates problems for you to solve, but that's part of the joy!</p>
+<p>In this post though, I want to focus on the third type of work we do -- mundane, repetitive tasks. This could be anything, like a long build command, typing the same sequence of commands over and over again, or banging your head against a wall when you try to read your own code six months later.</p>
+<p>Bonnie is a tool I built a few months ago as my first ever project in <a href="https://rust-lang.org">Rust</a>, and since then I've made significant updates that have improved every facet of it. It was originally intended as a replacement for NPM scripts, the simple little command aliasing system many JavaScript developers will be familiar with. Problem is, Rust doesn't have that, nor do a lot of languages! Bonnie was designed to be a cross-platform system to enable command aliasing in any project, regardless of programming language!</p>
+<p>Today, Bonnie supports custom arguments to scripts, environment variable interpolation, subcommands, conditional command ordering, and so much more!</p>
+<h2>Installing</h2>
+<p>Bonnie has pre-built binaries for Linux (and musl), MacOS, and Windows, which you can download from <a href="https://github.com/arctic-hen7/bonnie/releases">here</a>. After downloading the right one, put it in a directory from which you can execute scripts, like <code>/usr/local/bin</code> on Linux.</p>
+<p>If you're using Docker or a platform for which there's not a pre-built binary, check out the installation instructions on the homepage <a href="https://github.com/arctic-hen7/bonnie">here</a>. If you'd really like me to add a binary for another platform, open an issue on the project and I'm happy to oblige!</p>
+<h2>Setup</h2>
+<p>Once you can run Bonnie, make sure everything's working by running <code>bonnie -v</code>. You should see the version of Bonnie you're running. Bonnie will now work. If it doesn't, I've stuffed up, and you should slap me in the face with a cold fish (or a GitHub issue).</p>
+<h2>Writing scripts</h2>
+<p>So, let's say you've got a build script that's <em>really</em> long. Easy! Run <code>bonnie -i</code> to create a new configuration file in your current directory (assuming you're in your project's directory), and pop this into <code>bonnie.toml</code> underneath <code>[scripts]</code>, substituting in your build command.</p>
+<pre class="language-toml"><code class="language-toml"><span class="token key property">build</span> <span class="token punctuation">=</span> <span class="token string">"super long build command..."</span></code></pre>
+<p>Congrats! Now run <code>bonnie build</code> and your command should run! That's the beauty of Bonnie, <strong>it gets out of your way and just works</strong>.</p>
+<p>You can repeat this process for as many things as you like, and Bonnie scripts can call other scripts easily! Every script will be executed as if you'd run it in a terminal (PowerShell on Windows and <code>sh</code> on MacOS and Linux), so just add <code>bonnie command-here</code> into a script!</p>
+<p>If you want to replicate the functionality of NPM scripts, where any extra arguments you give after the command name will be added to the end (e.g. <code>npm build blah blah</code> becomes <code>[build command] blah blah</code>), just add <code>%%</code> wherever in your command you want those arguments to be put (so you can put them at the end, the beginning, in the middle, anywhere!).</p>
+<p>Bonnie will also let you change the shell it runs things in (so you could use <code>zsh</code> or <code>fish</code> instead), specify multi-stage commands (just provide an array!), or even add subcommands! If you're feeling adventurous, you could try out <a href="https://github.com/arctic-hen7/bonnie/wiki/Getting-Started-with-Bones">Bones</a>, which lets you run subcommands one after the other in a custom order, with if statements based on the exit codes commands give out! All the details are in <a href="https://github.com/arctic-hen7/bonnie/wiki">the wiki</a>!</p>
+<h2>Final words</h2>
+<p>Bonnie is a great tool for automating repetitive work, it's full of features, lightning-fast, and it just gets out of your way. Check it out on GitHub <a href="https://github.com/arctic-hen7/bonnie">here</a>!</p>
+<p><em>Note: I am the maintainer of Bonnie.</em></p>
 
         </article>
         <br><br>
@@ -105,37 +118,28 @@
     <ul class="text-center max-w-4xl">
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/tailwind'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/bonnie'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>tailwind</span>
+                    <span>bonnie</span>
                 </p>
             </div>
         </li>
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/css'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/automation'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>css</span>
+                    <span>automation</span>
                 </p>
             </div>
         </li>
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/webdev'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/promotion'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>webdev</span>
-                </p>
-            </div>
-        </li>
-        
-        <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/solution'">
-                <p class="dark:text-white font-bubble truncate">
-                    <span class="align-bottom material-icons-round">tag</span>
-                    <span>solution</span>
+                    <span>promotion</span>
                 </p>
             </div>
         </li>

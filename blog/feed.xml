@@ -5,7 +5,7 @@
     <subtitle>A blog about programming, productivity, and knowledge! More specific feeds are available for each category.</subtitle>
     <link href="https://arctic-hen7.github.io/blog/feed.xml" rel="self"/>
     <link href="https://arctic-hen7.github.io/blog"/>
-    <updated>2021-08-11T22:20:34Z</updated>
+    <updated>2021-08-12T10:04:38Z</updated>
     <id>https://arctic-hen7.github.io/blog</id>
     <author>
         <name>arctic_hen7</name>
@@ -41,9 +41,36 @@
     </entry>
     
     <entry>
+        <title>Automation with Bonnie</title>
+        <link href="https://arctic-hen7.github.io/blog/dev/how-to-automate-with-bonnie/"/>
+        <updated>2021-08-12T00:00:00Z</updated>
+        <id>https://arctic-hen7.github.io/blog/dev/how-to-automate-with-bonnie/</id>
+        <content type="html">&lt;p&gt;As developers, we&#39;re faced with, generally speaking, three kinds of work: &lt;strong&gt;problem solving&lt;/strong&gt;, &lt;strong&gt;implementation&lt;/strong&gt;, and &lt;strong&gt;mundane tasks&lt;/strong&gt;. Problem solving can be hard, but it&#39;s extremely rewarding. Implementing code is generally great, except that it inevitably generates problems for you to solve, but that&#39;s part of the joy!&lt;/p&gt;
+&lt;p&gt;In this post though, I want to focus on the third type of work we do -- mundane, repetitive tasks. This could be anything, like a long build command, typing the same sequence of commands over and over again, or banging your head against a wall when you try to read your own code six months later.&lt;/p&gt;
+&lt;p&gt;Bonnie is a tool I built a few months ago as my first ever project in &lt;a href=&quot;https://rust-lang.org/&quot;&gt;Rust&lt;/a&gt;, and since then I&#39;ve made significant updates that have improved every facet of it. It was originally intended as a replacement for NPM scripts, the simple little command aliasing system many JavaScript developers will be familiar with. Problem is, Rust doesn&#39;t have that, nor do a lot of languages! Bonnie was designed to be a cross-platform system to enable command aliasing in any project, regardless of programming language!&lt;/p&gt;
+&lt;p&gt;Today, Bonnie supports custom arguments to scripts, environment variable interpolation, subcommands, conditional command ordering, and so much more!&lt;/p&gt;
+&lt;h2&gt;Installing&lt;/h2&gt;
+&lt;p&gt;Bonnie has pre-built binaries for Linux (and musl), MacOS, and Windows, which you can download from &lt;a href=&quot;https://github.com/arctic-hen7/bonnie/releases&quot;&gt;here&lt;/a&gt;. After downloading the right one, put it in a directory from which you can execute scripts, like &lt;code&gt;/usr/local/bin&lt;/code&gt; on Linux.&lt;/p&gt;
+&lt;p&gt;If you&#39;re using Docker or a platform for which there&#39;s not a pre-built binary, check out the installation instructions on the homepage &lt;a href=&quot;https://github.com/arctic-hen7/bonnie&quot;&gt;here&lt;/a&gt;. If you&#39;d really like me to add a binary for another platform, open an issue on the project and I&#39;m happy to oblige!&lt;/p&gt;
+&lt;h2&gt;Setup&lt;/h2&gt;
+&lt;p&gt;Once you can run Bonnie, make sure everything&#39;s working by running &lt;code&gt;bonnie -v&lt;/code&gt;. You should see the version of Bonnie you&#39;re running. Bonnie will now work. If it doesn&#39;t, I&#39;ve stuffed up, and you should slap me in the face with a cold fish (or a GitHub issue).&lt;/p&gt;
+&lt;h2&gt;Writing scripts&lt;/h2&gt;
+&lt;p&gt;So, let&#39;s say you&#39;ve got a build script that&#39;s &lt;em&gt;really&lt;/em&gt; long. Easy! Run &lt;code&gt;bonnie -i&lt;/code&gt; to create a new configuration file in your current directory (assuming you&#39;re in your project&#39;s directory), and pop this into &lt;code&gt;bonnie.toml&lt;/code&gt; underneath &lt;code&gt;[scripts]&lt;/code&gt;, substituting in your build command.&lt;/p&gt;
+&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token key property&quot;&gt;build&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;super long build command...&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Congrats! Now run &lt;code&gt;bonnie build&lt;/code&gt; and your command should run! That&#39;s the beauty of Bonnie, &lt;strong&gt;it gets out of your way and just works&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;You can repeat this process for as many things as you like, and Bonnie scripts can call other scripts easily! Every script will be executed as if you&#39;d run it in a terminal (PowerShell on Windows and &lt;code&gt;sh&lt;/code&gt; on MacOS and Linux), so just add &lt;code&gt;bonnie command-here&lt;/code&gt; into a script!&lt;/p&gt;
+&lt;p&gt;If you want to replicate the functionality of NPM scripts, where any extra arguments you give after the command name will be added to the end (e.g. &lt;code&gt;npm build blah blah&lt;/code&gt; becomes &lt;code&gt;[build command] blah blah&lt;/code&gt;), just add &lt;code&gt;%%&lt;/code&gt; wherever in your command you want those arguments to be put (so you can put them at the end, the beginning, in the middle, anywhere!).&lt;/p&gt;
+&lt;p&gt;Bonnie will also let you change the shell it runs things in (so you could use &lt;code&gt;zsh&lt;/code&gt; or &lt;code&gt;fish&lt;/code&gt; instead), specify multi-stage commands (just provide an array!), or even add subcommands! If you&#39;re feeling adventurous, you could try out &lt;a href=&quot;https://github.com/arctic-hen7/bonnie/wiki/Getting-Started-with-Bones&quot;&gt;Bones&lt;/a&gt;, which lets you run subcommands one after the other in a custom order, with if statements based on the exit codes commands give out! All the details are in &lt;a href=&quot;https://github.com/arctic-hen7/bonnie/wiki&quot;&gt;the wiki&lt;/a&gt;!&lt;/p&gt;
+&lt;h2&gt;Final words&lt;/h2&gt;
+&lt;p&gt;Bonnie is a great tool for automating repetitive work, it&#39;s full of features, lightning-fast, and it just gets out of your way. Check it out on GitHub &lt;a href=&quot;https://github.com/arctic-hen7/bonnie&quot;&gt;here&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: I am the maintainer of Bonnie.&lt;/em&gt;&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
         <title>Gradient Text on Safari</title>
         <link href="https://arctic-hen7.github.io/blog/dev/safari-gradient-text/"/>
-        <updated>2021-08-11T00:00:00Z</updated>
+        <updated>2021-08-12T10:04:16Z</updated>
         <id>https://arctic-hen7.github.io/blog/dev/safari-gradient-text/</id>
         <content type="html">&lt;h2&gt;Problem&lt;/h2&gt;
 &lt;p&gt;You&#39;ve got some text with a beautiful gradient, it looks fantastic! Then you open your gorgeous new website in Safari, and half your text is missing. This is particularly from using &lt;code&gt;background-clip&lt;/code&gt; to create your gradients (as you would with &lt;a href=&quot;https://tailwindcss.com/&quot;&gt;Tailwind&lt;/a&gt;), and if the text goes multi-line, Safari will cut the second line off erratically. &lt;a href=&quot;https://bugs.webkit.org/show_bug.cgi?id=169125&quot;&gt;Here&#39;s&lt;/a&gt; the bug report filed for WebKit a few years ago, which still hasn&#39;t been addressed.&lt;/p&gt;
