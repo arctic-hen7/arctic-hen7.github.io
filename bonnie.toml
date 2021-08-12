@@ -27,3 +27,26 @@ setup = [
     "yarn",
     "bonnie build-css"
 ]
+
+## Opens a file in Abricotine, replacing all tabs with spaces (because Abricotine doesn't know the difference)
+## Change this if you ever want to use another editor
+open.cmd = "abricotine src/blog/%type/%slug.md"
+open.args = ["type", "slug"]
+
+## Creates a new post file
+new.cmd = [
+	"cp templates/template_%type.md src/blog/%type/%slug.md",
+	"bonnie open %type %slug"
+]
+new.args = ["type", "slug"]
+# Replaces tabs with spaces in posts
+tab2spaces = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
+# Stages and commits all changed markdown files
+commit.cmd = [
+	"bonnie tab2spaces",
+	"git add src/blog/**/*.md",
+	"git commit -m \"feat: 📝 added new post (%message)\""
+]
+commit.args = ["message"]
+# Pushes the latest commits to GitHub
+push = "git push origin main"
