@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gradient Text on Safari | The Arctic Site</title>
-    <meta name="description" content="How to fix missing gradient text on Safari.">
+    <title>Introducing Perseus for Rust Web Development! | The Arctic Site</title>
+    <meta name="description" content="Perseus aims to be NextJS for Rust.">
     <link rel="stylesheet" href="/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@
         
 <div class="w-full flex justify-center">
     <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
-        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Gradient Text on Safari</p>
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Introducing Perseus for Rust Web Development!</p>
         <p class="mt-2">
             <span>In</span>
             
@@ -90,12 +90,20 @@
         </p>
         <br>
         <article class="styled-prose">
-            <h2>Problem</h2>
-<p>You've got some text with a beautiful gradient, it looks fantastic! Then you open your gorgeous new website in Safari, and half your text is missing. This is particularly from using <code>background-clip</code> to create your gradients (as you would with <a href="https://tailwindcss.com">Tailwind</a>), and if the text goes multi-line, Safari will cut the second line off erratically. <a href="https://bugs.webkit.org/show_bug.cgi?id=169125">Here's</a> the bug report filed for WebKit a few years ago, which still hasn't been addressed.</p>
-<h2>Solution</h2>
-<pre class="language-css"><code class="language-css"><span class="token property">-webkit-box-decoration-break</span><span class="token punctuation">:</span> clone<span class="token punctuation">;</span></code></pre>
-<p>Yep, that's all. That should fix the problem completely on Safari! If you want an example, this is in use on this very website in the <code>pageHeader.njk</code> component, which you can see <a href="https://github.com/arctic-hen7/arctic-hen7.github.io/blob/cef3ee6b1715c1fb02f498188e57f2c746997dff/src/_includes/components/pageHeader.njk#L4">here</a>!</p>
-<p>In case this solution didn't work for you, there's a StackOverflow thread <a href="https://stackoverflow.com/questions/44963978/safari-on-ios-not-displaying-text-when-using-background-clip-and-text-fill-color">here</a> with a few other options that will hopefully work for you!</p>
+            <p><a href="https://github.com/arctic-hen7/perseus">Perseus</a> is a high-level web development framework for Rust, with full support for SSR, SSG, revalidation, and even incremental generation! It's based on the low-level VDOM-less reactivity framework <a href="https://github.com/sycamore-rs/sycamore">Sycamore</a>, and it adds higher-level functionality, like an Actix Web integrations for serving apps and even a CLI for easier development!</p>
+<h2>Documentation</h2>
+<p>Like most of my larger projects, Perseus has two main sources of documentation:</p>
+<ul>
+<li><a href="https://docs.rs/perseus">API Docs</a></li>
+<li><a href="https://arctic-hen7.github.com/perseus">The Book</a></li>
+</ul>
+<p>I've also written a tutorial on building your first app with Perseus, which covers everything from installation to serving! You can find it in the book <a href="https://arctic-hen7.github.io/perseus/tutorials/first_app/intro.html">here</a>.</p>
+<h2>Project Status</h2>
+<p>At the time of writing, Perseus is in v0.1.2, and supports a lot of features. It's not ready for production yet, but it soon will be hopefully! The big issues right now are support for serverless platforms, for which I need to be able to access their filesystems, and SEO, which still needs some improvements.</p>
+<p>That said, Perseus is perfect for really anything that's not public-facing, and, provided no one points out any gaping holes soon, it's probably great for small projects. I wouldn't advise using it in a nuclear power plant (at all), but I can't stop you!</p>
+<h2>The Future</h2>
+<p>I want Perseus to become the NextJS of WASM, and I want to open up the phenomenal opportunities of diverse rendering strategies to Rust web developers, which for too long have only been the domain of JavaScript. There's still more work to be done, including native support for internationalization, but then I'll work on an app that uses it (and <a href="https://github.com/arctic-hen7/diana">Diana</a>) to try to iron out any flaws and get the interface perfect.</p>
+<p>For now though, you can chat about Perseus in it's [Gitter community] or on its [channel] on the Sycamore Discord server (for Sycamore-related stuff, graciously provided by <a href="https://github.com/lukechu10">@lukechu10</a>), and any feedback would be greatly appreciated!</p>
 
         </article>
         <br><br>
@@ -105,37 +113,46 @@
     <ul class="text-center max-w-4xl">
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/tailwind'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/web'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>tailwind</span>
+                    <span>web</span>
                 </p>
             </div>
         </li>
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/css'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/rust'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>css</span>
+                    <span>rust</span>
                 </p>
             </div>
         </li>
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/webdev'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/perseus'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>webdev</span>
+                    <span>perseus</span>
                 </p>
             </div>
         </li>
         
         <li class="px-1 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/solution'">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/frontend'">
                 <p class="dark:text-white font-bubble truncate">
                     <span class="align-bottom material-icons-round">tag</span>
-                    <span>solution</span>
+                    <span>frontend</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/backend'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>backend</span>
                 </p>
             </div>
         </li>
