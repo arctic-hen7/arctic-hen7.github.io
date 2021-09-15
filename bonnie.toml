@@ -1,52 +1,51 @@
-version="0.3.1"
+version="0.3.2"
 
 [scripts]
-## Cleans up the output folder
-clean = "rm -rf dist/*"
-## Runs Eleventy for development (assuming CSS is ready after `setup`)
-dev = [
+clean.cmd = "rm -rf dist/*"
+clean.desc = "cleans the Eleventy output folder"
+dev.cmd = [
     "bonnie clean",
     "yarn eleventy --serve"
 ]
-## Builds everything for production (the result of this will be served live)
-build = [
+dev.desc = "runs Eleventy for development"
+build.cmd = [
     "bonnie build-css --prod",
     "ELEVENTY_PRODUCTION=true yarn eleventy"
 ]
+build.desc = "builds the site for production"
 
-## Runs PostCSS to build Tailwind etc.
 build-css.cmd = "yarn postcss \"src/styles/**/*.css\" -o ./_tmp/style.css"
-## Builds CSS, watching for file changes
+build-css.desc = "runs PostCSS to build Tailwind"
 build-css.subcommands.--watch = "find . -name \"*.css\" -not -path \"./node_modules/*\" -not -path \"./_tmp/*\" -not -path \"./dist/*\" | entr -s \"bonnie build-css\""
 build-css.subcommands.-w = "bonnie build-css --watch"
-## Builds CSS for production
 build-css.subcommands.--prod = "NODE_ENV=production bonnie build-css"
 build-css.subcommands.-p = "bonnie build-css --prod"
 
-setup = [
+setup.cmd = [
     "yarn",
     "bonnie build-css"
 ]
+setup.desc = "sets up the project for development"
 
-## Opens a file in Abricotine, replacing all tabs with spaces (because Abricotine doesn't know the difference)
 ## Change this if you ever want to use another editor
 open.cmd = "abricotine src/blog/%type/%slug.md"
 open.args = ["type", "slug"]
+open.desc = "opens the given post in Abricotine"
 
-## Creates a new post file
 new.cmd = [
 	"cp templates/template_%type.md src/blog/%type/%slug.md",
 	"bonnie open %type %slug"
 ]
 new.args = ["type", "slug"]
-# Replaces tabs with spaces in posts
-tab2spaces = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
-# Stages and commits all changed markdown files
+new.desc = "creates a new post and opens it"
+tab2spaces.cmd = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
+tab2spaces.desc = "replaces Abricotine tabs with YAML spaces in all markdown files"
 commit.cmd = [
 	"bonnie tab2spaces",
 	"git add src/blog/**/*.md",
 	"git commit -m \"feat: 📝 added new post (%message)\""
 ]
 commit.args = ["message"]
-# Pushes the latest commits to GitHub
-push = "git push origin main"
+commit.desc = "stages and commits all markdown files"
+push.cmd = "git push origin main"
+push.desc = "pushes the latest changes to GitHub"
