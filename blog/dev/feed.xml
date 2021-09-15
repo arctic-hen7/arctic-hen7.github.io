@@ -5,7 +5,7 @@
     <subtitle>All about programming generally, with a focus on Rust.</subtitle>
     <link href="https://arctic-hen7.github.io/blog/dev/feed.xml" rel="self"/>
     <link href="https://arctic-hen7.github.io/blog/dev"/>
-    <updated>2021-09-05T04:50:25Z</updated>
+    <updated>2021-09-15T08:13:12Z</updated>
     <id>https://arctic-hen7.github.io/blog/dev</id>
     <author>
         <name>arctic_hen7</name>
@@ -72,9 +72,38 @@
     </entry>
     
     <entry>
+        <title>How to Fix Ubuntu Broken After Deleting Rollup</title>
+        <link href="https://arctic-hen7.github.io/blog/dev/breaking-ubuntu-rollup/"/>
+        <updated>2021-09-15T00:00:00Z</updated>
+        <id>https://arctic-hen7.github.io/blog/dev/breaking-ubuntu-rollup/</id>
+        <content type="html">&lt;p&gt;This post details one of the strangest failures I&#39;ve ever seen in Ubuntu and how to fix it. For me, this occurred after deleting &lt;code&gt;rollup&lt;/code&gt;, but it may have been something else for you! Please leave a comment if you&#39;ve had this problem and if you have any idea how it works!&lt;/p&gt;
+&lt;h2&gt;Scenario&lt;/h2&gt;
+&lt;p&gt;I was working on &lt;a href=&quot;https://github.com/arctic-hen7/perseus&quot;&gt;Perseus&lt;/a&gt; this morning, specifically removing the dependency on &lt;a href=&quot;https://arctic-hen7.github.io/blog/dev/breaking-ubuntu-rollup/&quot;&gt;Rollup&lt;/a&gt; for the project. So, I naturally decided to remove Rollup completely from my system to test that there was no longer any dependency.&lt;/p&gt;
+&lt;p&gt;So, I did what made sense; &lt;code&gt;yarn global remove rollup&lt;/code&gt;. And, to my dismay, &lt;code&gt;rollup&lt;/code&gt; still worked as a command. I ran &lt;code&gt;which rollup&lt;/code&gt; to find the exact location of the binary, which was in &lt;code&gt;~/.yarn/bin&lt;/code&gt;. And then I did what you should &lt;strong&gt;never&lt;/strong&gt; do. I decided to delete is manually with &lt;code&gt;rm&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now it&#39;s worth noting that around this time my system had become very slow due to some kind of swap glitch, and so I decided to restart, having just deleted a binary manually. Now it&#39;s worth noting that I installed &lt;code&gt;rollup&lt;/code&gt; through &lt;code&gt;yarn&lt;/code&gt;, which I installed through &lt;code&gt;npm&lt;/code&gt;, which I installed through &lt;code&gt;nvm&lt;/code&gt; (Node version manager), which I installed with &lt;code&gt;curl&lt;/code&gt;. That&#39;s &lt;em&gt;five&lt;/em&gt; degrees of separation from anything that should be remotely system-critical, hence my confusion at what happened next.&lt;/p&gt;
+&lt;p&gt;So, booting my computer back up, everything was working as normal. I got to the login screen fine, the fan still whirring a bit from the swap glitch, and I typed in my password as usual. Then, as my desktop loaded, my mouse froze. I could not interact with my system in any way whatsoever. I rebooted &lt;em&gt;three&lt;/em&gt; times, the exact same thing.&lt;/p&gt;
+&lt;h2&gt;The Solution&lt;/h2&gt;
+&lt;p&gt;My first thought was to change my login shell, which is &lt;code&gt;fish&lt;/code&gt;, to something more mainstream like &lt;code&gt;bash&lt;/code&gt;, as that could have some &lt;code&gt;rollup&lt;/code&gt; dependency that might be causing a system hang. I did that with recovery mode, which I&#39;ll explain now (you&#39;ll need this), but to no avail.&lt;/p&gt;
+&lt;h3&gt;Ubuntu Recovery Mode&lt;/h3&gt;
+&lt;p&gt;Ubuntu has a very helpful boot mode called recovery mode that you can use to repair a broken system. You&#39;ll need to be able to boot your system for this, which was fine for me because it was a post-login issue.&lt;/p&gt;
+&lt;p&gt;You can access recovery mode by spamming &lt;code&gt;Esc&lt;/code&gt; as your computer boots to stop UEFI fast boot, and then press &lt;code&gt;Enter&lt;/code&gt; to continue boot. Immediately after that, hold down &lt;code&gt;Shift&lt;/code&gt; (don&#39;t spam it) to get the GRUB menu, the bootloader. Then go down to something like &lt;code&gt;Advanced Options&lt;/code&gt;, and then select &lt;code&gt;Recovery Mode&lt;/code&gt; with the newest kernel (for this issue at least, but this can also be used to revert broken kernel upgrades). You should now be taken to a terminal-only screen (where you&#39;ll need to decrypt your hard drive and the like), and then you&#39;ll get a menu of options. This will boot your filesystem read-only, so it&#39;s practically impossible to do any damage without changing that, which you can do in 20.04 and later by selecting &lt;code&gt;Enable networking&lt;/code&gt; and pressing &lt;code&gt;Enter&lt;/code&gt;. Then press the option that lets you drop into a root shell, and you now have a root terminal on your system!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Aside: THIS is why you should encrypt your hard drive! Otherwise, yeah, anyone could use this to do &lt;a href=&quot;https://r3xnation.wordpress.com/2016/11/01/how-to-hack-into-ubuntuany-version/&quot;&gt;anything they want&lt;/a&gt; (weird link but good explanation) to your system.&lt;/em&gt;&lt;/p&gt;
+&lt;h3&gt;Actually Fixing It&lt;/h3&gt;
+&lt;p&gt;After logging into a hung desktop with 10 minutes until I was needed on a Zoom meeting, I booted back into recovery mode, enabled networking, and switched to my user account with &lt;code&gt;su arctic_hen7&lt;/code&gt;. I confirmed that &lt;code&gt;rollup&lt;/code&gt; didn&#39;t exist, and then found that &lt;code&gt;yarn&lt;/code&gt; didn&#39;t either. That was weird, and neither did &lt;code&gt;node&lt;/code&gt;! In case you&#39;re thinking of weird &lt;code&gt;fish&lt;/code&gt; stuff with loading custom binaries, I was in &lt;code&gt;bash&lt;/code&gt; at this point. I still have no idea how deleting a binary manually managed to corrupt the entire JavaScript stack on my computer.&lt;/p&gt;
+&lt;p&gt;Nevertheless, I reinstalled Node using &lt;a href=&quot;https://arctic-hen7.github.io/blog/dev/breaking-ubuntu-rollup/&quot;&gt;NVM&lt;/a&gt; (which I already had installed), reinstalled &lt;code&gt;yarn&lt;/code&gt;, and then ran &lt;code&gt;yarn global add rollup&lt;/code&gt; for good measure. I then tried popping into &lt;code&gt;fish&lt;/code&gt; to see how it was going. I use &lt;code&gt;fish&lt;/code&gt; with &lt;a href=&quot;https://arctic-hen7.github.io/blog/dev/breaking-ubuntu-rollup/&quot;&gt;Starship&lt;/a&gt;, and it was telling me that the latter wasn&#39;t working. Two minutes until that Zoom meeting by the way.&lt;/p&gt;
+&lt;p&gt;I frantically rebooted and crossed my fingers, noting that my shell was still set to &lt;code&gt;bash&lt;/code&gt; in case Starship was still an issue. And it worked! Until a spontaneous logout 12 minutes later, which I think was unrelated, because it didn&#39;t happen again and still hasn&#39;t yet (I am so expecting one as a write this...).&lt;/p&gt;
+&lt;p&gt;After my Zoom meeting, I then tried using &lt;code&gt;fish&lt;/code&gt; again: errors were gone. I assume Starship was trying to do something that&#39;s not allowed in recovery mode, but I can&#39;t yet remember the error message, so I have no idea what.&lt;/p&gt;
+&lt;h2&gt;Closing Words&lt;/h2&gt;
+&lt;p&gt;So, that was one of the weirdest issues I&#39;ve ever encountered in all my time using Linux, but thankfully it was a pretty easy fix. I have still found no documentation online about this, so hopefully this helps someone at some point in the future!&lt;/p&gt;
+&lt;p&gt;Also, if you&#39;ve had this issue, please let me know in the comments!&lt;/p&gt;
+&lt;p&gt;Oh, and the lesson from all this is to &lt;strong&gt;NEVER MANUALLY DELETE BINARIES!!!&lt;/strong&gt;&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
         <title>Gradient Text on Safari</title>
         <link href="https://arctic-hen7.github.io/blog/dev/safari-gradient-text/"/>
-        <updated>2021-09-05T04:49:54Z</updated>
+        <updated>2021-09-15T08:12:49Z</updated>
         <id>https://arctic-hen7.github.io/blog/dev/safari-gradient-text/</id>
         <content type="html">&lt;h2&gt;Problem&lt;/h2&gt;
 &lt;p&gt;You&#39;ve got some text with a beautiful gradient, it looks fantastic! Then you open your gorgeous new website in Safari, and half your text is missing. This is particularly from using &lt;code&gt;background-clip&lt;/code&gt; to create your gradients (as you would with &lt;a href=&quot;https://tailwindcss.com/&quot;&gt;Tailwind&lt;/a&gt;), and if the text goes multi-line, Safari will cut the second line off erratically. &lt;a href=&quot;https://bugs.webkit.org/show_bug.cgi?id=169125&quot;&gt;Here&#39;s&lt;/a&gt; the bug report filed for WebKit a few years ago, which still hasn&#39;t been addressed.&lt;/p&gt;

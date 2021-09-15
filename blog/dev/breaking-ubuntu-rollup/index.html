@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Fix Ubuntu Broken After Deleting Rollup | The Arctic Site</title>
+    <meta name="description" content="A pretty simple fix to a downright weird problem.">
+    <link rel="stylesheet" href="/style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-tomorrow.css" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-white dark:bg-gray-800">
+    <header x-data="{ menuOpen: false }" class="shadow-xl sm:p-2 w-full bg-white dark:bg-gray-800 mb-20">
+        <div class="flex justify-between">
+            <a href="/" class="justify-self-start self-center m-3 ml-5 text-md sm:text-2xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-600 hover:from-indigo-600 hover:to-blue-400">
+                The Arctic Site
+            </a>
+            <div @click="menuOpen = !menuOpen" class="xs:hidden m-3 mr-5 tham tham-e-spin tham-w-6" :class="{ 'tham-active': menuOpen }">
+                <div class="tham-box">
+                    <div class="dark:bg-white tham-inner"></div>
+                </div>
+            </div>
+            <nav class="hidden xs:flex">
+                
+<ul class="mr-5 flex">
+    <li class="m-3 p-1">
+        <a href="/blog" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-400 hover:from-pink-400 hover:to-blue-400">Blog</a>
+    </li>
+    <li class="m-3 p-1">
+        <a href="/projects" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-700 hover:from-pink-700 hover:to-purple-600">Projects</a>
+    </li>
+    <li class="m-3 p-1">
+        <a href="/about" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-fuchsia-600 hover:from-fuchsia-600 hover:to-cyan-600">About</a>
+    </li>
+    <li class="m-3 p-1">
+        
+        <a href="/blog/feeds" class="w-5 sm:text-lg dark:text-white">
+            <span class="material-icons-round">rss_feed</span>
+        </a>
+    </li>
+</ul>
+
+            </nav>
+        </div>
+        <nav x-cloak @click.aways="menuOpen = false" :class="{ 'flex flex-col': menuOpen, 'hidden': !menuOpen }" class="xs:hidden w-full text-center justify-center">
+            
+<ul class="mr-5 ">
+    <li class="m-3 p-1">
+        <a href="/blog" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-400 hover:from-pink-400 hover:to-blue-400">Blog</a>
+    </li>
+    <li class="m-3 p-1">
+        <a href="/projects" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-700 hover:from-pink-700 hover:to-purple-600">Projects</a>
+    </li>
+    <li class="m-3 p-1">
+        <a href="/about" class="sm:text-lg text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-fuchsia-600 hover:from-fuchsia-600 hover:to-cyan-600">About</a>
+    </li>
+    <li class="m-3 p-1">
+        
+        <a href="/blog/feeds" class="w-5 sm:text-lg dark:text-white">
+            <span class="material-icons-round">rss_feed</span>
+        </a>
+    </li>
+</ul>
+
+        </nav>
+    </header>
+    <div class="mt-10 sm:mt-16">
+
+
+<main>
+    <div class="text-center">
+        
+<div class="w-full flex justify-center">
+    <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">How to Fix Ubuntu Broken After Deleting Rollup</p>
+        <p class="mt-2">
+            <span>In</span>
+            
+            <span class="cursor-pointer font-bubble text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500" onclick="window.location.href = '/blog/dev'">
+                Dev
+            </span>
+            
+        </p>
+        <p class="text-gray-500 dark:text-gray-400">
+            9/15/2021
+        </p>
+        <br>
+        <article class="styled-prose">
+            <p>This post details one of the strangest failures I've ever seen in Ubuntu and how to fix it. For me, this occurred after deleting <code>rollup</code>, but it may have been something else for you! Please leave a comment if you've had this problem and if you have any idea how it works!</p>
+<h2>Scenario</h2>
+<p>I was working on <a href="https://github.com/arctic-hen7/perseus">Perseus</a> this morning, specifically removing the dependency on <a href="">Rollup</a> for the project. So, I naturally decided to remove Rollup completely from my system to test that there was no longer any dependency.</p>
+<p>So, I did what made sense; <code>yarn global remove rollup</code>. And, to my dismay, <code>rollup</code> still worked as a command. I ran <code>which rollup</code> to find the exact location of the binary, which was in <code>~/.yarn/bin</code>. And then I did what you should <strong>never</strong> do. I decided to delete is manually with <code>rm</code>.</p>
+<p>Now it's worth noting that around this time my system had become very slow due to some kind of swap glitch, and so I decided to restart, having just deleted a binary manually. Now it's worth noting that I installed <code>rollup</code> through <code>yarn</code>, which I installed through <code>npm</code>, which I installed through <code>nvm</code> (Node version manager), which I installed with <code>curl</code>. That's <em>five</em> degrees of separation from anything that should be remotely system-critical, hence my confusion at what happened next.</p>
+<p>So, booting my computer back up, everything was working as normal. I got to the login screen fine, the fan still whirring a bit from the swap glitch, and I typed in my password as usual. Then, as my desktop loaded, my mouse froze. I could not interact with my system in any way whatsoever. I rebooted <em>three</em> times, the exact same thing.</p>
+<h2>The Solution</h2>
+<p>My first thought was to change my login shell, which is <code>fish</code>, to something more mainstream like <code>bash</code>, as that could have some <code>rollup</code> dependency that might be causing a system hang. I did that with recovery mode, which I'll explain now (you'll need this), but to no avail.</p>
+<h3>Ubuntu Recovery Mode</h3>
+<p>Ubuntu has a very helpful boot mode called recovery mode that you can use to repair a broken system. You'll need to be able to boot your system for this, which was fine for me because it was a post-login issue.</p>
+<p>You can access recovery mode by spamming <code>Esc</code> as your computer boots to stop UEFI fast boot, and then press <code>Enter</code> to continue boot. Immediately after that, hold down <code>Shift</code> (don't spam it) to get the GRUB menu, the bootloader. Then go down to something like <code>Advanced Options</code>, and then select <code>Recovery Mode</code> with the newest kernel (for this issue at least, but this can also be used to revert broken kernel upgrades). You should now be taken to a terminal-only screen (where you'll need to decrypt your hard drive and the like), and then you'll get a menu of options. This will boot your filesystem read-only, so it's practically impossible to do any damage without changing that, which you can do in 20.04 and later by selecting <code>Enable networking</code> and pressing <code>Enter</code>. Then press the option that lets you drop into a root shell, and you now have a root terminal on your system!</p>
+<p><em>Aside: THIS is why you should encrypt your hard drive! Otherwise, yeah, anyone could use this to do <a href="https://r3xnation.wordpress.com/2016/11/01/how-to-hack-into-ubuntuany-version/">anything they want</a> (weird link but good explanation) to your system.</em></p>
+<h3>Actually Fixing It</h3>
+<p>After logging into a hung desktop with 10 minutes until I was needed on a Zoom meeting, I booted back into recovery mode, enabled networking, and switched to my user account with <code>su arctic_hen7</code>. I confirmed that <code>rollup</code> didn't exist, and then found that <code>yarn</code> didn't either. That was weird, and neither did <code>node</code>! In case you're thinking of weird <code>fish</code> stuff with loading custom binaries, I was in <code>bash</code> at this point. I still have no idea how deleting a binary manually managed to corrupt the entire JavaScript stack on my computer.</p>
+<p>Nevertheless, I reinstalled Node using <a href="">NVM</a> (which I already had installed), reinstalled <code>yarn</code>, and then ran <code>yarn global add rollup</code> for good measure. I then tried popping into <code>fish</code> to see how it was going. I use <code>fish</code> with <a href="">Starship</a>, and it was telling me that the latter wasn't working. Two minutes until that Zoom meeting by the way.</p>
+<p>I frantically rebooted and crossed my fingers, noting that my shell was still set to <code>bash</code> in case Starship was still an issue. And it worked! Until a spontaneous logout 12 minutes later, which I think was unrelated, because it didn't happen again and still hasn't yet (I am so expecting one as a write this...).</p>
+<p>After my Zoom meeting, I then tried using <code>fish</code> again: errors were gone. I assume Starship was trying to do something that's not allowed in recovery mode, but I can't yet remember the error message, so I have no idea what.</p>
+<h2>Closing Words</h2>
+<p>So, that was one of the weirdest issues I've ever encountered in all my time using Linux, but thankfully it was a pretty easy fix. I have still found no documentation online about this, so hopefully this helps someone at some point in the future!</p>
+<p>Also, if you've had this issue, please let me know in the comments!</p>
+<p>Oh, and the lesson from all this is to <strong>NEVER MANUALLY DELETE BINARIES!!!</strong></p>
+
+        </article>
+        <br><br>
+        <p class="text-center text-xl mb-5">Tags</p>
+        
+<div class="flex justify-center">
+    <ul class="text-center max-w-4xl">
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/ubuntu'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>ubuntu</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/linux'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>linux</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/fix'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>fix</span>
+                </p>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+        <br>
+        <div class="giscus"></div>
+    </div>
+</div>
+<script src="https://giscus.app/client.js"
+        data-repo="arctic-hen7/arctic-hen7.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzNjc4MTc5Njk="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOFex08c4B-nd9"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="preferred_color_scheme"
+        crossorigin="anonymous"
+        async>
+</script>
+
+    </div>
+</main>
+
+        </div>
+        <footer class="w-full flex justify-center mt-8 py-5 bg-gray-100 dark:bg-gray-900">
+            <p class="dark:text-white" id="footer-copyright"></p>
+            <script>
+                document.getElementById("footer-copyright").innerText = "© arctic-hen7 " + new Date().getFullYear()
+            </script>
+        </footer>
+    </body>
+</html>
+
+
+
