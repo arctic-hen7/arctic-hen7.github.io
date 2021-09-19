@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tag: &quot;rust&quot; | The Arctic Site</title>
-    <meta name="description" content="">
+    <title>Rust Single and Multi Threading in One Interface | The Arctic Site</title>
+    <meta name="description" content="How to make something multi-threaded single-threaded effortlessly in Rust.">
     <link rel="stylesheet" href="/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
@@ -74,63 +74,80 @@
 <main>
     <div class="text-center">
         
+<div class="w-full flex justify-center">
+    <div class="text-left m-8 p-8 max-w-3xl rounded-xl sm:shadow-2xl dark:text-white">
+        <p class="text-4xl 2xs:text-5xl xs:text-7xl sm:text-8xl">Rust Single and Multi Threading in One Interface</p>
+        <p class="mt-2">
+            <span>In</span>
             
+            <span class="cursor-pointer font-bubble text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-indigo-500 hover:from-indigo-500 hover:to-green-500" onclick="window.location.href = '/blog/dev'">
+                Dev
+            </span>
+            
+        </p>
+        <p class="text-gray-500 dark:text-gray-400">
+            9/17/2021
+        </p>
+        <br>
+        <article class="styled-prose">
+            <p>Rust is famous for its incredible multi-threading capabilities, which are fully memory-safe, and prevent nearly every error that can occur in C multithreading through the ingenious ownership system. However, there are cases in which you may want a multi-threaded system to have a single-threaded option, particularly for machines on older Intel processors (which often have poorer multi-threading performance). I recently encountered this while working on the <a href="https://arctic-hen7.github.io/perseus/cli.html">Perseus CLI</a>, which parallelizes its various build commands to make builds <em>really</em> fast, but this doesn't work so well on older systems, and there may well be other cases in which single-threading may be more desirable for an end user.</p>
+<p>In light of this, I was wondering if it would be possible to make a multi-threaded system have an option for single-threadedness <strong>without changing its existing interface</strong> beyond changing a few types.</p>
+<p>TODO</p>
 
-<div class="text-center m-8">
-    
-    <span class="text-5xl xs:text-7xl sm:text-8xl font-bubble text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-pink-500 to-indigo-500 hover:from-indigo-500 hover:via-pink-500 hover:to-yellow-500" style="-webkit-box-decoration-break: clone;">
-        Tag: rust
-    </span>
+        </article>
+        <br><br>
+        <p class="text-center text-xl mb-5">Tags</p>
+        
+<div class="flex justify-center">
+    <ul class="text-center max-w-4xl">
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/rust'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>rust</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/multithreading'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>multithreading</span>
+                </p>
+            </div>
+        </li>
+        
+        <li class="px-1 inline-block align-top">
+            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-3 min-w-min" onclick="window.location.href = '/blog/tags/async'">
+                <p class="dark:text-white font-bubble truncate">
+                    <span class="align-bottom material-icons-round">tag</span>
+                    <span>async</span>
+                </p>
+            </div>
+        </li>
+        
+    </ul>
 </div>
 
-<br>
-<div class="flex justify-center w-full">
-    <div class="styled-prose flex-col text-center max-w-prose">
-        <p class="px-5 text-lg text-center dark:text-white">
-            Here's a list of all the posts in all categories tagged as 'rust'.
-        </p>
+        <br>
+        <div class="giscus"></div>
     </div>
 </div>
-<br>
+<script src="https://giscus.app/client.js"
+        data-repo="arctic-hen7/arctic-hen7.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzNjc4MTc5Njk="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOFex08c4B-nd9"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="preferred_color_scheme"
+        crossorigin="anonymous"
+        async>
+</script>
 
-<div class="flex justify-center">
-    <ol class="text-center">
-        
-        <li class="px-5 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-8 max-w-xs" onclick="window.location.href = '/blog/dev/mdbook-versioning/'">
-                <p class="text-4xl font-bubble dark:text-white">Versioned Docs with mdBook</p>
-                <p class="text-gray-800 dark:text-gray-100">How to create performant, versioned docs for free with mdBook and GitHub Pages.</p>
-                <p class="text-gray-500 dark:text-gray-400">
-                    9/19/2021
-                </p>
-            </div>
-        </li>
-        
-        <li class="px-5 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-8 max-w-xs" onclick="window.location.href = '/blog/dev/rust-multi-single-threading/'">
-                <p class="text-4xl font-bubble dark:text-white">Rust Single and Multi Threading in One Interface</p>
-                <p class="text-gray-800 dark:text-gray-100">How to make something multi-threaded single-threaded effortlessly in Rust.</p>
-                <p class="text-gray-500 dark:text-gray-400">
-                    9/17/2021
-                </p>
-            </div>
-        </li>
-        
-        <li class="px-5 inline-block align-top">
-            <div class="text-left cursor-pointer rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-100 p-8 max-w-xs" onclick="window.location.href = '/blog/dev/introducing-perseus/'">
-                <p class="text-4xl font-bubble dark:text-white">Introducing Perseus for Rust Web Development!</p>
-                <p class="text-gray-800 dark:text-gray-100">Perseus aims to be NextJS for Rust.</p>
-                <p class="text-gray-500 dark:text-gray-400">
-                    9/5/2021
-                </p>
-            </div>
-        </li>
-        
-    </ol>
-</div>
-
-
-        
     </div>
 </main>
 
