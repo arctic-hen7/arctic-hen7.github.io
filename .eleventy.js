@@ -1,6 +1,9 @@
 // The number of posts to display as most recent
 const NUM_LATEST_POSTS = 3;
 
+const markdownIt = require("markdown-it");
+const markdownItTaskLists = require("markdown-it-task-lists");
+
 module.exports = (cfg) => {
     // This removes all metadata tags
     const filterTagsList = (tags) =>
@@ -82,6 +85,13 @@ module.exports = (cfg) => {
     // Add plugins
     cfg.addPlugin(require("@11ty/eleventy-plugin-rss"));
     cfg.addPlugin(require("@11ty/eleventy-plugin-syntaxhighlight"));
+
+    // Set the Markdown engine to also parse task lists (e.g. for my reading list)
+    let mdOpts = {
+        html: true,
+    };
+    let mdLib = markdownIt(mdOpts).use(markdownItTaskLists);
+    cfg.setLibrary("md", mdLib);
 
     return {
         passthroughFileCopy: true,
