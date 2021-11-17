@@ -35,10 +35,8 @@ This section is mainly for me to direct people to for presents for birthdays and
 
 - Dante -- *The Divine Comedy*
 - Aristotle -- *The Organon*
-- Montaigne -- *Collected Essays*
 - Pascal -- *The Pensées*
 - Kant -- *Groundwork on the Metaphysics of Morals*
-- Rousseau -- *Discourse on the Origin and Basis of Inequality Among Men*
 - Descartes -- *Discourse on Method*
 - Plutarch -- *Lives*
 
