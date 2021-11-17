@@ -5,7 +5,7 @@
     <subtitle>A blog about programming, productivity, and knowledge! More specific feeds are available for each category.</subtitle>
     <link href="https://arctic-hen7.github.io/blog/feed.xml" rel="self"/>
     <link href="https://arctic-hen7.github.io/blog"/>
-    <updated>2021-11-14T01:17:20Z</updated>
+    <updated>2021-11-17T07:27:59Z</updated>
     <id>https://arctic-hen7.github.io/blog</id>
     <author>
         <name>arctic_hen7</name>
@@ -281,10 +281,8 @@ ln -s ../../common/header_old.hbs [VERSION]/theme/header.hbs
 &lt;ul&gt;
 &lt;li&gt;Dante -- &lt;em&gt;The Divine Comedy&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Aristotle -- &lt;em&gt;The Organon&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Montaigne -- &lt;em&gt;Collected Essays&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Pascal -- &lt;em&gt;The Pensées&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Kant -- &lt;em&gt;Groundwork on the Metaphysics of Morals&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Rousseau -- &lt;em&gt;Discourse on the Origin and Basis of Inequality Among Men&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Descartes -- &lt;em&gt;Discourse on Method&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Plutarch -- &lt;em&gt;Lives&lt;/em&gt;&lt;/li&gt;
 &lt;/ul&gt;
