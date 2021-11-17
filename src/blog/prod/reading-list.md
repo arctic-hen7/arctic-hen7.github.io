@@ -31,7 +31,7 @@ This section is devoted to recommendations from others that have yet to be categ
 
 ## Wishlist
 
-This section is mainly for me to direct people to for presents for birthdays and the like. These are texts that I'd like to receive, preferably in eBook form, but hard-copy is also fine. If I've directed you here via some olther communication, one or more of these books would be absolutely lovely, thank you very much!
+This section is mainly for me to direct people to for presents for birthdays and the like. These are texts that I'd like to receive, preferably in eBook form, but hard-copy is also fine. If I've directed you here via some other communication, one or more of these books would be absolutely lovely, thank you very much!
 
 - Dante -- *The Divine Comedy*
 - Aristotle -- *The Organon*
