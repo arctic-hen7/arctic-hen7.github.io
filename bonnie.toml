@@ -33,17 +33,17 @@ open.args = ["type", "slug"]
 open.desc = "opens the given post in Abricotine"
 
 new.cmd = [
-	"cp templates/template_%type.md src/blog/%type/%slug.md",
-	"bonnie open %type %slug"
+    "cp templates/template_%type.md src/blog/%type/%slug.md",
+    "bonnie open %type %slug"
 ]
 new.args = ["type", "slug"]
 new.desc = "creates a new post and opens it"
 tab2spaces.cmd = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
 tab2spaces.desc = "replaces Abricotine tabs with YAML spaces in all markdown files"
 commit.cmd = [
-	"bonnie tab2spaces",
-	"git add src/blog/**/*.md",
-	"git commit -m \"feat: 📝 added new post (%message)\""
+    "bonnie tab2spaces",
+    "git add src/blog/**/*.md",
+    "git commit -m \"feat: 📝 added new post (%message)\""
 ]
 commit.args = ["message"]
 commit.desc = "stages and commits all markdown files"
