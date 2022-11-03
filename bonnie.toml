@@ -1,51 +1,95 @@
 version="0.3.2"
 
 [scripts]
-clean.cmd = "rm -rf dist/*"
-clean.desc = "cleans the Eleventy output folder"
-dev.cmd = [
-    "bonnie clean",
-    "yarn eleventy --serve"
+dev.cmd = "concurrently \"bonnie export\" \"bonnie build-tailwind\""
+site.desc = "builds and serves the site for local development (requires `concurrently`)"
+export.cmd = [
+    "perseus export -sw --custom-watch ../docs/ --cargo-engine-path cargo-clif"
 ]
-dev.desc = "runs Eleventy for development"
-build.cmd = [
-    "bonnie build-css --prod",
-    "ELEVENTY_PRODUCTION=true yarn eleventy"
+site.subcommands.export.desc = "exports and serves the site, watching for changes"
+site.subcommands.check.cmd = [
+    "cd website",
+    "perseus check -w --cargo-engine-path cargo-clif"
 ]
-build.desc = "builds the site for production"
-
-build-css.cmd = "yarn postcss \"src/styles/**/*.css\" -o ./_tmp/style.css"
-build-css.desc = "runs PostCSS to build Tailwind"
-build-css.subcommands.--watch = "find . -name \"*.css\" -not -path \"./node_modules/*\" -not -path \"./_tmp/*\" -not -path \"./dist/*\" | entr -s \"bonnie build-css\""
-build-css.subcommands.-w = "bonnie build-css --watch"
-build-css.subcommands.--prod = "NODE_ENV=production bonnie build-css"
-build-css.subcommands.-p = "bonnie build-css --prod"
-
-setup.cmd = [
-    "yarn",
-    "bonnie build-css"
+site.subcommands.check.desc = "checks the code of the website"
+site.subcommands.tinker.cmd = [
+    "cd website",
+    "perseus tinker"
 ]
-setup.desc = "sets up the project for development"
-
-## Change this if you ever want to use another editor
-open.cmd = "abricotine src/blog/%type/%slug.md"
-open.args = ["type", "slug"]
-open.desc = "opens the given post in Abricotine"
-
-new.cmd = [
-    "cp templates/template_%type.md src/blog/%type/%slug.md",
-    "bonnie open %type %slug"
+site.subcommands.tinker.desc = "runs tinkers on the website"
+site.subcommands.build-tailwind.cmd = [
+    "cd website",
+    "tailwindcss -c ./tailwind.config.js -o ./static/tailwind.css -w"
 ]
-new.args = ["type", "slug"]
-new.desc = "creates a new post and opens it"
-tab2spaces.cmd = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
-tab2spaces.desc = "replaces Abricotine tabs with YAML spaces in all markdown files"
-commit.cmd = [
-    "bonnie tab2spaces",
-    "git add src/blog/**/*.md",
-    "git commit -m \"feat: 📝 added new post (%message)\""
+site.subcommands.build-tailwind.desc = "builds a tailwind stylesheet for development, watching for changes"
+site.subcommands.build-tailwind.subcommands.prod.cmd.generic = [
+    "cd website",
+    "NODE_ENV=production tailwindcss -c ./tailwind.config.js -o ./static/tailwind.css --minify"
 ]
-commit.args = ["message"]
-commit.desc = "stages and commits all markdown files"
-push.cmd = "git push origin main"
-push.desc = "pushes the latest changes to GitHub"
+site.subcommands.build-tailwind.subcommands.prod.cmd.targets.windows = [
+    "cd website",
+    "powershell -Command { $env:NODE_ENV=\"production\"; tailwindcss -s tailwind.config.js -o static/tailwind.css --minify }"
+]
+site.subcommands.build-tailwind.subcommands.prod.desc = "builds a tailwind stylesheet for production (minifying)"
+site.subcommands.deploy.cmd.generic = [
+    "bonnie site build-tailwind prod",
+    "cd website",
+    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus tinker",
+    # Point this live version of the CLI at the given example
+    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus deploy -e"
+]
+site.subcommands.deploy.cmd.targets.windows = [
+    "bonnie site build-tailwind prod",
+    "cd website",
+    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus tinker }",
+    # Point this live version of the CLI at the given example
+    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus deploy -e }"
+]
+site.subcommands.deploy.desc = "builds the website for production and finalizes it at `website/pkg`"
+site.subcommands.deploy-prod.cmd.generic = [
+    "bonnie site build-tailwind prod",
+    "cd website",
+    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus tinker",
+    # Point this live version of the CLI at the given example
+    "PERSEUS_BASE_PATH=https://framesurge.sh/perseus perseus deploy -e",
+    "PERSEUS_BASE_PATH=https://framesurge.sh/perseus perseus export-error-page --code 404 --output pkg/404.html",
+    # Build the Tribble contributing docs
+    "cd ..",
+    "tribble deploy --path https://framesurge.sh/perseus/tribble -o tribble",
+    "mv tribble website/pkg/"
+]
+site.subcommands.deploy-prod.cmd.targets.windows = [
+    "bonnie site build-tailwind prod",
+    "cd website",
+    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus tinker }",
+    # Point this live version of the CLI at the given example
+    "powershell -Command { $env:PERSEUS_BASE_PATH=\"https://framesurge.sh/perseus\"; perseus deploy -e }",
+    "powershell -Command { $env:PERSEUS_BASE_PATH=\"https://framesurge.sh/perseus\"; perseus export-error-page --code 404 --output pkg/404.html } ",
+    # Build the Tribble contributing docs
+    "cd ..",
+    "tribble deploy --path https://framesurge.sh/perseus/tribble -o tribble",
+    "Move-Item -Path tribble -Destination website\\pkg"
+]
+site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `website/pkg`"
+site.subcommands.deploy.subcommands.serve.cmd.generic = [
+    "cd website",
+    "mkdir pkgs",
+    "mv pkg pkgs/perseus",
+    "mv pkgs pkg",
+    "serve -p 8080 pkg/"
+]
+site.subcommands.deploy.subcommands.serve.cmd.targets.windows = [
+    "cd website",
+    "New-Item -Force -ItemType directory -Path pkgs",
+    "Move-Item -Path pkg -Destination pkgs/perseus",
+    "Rename-Item -Path pkgs -NewName pkg",
+    "serve -p 8080 pkg/"
+]
+site.subcommands.deploy.subcommands.serve.desc = "serves the website for local testing after it's been built for production"
+site.subcommands.run.cmd = [
+    "bonnie site build-tailwind",
+    "cd website",
+    # Point this live version of the CLI at the given example
+    "perseus serve",
+]
+site.subcommands.run.desc = "runs the website without watching for changes"

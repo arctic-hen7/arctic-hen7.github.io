@@ -1,5 +1,5 @@
 # This ensures your code style preferences are enforced no matter what editor you and your contributors use!
-# They'll need to install the Editorconfig extension in their editr of choice first though.
+# They'll need to install the Editorconfig extension in their editor of choice first though.
 
 root = true
 
