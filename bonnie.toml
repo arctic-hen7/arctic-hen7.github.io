@@ -1,91 +1,40 @@
 version="0.3.2"
 
 [scripts]
-dev.cmd = "concurrently \"bonnie export\" \"bonnie build-tailwind\""
+site.cmd = "concurrently \"bonnie site export\" \"bonnie site build-tailwind\""
 site.desc = "builds and serves the site for local development (requires `concurrently`)"
-export.cmd = [
-    "perseus export -sw --custom-watch ../docs/ --cargo-engine-path cargo-clif"
+site.subcommands.export.cmd = [
+    "perseus export -sw --cargo-engine-path cargo-clif"
 ]
 site.subcommands.export.desc = "exports and serves the site, watching for changes"
 site.subcommands.check.cmd = [
-    "cd website",
     "perseus check -w --cargo-engine-path cargo-clif"
 ]
 site.subcommands.check.desc = "checks the code of the website"
-site.subcommands.tinker.cmd = [
-    "cd website",
-    "perseus tinker"
-]
-site.subcommands.tinker.desc = "runs tinkers on the website"
 site.subcommands.build-tailwind.cmd = [
-    "cd website",
-    "tailwindcss -c ./tailwind.config.js -o ./static/tailwind.css -w"
+    "tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css -w"
 ]
 site.subcommands.build-tailwind.desc = "builds a tailwind stylesheet for development, watching for changes"
 site.subcommands.build-tailwind.subcommands.prod.cmd.generic = [
-    "cd website",
-    "NODE_ENV=production tailwindcss -c ./tailwind.config.js -o ./static/tailwind.css --minify"
+    "NODE_ENV=production tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css --minify"
 ]
 site.subcommands.build-tailwind.subcommands.prod.cmd.targets.windows = [
-    "cd website",
     "powershell -Command { $env:NODE_ENV=\"production\"; tailwindcss -s tailwind.config.js -o static/tailwind.css --minify }"
 ]
 site.subcommands.build-tailwind.subcommands.prod.desc = "builds a tailwind stylesheet for production (minifying)"
 site.subcommands.deploy.cmd.generic = [
     "bonnie site build-tailwind prod",
-    "cd website",
-    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus tinker",
     # Point this live version of the CLI at the given example
-    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus deploy -e"
+    "PERSEUS_BASE_PATH=http://localhost:8080 perseus deploy -e"
 ]
-site.subcommands.deploy.cmd.targets.windows = [
-    "bonnie site build-tailwind prod",
-    "cd website",
-    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus tinker }",
-    # Point this live version of the CLI at the given example
-    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus deploy -e }"
-]
-site.subcommands.deploy.desc = "builds the website for production and finalizes it at `website/pkg`"
+site.subcommands.deploy.desc = "builds the website for production and finalizes it at `pkg`"
 site.subcommands.deploy-prod.cmd.generic = [
     "bonnie site build-tailwind prod",
-    "cd website",
-    "PERSEUS_BASE_PATH=http://localhost:8080/perseus perseus tinker",
     # Point this live version of the CLI at the given example
-    "PERSEUS_BASE_PATH=https://framesurge.sh/perseus perseus deploy -e",
-    "PERSEUS_BASE_PATH=https://framesurge.sh/perseus perseus export-error-page --code 404 --output pkg/404.html",
-    # Build the Tribble contributing docs
-    "cd ..",
-    "tribble deploy --path https://framesurge.sh/perseus/tribble -o tribble",
-    "mv tribble website/pkg/"
+    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus deploy -e",
+    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus export-error-page --code 404 --output pkg/404.html",
 ]
-site.subcommands.deploy-prod.cmd.targets.windows = [
-    "bonnie site build-tailwind prod",
-    "cd website",
-    "powershell -Command { $env:PERSEUS_BASE_PATH=\"http://localhost:8080/perseus\"; perseus tinker }",
-    # Point this live version of the CLI at the given example
-    "powershell -Command { $env:PERSEUS_BASE_PATH=\"https://framesurge.sh/perseus\"; perseus deploy -e }",
-    "powershell -Command { $env:PERSEUS_BASE_PATH=\"https://framesurge.sh/perseus\"; perseus export-error-page --code 404 --output pkg/404.html } ",
-    # Build the Tribble contributing docs
-    "cd ..",
-    "tribble deploy --path https://framesurge.sh/perseus/tribble -o tribble",
-    "Move-Item -Path tribble -Destination website\\pkg"
-]
-site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `website/pkg`"
-site.subcommands.deploy.subcommands.serve.cmd.generic = [
-    "cd website",
-    "mkdir pkgs",
-    "mv pkg pkgs/perseus",
-    "mv pkgs pkg",
-    "serve -p 8080 pkg/"
-]
-site.subcommands.deploy.subcommands.serve.cmd.targets.windows = [
-    "cd website",
-    "New-Item -Force -ItemType directory -Path pkgs",
-    "Move-Item -Path pkg -Destination pkgs/perseus",
-    "Rename-Item -Path pkgs -NewName pkg",
-    "serve -p 8080 pkg/"
-]
-site.subcommands.deploy.subcommands.serve.desc = "serves the website for local testing after it's been built for production"
+site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `pkg`"
 site.subcommands.run.cmd = [
     "bonnie site build-tailwind",
     "cd website",
@@ -93,3 +42,9 @@ site.subcommands.run.cmd = [
     "perseus serve",
 ]
 site.subcommands.run.desc = "runs the website without watching for changes"
+
+cli.cmd = [
+    "cd cli",
+    "cargo run %%"
+]
+cli.desc = "runs the given command in the cli for the site"

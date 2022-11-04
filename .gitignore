@@ -1,3 +1,11 @@
 dist/
 target/
 Cargo.lock
+node_modules/
+pkg/
+
+# This is generated
+static/tailwind.css
+
+# TODO Remove this in prod
+.blog/

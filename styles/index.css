@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Page layout of the header, content, and footer */
+html, body, body > div, #root {
+    height: 100vh;
+}
+#root {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr min-content;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
+}
+/* This is equivalent to `main`, but also works on docs pages with a sidebar */
+header {
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    grid-area: header;
+}
+main {
+    grid-area: main;
+}
+footer {
+    grid-area: footer;
+}
+
+/* Styling for posts */
+.styled-prose > * + *,
+.styled-prose li + li,
+.styled-prose li > p + p {
+    @apply mt-6;
+}
+.styled-prose strong,
+bold {
+    font-weight: 900;
+}
+.styled-prose a {
+    @apply text-fuchsia-500;
+}
+.styled-prose h1 {
+    @apply text-4xl my-3;
+}
+.styled-prose h2 {
+    @apply text-3xl my-3;
+}
+.styled-prose h3 {
+    @apply text-2xl my-3;
+}
+.styled-prose h4 {
+    @apply text-xl my-3;
+}
+.styled-prose h5 {
+    @apply text-lg my-3;
+}
+.styled-prose h6 {
+    @apply leading-tight my-3;
+}
+.styled-prose :not(pre) code {
+    @apply rounded-lg p-1;
+    /* Similar styling as the syntax highlighted `pre` blocks */
+    background-color: #2d2d2d;
+    color: #cccccc;
+}
+.styled-prose blockquote {
+    @apply border-l-4 pl-4 italic;
+}
+.styled-prose ul {
+    @apply list-disc pl-5;
+    @apply pl-10;
+}
+.styled-prose ol {
+    @apply list-decimal pl-5;
+    @apply pl-10;
+}
