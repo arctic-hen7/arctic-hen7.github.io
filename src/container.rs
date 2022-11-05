@@ -11,10 +11,10 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
 
     view! { cx,
         header(
-            class = "shadow-md sm:p-2 w-full mb-20 bg-neutral-500/30 backdrop-blur-lg {}",
+            class = "shadow-md sm:p-2 w-full mb-20 backdrop-blur-lg {}",
         ) {
             div(class = "flex justify-between items-center") {
-                a(class = "justify-self-start self-center m-3 ml-5 text-md sm:text-2xl text-bold title-font", href = "/") {
+                a(class = "justify-self-start self-center m-3 ml-5 text-md sm:text-2xl text-bold title-font text-white", href = "/") {
                     "The Arctic Circle"
                 }
                 // The button for opening/closing the hamburger menu on mobile
@@ -63,7 +63,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
         }
         main(
             class = if props.offset_top {
-                "mt-14 xs:mt-16 sm:mt-20 lg:mt-25"
+                "mt-14 xs:mt-16 sm:mt-20 lg:mt-24"
             } else { "" }
         ) {
             (children)
@@ -81,7 +81,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
 #[derive(Prop)]
 pub struct ContainerProps<'a, G: Html> {
     children: Children<'a, G>,
-    offset_top: bool
+    offset_top: bool,
 }
 
 #[component]

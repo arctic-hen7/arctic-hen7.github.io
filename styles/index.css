@@ -29,6 +29,17 @@ footer {
     grid-area: footer;
 }
 
+/* Handling of hash links with the header */
+h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+    display: block;
+    content: " ";
+    /* This is the same as is used in the container */
+    @apply h-14 xs:h-16 sm:h-20 lg:h-24;
+    @apply -mt-14 xs:-mt-16 sm:-mt-20 lg:-mt-24;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 /* Styling for posts */
 .styled-prose > * + *,
 .styled-prose li + li,

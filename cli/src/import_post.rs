@@ -86,6 +86,10 @@ impl FullPost {
         let body = Regex::new(r#"<a(.*?)href=".*?#ID-(.*?)"(.*?)>"#)
             .unwrap()
             .replace_all(&body, r#"<a${1}href="post/$2"$3>"#);
+        // Parse hash links (since the `<base>` tag will interfere)
+        let body = Regex::new(r#"href="\#(.*?)""#)
+            .unwrap()
+            .replace_all(&body, format!(r#"href="post/{}#$1""#, &id));
 
         // Delete the HTMl file so they don't glut up my Zettelkasten folder (which is inside a Git repo)
         fs::remove_file(html_file).context("Failed to remove converted HTML file")?;

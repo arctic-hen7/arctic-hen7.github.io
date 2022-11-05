@@ -23,7 +23,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
                         meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
                         link(rel = "stylesheet", href = ".perseus/static/tailwind.css")
                 }
-                body(class = "bg-white dark:bg-neutral-900") {
+                body(class = "bg-black") {
                     PerseusRoot()
                 }
             }

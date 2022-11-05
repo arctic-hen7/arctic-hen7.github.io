@@ -16,8 +16,10 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
 
     view! { cx,
         Container(offset_top = true) {
-            // This will include the title!
-            div(class = "styled-prose", dangerously_set_inner_html = &post.contents.get())
+            div(class = "flex justify-center") {
+                // This will include the title!
+                div(class = "styled-prose text-white max-w-5xl", dangerously_set_inner_html = &post.contents.get())
+            }
             ul {
                 (tags_view)
             }
