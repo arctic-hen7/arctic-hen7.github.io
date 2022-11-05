@@ -1,5 +1,6 @@
 use std::{fs, path::{PathBuf, Path}};
 use anyhow::{Context, Result, anyhow, bail};
+use regex::Regex;
 use std::process::Command;
 use std::io::Write;
 use crate::{parse_post::OrgFile, post::*};
@@ -47,8 +48,9 @@ impl FullPost {
         let shell_param = "-command";
         // This will NOT pipe output/errors to the console
         let command = format!(
-            r#"emacs --batch --eval "(progn (require 'org) (find-file \"{}\") (setq org-html-preamble nil) (setq org-html-postamble nil) (org-html-export-to-html))""#,
-            file.path.to_string_lossy()
+            // WARNING: You will need this in your `$PATH`!
+            r#"export-blog-post "{}""#,
+            file.path.canonicalize().unwrap().to_string_lossy()
         );
         let output = Command::new(shell_exec)
             .args([shell_param, &command])
@@ -79,6 +81,11 @@ impl FullPost {
         // We don't need any of the `<head>` in that generated file, so just grab the body
         let html_parts = html_contents.trim().split(r#"<div id="content" class="content">"#).collect::<Vec<_>>(); // Yes, we need this `.trim()`!
         let body = html_parts[1].strip_suffix("</div>\n</body>\n</html>").unwrap().trim();
+        // Parse links
+        // Links are of the form `<a href="[filename]#ID-[post-id]">[title]</a>`
+        let body = Regex::new(r#"<a(.*?)href=".*?#ID-(.*?)"(.*?)>"#)
+            .unwrap()
+            .replace_all(&body, r#"<a${1}href="post/$2"$3>"#);
 
         // Delete the HTMl file so they don't glut up my Zettelkasten folder (which is inside a Git repo)
         fs::remove_file(html_file).context("Failed to remove converted HTML file")?;
