@@ -14,7 +14,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
             class = "shadow-md sm:p-2 w-full mb-20 backdrop-blur-lg {}",
         ) {
             div(class = "flex justify-between items-center") {
-                a(class = "justify-self-start self-center m-3 ml-5 text-md sm:text-2xl text-bold title-font text-white", href = "/") {
+                a(class = "justify-self-start self-center m-3 ml-5 text-md sm:text-2xl text-bold title-font", href = "/") {
                     "The Arctic Circle"
                 }
                 // The button for opening/closing the hamburger menu on mobile
@@ -69,7 +69,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
             (children)
         }
         footer(
-            class = "w-full flex justify-center py-5 bg-black text-white"
+            class = "w-full flex justify-center py-5 bg-black"
         ) {
             p(class = "mx-5 text-center") {
                 (format!("© arctic-hen7 {}", COPYRIGHT_YEARS))
@@ -88,7 +88,13 @@ pub struct ContainerProps<'a, G: Html> {
 fn NavLinks<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
         li(class = "m-3 p-1") {
+            a(href = "") { "Home" }
+        }
+        li(class = "m-3 p-1") {
             a(href = "about") { "About" }
+        }
+        li(class = "m-3 p-1") {
+            a(href = "shortform") { "The Ice Floes" }
         }
     }
 }

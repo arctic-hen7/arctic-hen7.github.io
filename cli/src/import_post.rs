@@ -90,6 +90,21 @@ impl FullPost {
         let body = Regex::new(r#"href="\#(.*?)""#)
             .unwrap()
             .replace_all(&body, format!(r#"href="post/{}#$1""#, &id));
+        // And take the table of contents out
+        let toc = Regex::new(r#"(?s)<div id="table-of-contents".*?</ul>\n</div>\n</div>"#)
+            .unwrap()
+            .find(&body);
+        let (toc, body) = match toc {
+            Some(toc) => {
+                let toc = toc.as_str();
+                // Delete it from the current body text
+                (toc, body.replace(toc, ""))
+            },
+            // If there were no sections, that's fine, we just won't have a table of contents
+            None => ("<div></div>", body.to_string())
+        };
+        // Remove the erroneous title from the table of contents (its positioning makes its role clear)
+        let toc = toc.replace("<h2>Table of Contents</h2>", "");
 
         // Delete the HTMl file so they don't glut up my Zettelkasten folder (which is inside a Git repo)
         fs::remove_file(html_file).context("Failed to remove converted HTML file")?;
@@ -109,6 +124,7 @@ impl FullPost {
             contents: body.to_string(),
             tags,
             series,
+            toc: toc.to_string(),
         };
         let full_post = FullPost {
             post,

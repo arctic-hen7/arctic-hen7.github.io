@@ -18,6 +18,8 @@ pub struct Post {
     pub tags: Vec<String>,
     /// The series that this post is part of, if it's part of any, and its index therein. (A post can only be a part of one series.)
     pub series: Option<(String, usize)>,
+    /// The HTML table of contents, to be interpolated as a sticky sidebar.
+    pub toc: String,
 }
 
 /// A post's full representation on-disk (including information that won't be sent to the browser).

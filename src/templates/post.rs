@@ -18,7 +18,20 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
         Container(offset_top = true) {
             div(class = "flex justify-center") {
                 // This will include the title!
-                div(class = "styled-prose text-white max-w-5xl", dangerously_set_inner_html = &post.contents.get())
+                div(class = "styled-prose max-w-5xl", dangerously_set_inner_html = &post.contents.get())
+                // The table of contents will be sticky-aligned to the side of the page
+                nav(
+                    // Yes, this is 63vh high
+                    // I use a larger width here than in the child `<div>` to size things nicely while avoiding a horizontal scrollbar
+                    // Bottom padding is to offset the upper padding on the heading
+                    class = "styled-prose sticky self-start top-14 xs:top-16 sm:top-20 lg:top-24 max-w-md max-h-[63vh] overflow-y-auto border-l border-neutral-600 pl-4 ml-4 py-3"
+                ) {
+                    div(
+                        class = "max-w-sm",
+                        dangerously_set_inner_html = &post.toc.get()
+                    )
+                }
+
             }
             ul {
                 (tags_view)
@@ -50,7 +63,7 @@ pub fn head(cx: Scope, post: Post) -> View<SsrNode> {
                 }
             });"#
         }
-        script(src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
+        // script(src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
     }
 }
 

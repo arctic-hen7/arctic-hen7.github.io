@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    scroll-behavior: smooth;
+}
+
 /* Page layout of the header, content, and footer */
 html, body, body > div, #root {
     height: 100vh;
@@ -43,7 +47,8 @@ h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
 /* Styling for posts */
 .styled-prose > * + *,
 .styled-prose li + li,
-.styled-prose li > p + p {
+.styled-prose li > p + p,
+.styled-prose li > ul > li:nth-child(1) {
     @apply mt-6;
 }
 .styled-prose strong,
