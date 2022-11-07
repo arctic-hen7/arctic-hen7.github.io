@@ -9,3 +9,5 @@ static/tailwind.css
 
 # TODO Remove this in prod
 .blog/
+
+.env

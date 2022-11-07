@@ -1,7 +1,6 @@
 mod templates;
 mod post;
 mod container;
-mod global_state;
 
 use perseus::{Html, PerseusApp, PerseusRoot};
 
@@ -15,7 +14,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::post::get_template)
         .template(crate::templates::tag::get_template)
         .template(crate::templates::series::get_template)
-        // .global_state_creator(crate::global_state::get_global_state_creator())
+        .template(crate::templates::shortform::get_template)
         .index_view(|cx| sycamore::view! { cx,
             html(class = "light") {
                 head {
