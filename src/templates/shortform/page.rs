@@ -34,26 +34,36 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
     // We need to make sure the shortforms aren't already filled out, for when we re-render (and everything is in the PSS!)
     #[cfg(target_arch = "wasm32")]
     if shortform_list.list.get().is_none() {
-        // TODO Error handling! (if we have critical errors, make the map empty, not nonexistent)
+        // If we have critical errors, we make the map empty, not nonexistent, since that's needed for checking and actually *showing* those errors (as opposed to a loading page)
         perseus::spawn_local_scoped(cx, async {
-            let full_list = gloo_net::http::Request::get("https://raw.githubusercontent.com/arctic-hen7/the-ice-floes/main/posts")
+            let list = match gloo_net::http::Request::get("https://raw.githubusercontent.com/arctic-hen7/the-ice-floes/main/posts")
                 .send()
-                .await
-                .unwrap()
-                .text()
-                .await
-                .unwrap();
-            // Split the list into posts, line-by-line
-            let posts = full_list.split("\n");
-            let mut list = HashMap::new();
-            for post in posts {
-                let res = serde_json::from_str::<Shortform>(post).map_err(|_| ShortformError::DeserFailed);
-                match res {
-                    Ok(post) => { list.insert(post.id.to_string(), post); },
-                    // If deserialization failed, we don't even know the ID, so add this to the top-level errors
-                    Err(err) => shortform_list.errors.modify().push(err)
+                .await {
+                    Ok(res) => match res.text().await {
+                        Ok(full_list) => {
+                            // Split the list into posts, line-by-line
+                            let posts = full_list.split("\n");
+                            let mut list = HashMap::new();
+                            for post in posts {
+                                let res = serde_json::from_str::<Shortform>(post);
+                                match res {
+                                    Ok(post) => { list.insert(post.id.to_string(), post); },
+                                    // If deserialization failed, we don't even know the ID, so add this to the top-level errors
+                                    Err(_) => shortform_list.errors.modify().push(ShortformError::DeserFailed)
+                                };
+                            }
+                            list
+                        },
+                        Err(_) => {
+                            shortform_list.errors.modify().push(ShortformError::FetchFailed);
+                            HashMap::new()
+                        },
+                    },
+                    Err(_) => {
+                        shortform_list.errors.modify().push(ShortformError::FetchFailed);
+                        HashMap::new()
+                    }
                 };
-            }
 
             // Completely override whatever else was already in the list (even if there were all errors
             // and we have nothing, this still shouldn't be `None`)

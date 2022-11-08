@@ -24,13 +24,6 @@ pub enum ShortformError {
     /// Couldn't deserialize one of the posts.
     #[error("couldn't parse post (try reloading the page, otherwise this is a problem on our end)")]
     DeserFailed,
-    /// The signature on one of the posts was invalid.
-    ///
-    /// TODO If this is recorded, ping an error logging
-    /// server to let me know that someone has access to
-    /// the ice floes repo.
-    #[error("signature invalid (this post may have been made by an imposter!!!)")]
-    SigInvalid,
     /// The hash component of the URL references a post that doesn't exist.
     #[error("no such post")]
     HashInvalid
