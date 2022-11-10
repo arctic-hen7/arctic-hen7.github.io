@@ -92,11 +92,11 @@ impl FullPost {
         // Links are of the form `<a href="[filename]#ID-[post-id]">[title]</a>`
         let body = Regex::new(r#"<a(.*?)href=".*?#ID-(.*?)"(.*?)>"#)
             .unwrap()
-            .replace_all(&body, r#"<a${1}href="post/$2"$3>"#);
+            .replace_all(&body, r#"<a${1}href="posts/$2"$3>"#);
         // Parse hash links (since the `<base>` tag will interfere)
         let body = Regex::new(r#"href="\#(.*?)""#)
             .unwrap()
-            .replace_all(&body, format!(r#"href="post/{}#$1""#, &id));
+            .replace_all(&body, format!(r#"href="posts/{}#$1""#, &id));
         // And take the table of contents out
         let toc = Regex::new(r#"(?s)<div id="table-of-contents".*?</ul>\n</div>\n</div>"#)
             .unwrap()

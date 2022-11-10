@@ -1,7 +1,7 @@
 use sycamore::prelude::*;
 use super::*;
 use super::skeleton::*;
-use crate::container::Container;
+use crate::container::{Container, CurrentRoute};
 
 /// The URL to fetch posts from.
 #[cfg(target_arch = "wasm32")]
@@ -22,8 +22,9 @@ static POSTS_URL: &str = "https://raw.githubusercontent.com/arctic-hen7/the-ice-
 #[cfg(not(target_arch = "wasm32"))]
 #[perseus::template_rx]
 pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, _shortform_list: ShortformListRx<'rx>) -> View<G> {
+
     view! { cx,
-        Container(offset_top = true) {
+        Container(offset_top = true, route = CurrentRoute::Shortform) {
             ShortformSkeleton {}
         }
     }
@@ -113,7 +114,7 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
             ShortformStatus::Single(shortform) => {
                 let shortform = shortform.clone();
                 view! { cx,
-                    Container(offset_top = true) {
+                    Container(offset_top = true, route = CurrentRoute::Shortform) {
                         // This can't be inside the component, because it's a page layout, and we need this inside the root page as well
                         div(class = "flex flex-col items-center") {
                             // A usual href leads to a non-Sycamore reload here for some reason
@@ -130,21 +131,21 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
                 }
             },
             ShortformStatus::SingleNotFound => view! { cx,
-                Container(offset_top = true) {
+                Container(offset_top = true, route = CurrentRoute::Shortform) {
                     ShortformErrorView(ShortformError::HashInvalid)
                 }
             },
             ShortformStatus::Root => {
                 let shortform_list = shortform_list.clone();
                 view! { cx,
-                    Container(offset_top = true) {
+                    Container(offset_top = true, route = CurrentRoute::Shortform) {
                         // By this point, we can guarantee that there's some stuff here
                         ShortformRootPage(shortform_list)
                     }
                 }
             },
             ShortformStatus::Loading => view! { cx,
-                Container(offset_top = true) {
+                Container(offset_top = true, route = CurrentRoute::Shortform) {
                     ShortformSkeleton {}
                 }
             }

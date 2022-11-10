@@ -1,7 +1,7 @@
 use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
 use crate::post::*;
-use crate::container::Container;
+use crate::container::{Container, CurrentRoute};
 use crate::BLOG_DIR;
 
 #[perseus::template_rx]
@@ -17,7 +17,7 @@ pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
     }).collect::<Vec<_>>());
 
     view! { cx,
-        Container(offset_top = true) {
+        Container(offset_top = true, route = CurrentRoute::Tag) {
             p { (tag.name.get()) }
             ul {
                 (posts_view)

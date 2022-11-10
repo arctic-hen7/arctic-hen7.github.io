@@ -93,3 +93,7 @@ bold {
     @apply list-decimal pl-5;
     @apply pl-10;
 }
+
+#MathJax_Message {
+    height: auto; /* Needed to override the top-level 100vh */
+}

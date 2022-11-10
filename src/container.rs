@@ -39,7 +39,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
                 // This displays the navigation links on desktop
                 nav(class = "hidden md:flex") {
                     ul(class = "mr-5 flex") {
-                        NavLinks()
+                        NavLinks(props.route)
                     }
                 }
             }
@@ -57,7 +57,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
                 )
             ) {
                 ul(class = "mr-5") {
-                    NavLinks()
+                    NavLinks(props.route)
                 }
             }
         }
@@ -82,19 +82,59 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
 pub struct ContainerProps<'a, G: Html> {
     children: Children<'a, G>,
     offset_top: bool,
+    route: CurrentRoute,
 }
 
 #[component]
-fn NavLinks<G: Html>(cx: Scope) -> View<G> {
+fn NavLinks<G: Html>(cx: Scope, curr_route: CurrentRoute) -> View<G> {
     view! { cx,
+        (
+            if curr_route != CurrentRoute::Home {
+                view! { cx,
+                    li(class = "m-3 p-1") {
+                        a(href = "") { "Home" }
+                    }
+                }
+            } else {
+                View::empty()
+            }
+        )
+        (
+            if curr_route != CurrentRoute::About {
+                view! { cx,
+                    li(class = "m-3 p-1") {
+                        a(href = "about") { "About" }
+                    }
+                }
+            } else {
+                View::empty()
+            }
+        )
+        // We always want to be able to go back to the index of posts
         li(class = "m-3 p-1") {
-            a(href = "") { "Home" }
+            a(href = "posts") { "The Arctic Circle" }
         }
-        li(class = "m-3 p-1") {
-            a(href = "about") { "About" }
-        }
-        li(class = "m-3 p-1") {
-            a(href = "shortform") { "The Ice Floes" }
-        }
+        (
+            if curr_route != CurrentRoute::Shortform {
+                view! { cx,
+                    li(class = "m-3 p-1") {
+                        a(href = "shortform") { "The Ice Floes" }
+                    }
+                }
+            } else {
+                View::empty()
+            }
+        )
     }
+}
+
+/// The templates in the app, just so we know which link to skip in the header.
+#[derive(PartialEq, Eq, Clone, Copy)]
+pub enum CurrentRoute {
+    Home,
+    About,
+    BlogPost,
+    Shortform,
+    Series,
+    Tag,
 }

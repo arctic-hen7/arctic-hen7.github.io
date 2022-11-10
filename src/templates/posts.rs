@@ -1,7 +1,7 @@
 use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
 use crate::post::*;
-use crate::container::Container;
+use crate::container::{Container, CurrentRoute};
 use crate::BLOG_DIR;
 
 #[perseus::template_rx]
@@ -15,7 +15,7 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
     }).collect::<Vec<_>>());
 
     view! { cx,
-        Container(offset_top = true) {
+        Container(offset_top = true, route = CurrentRoute::BlogPost) {
             div(class = "flex justify-center") {
                 // This will include the title!
                 div(class = "styled-prose max-w-5xl", dangerously_set_inner_html = &post.contents.get())
@@ -63,7 +63,7 @@ pub fn head(cx: Scope, post: Post) -> View<SsrNode> {
                 }
             });"#
         }
-        // script(src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
+        script(src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML")
     }
 }
 
@@ -72,7 +72,7 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Post> {
     use std::path::Path;
     use std::fs;
 
-    let id = path.strip_prefix("post/").unwrap();
+    let id = path.strip_prefix("posts/").unwrap();
     let filename = format!("{id}.json");
     let file_path = Path::new(BLOG_DIR).join(&filename);
 
@@ -103,7 +103,7 @@ fn get_build_paths() -> RenderFnResult<Vec<String>> {
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("post")
+    Template::new("posts")
         .template(post_page)
         .head(head)
         .build_paths_fn(get_build_paths)

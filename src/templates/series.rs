@@ -1,7 +1,7 @@
 use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
 use crate::post::*;
-use crate::container::Container;
+use crate::container::{Container, CurrentRoute};
 use crate::BLOG_DIR;
 
 // Note: when Perseus has islands, this will be a component with state, which can be included on the page of each post in a series.
@@ -18,7 +18,7 @@ pub fn series_page<'rx, G: Html>(cx: Scope<'rx>, series: SeriesRx<'rx>) -> View<
     }).collect::<Vec<_>>());
 
     view! { cx,
-        Container(offset_top = true) {
+        Container(offset_top = true, route = CurrentRoute::Series) {
             p { (series.name.get()) }
             ul {
                 (posts_view)
