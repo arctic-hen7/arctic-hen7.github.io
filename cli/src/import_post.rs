@@ -19,6 +19,13 @@ impl FullPost {
         let id = file.properties.get("ID").ok_or(anyhow!("File '{}' had no `ID` property.", file.path.to_string_lossy()))?;
         let title = file.metadata.get("title").ok_or(anyhow!("File '{}' had no `title` metadatum.", file.path.to_string_lossy()))?;
 
+        // Parse the author
+        let author = match file.metadata.get("author") {
+            Some(author) => PostAuthor::from_metadata(author)?,
+            // I am the default
+            None => PostAuthor::Me,
+        };
+
         // Get the tags
         let tags = file.properties.get("BLOG_TAGS").ok_or(anyhow!("File '{}' had no blog tags (these should be specified under the `BLOG_TAGS` property)", file.path.to_string_lossy()))?;
         let tags = tags.split(", ").map(|s| s.to_string()).collect::<Vec<String>>();
@@ -113,14 +120,7 @@ impl FullPost {
         let post = Post {
             title: title.to_string(),
             id: id.to_string(),
-            author: match file.metadata.get("author") {
-                Some(author) => if *author == "arctic-hen7" {
-                    PostAuthor::Me
-                } else {
-                    PostAuthor::Guest(author.to_string())
-                },
-                None => PostAuthor::Me
-            },
+            author,
             contents: body.to_string(),
             tags,
             series,

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, ffi::OsStr, fs, path::{Path, PathBuf}, time::SystemTime};
+use std::{collections::HashMap, ffi::OsStr, fs, path::{Path, PathBuf}};
 use anyhow::{Context, Result, bail, anyhow};
 use crate::{parse_post::OrgFile, post::*};
 
@@ -63,12 +63,9 @@ impl PostsList {
             if file.is_post() {
                 let title = file.metadata.get("title").ok_or(anyhow!("Post file '{}' has no title", entry.path().to_string_lossy()))?;
                 let author = match file.metadata.get("author") {
-                    Some(author) => if *author == "arctic-hen7" {
-                        PostAuthor::Me
-                    } else {
-                        PostAuthor::Guest(author.to_string())
-                    },
-                    None => PostAuthor::Me
+                    Some(author) => PostAuthor::from_metadata(author)?,
+                    // I am the default
+                    None => PostAuthor::Me,
                 };
                 let display = get_post_display(&title, &author);
 
@@ -134,8 +131,8 @@ fn get_post_display(title: &str, author: &PostAuthor) -> String {
         "{}{}",
         title,
         // Only display the author if it's not me
-        if let PostAuthor::Guest(author) = &author {
-            format!(" ({})", author)
+        if let PostAuthor::Guest { name, .. } = &author {
+            format!(" ({})", name)
         } else {
             String::new()
         }

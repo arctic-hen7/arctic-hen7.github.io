@@ -32,7 +32,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
                 ) {
                     div(class = "tham-box") {
                         div(
-                            class = "tham-inner"
+                            class = "tham-inner bg-white"
                         ) {}
                     }
                 }

@@ -1,19 +1,33 @@
 use std::env;
 use anyhow::Result;
 use chrono::Utc;
+use regex::Regex;
 use uuid::Uuid;
-
+use pulldown_cmark::{Parser, Options, html};
+use crate::post::PostAuthor;
 use super::{Shortform, list_shortform::get_shortforms_raw};
 
 /// Creates a new shortform post and publishes it to GitHub, from which it can be imported
-/// to my personal site automatically.
+/// to my personal site automatically. This takes a post author as they would be specified
+/// in a blog post's metadata.
 ///
 /// This takes the HTML content of the post.
-pub async fn create_shortform(html_content: &str) -> Result<()> {
+pub async fn create_shortform(md_content: &str, author: &str) -> Result<()> {
+    // Parse GH @ links
+    let md_content = Regex::new(r#"\[\[@(.*?)\]\]"#)
+        .unwrap()
+        .replace(&md_content, "[@$1](https://github.com/$1)");
+
+    let md_opts = Options::all();
+    let parser = Parser::new_ext(&md_content, md_opts);
+    let mut html_content = String::new();
+    html::push_html(&mut html_content, parser);
+
     let shortform = Shortform {
         id: Uuid::new_v4(),
         content: html_content.to_string(),
-        time: Utc::now()
+        time: Utc::now(),
+        author: PostAuthor::from_metadata(author)?,
     };
 
     // Get the current raw posts and the hash of the file they're in (so we can reference it for editing)

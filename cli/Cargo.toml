@@ -18,3 +18,4 @@ tokio = { version = "1", features = [ "full" ] }
 chrono = { version = "0.4", features = [ "serde" ] }
 uuid = { version = "1", features = [ "v4", "serde" ] }
 base64 = "0.5" # Yes, this is outdated, but it supports MIME encodings
+pulldown-cmark = "0.9"

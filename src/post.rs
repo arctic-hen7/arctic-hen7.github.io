@@ -35,10 +35,17 @@ pub struct FullPost {
 }
 
 /// The author of a post.
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum PostAuthor {
     /// Me (the default).
     Me,
-    /// Another guest, whose name will be shown,
-    Guest(String)
+    /// Another guest.
+    Guest {
+        /// The guest's display name.
+        name: String,
+        /// Their profile picture URL, if they have one.
+        profile_pic_url: Option<String>,
+        /// Their home page URL (this could be a Twitter account, GitHub, a personal site, anything).
+        home_url: String,
+    }
 }

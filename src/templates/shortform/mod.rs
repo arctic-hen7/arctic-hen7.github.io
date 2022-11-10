@@ -15,6 +15,8 @@ use std::collections::HashMap;
 
 use error::ShortformError;
 
+use crate::post::PostAuthor;
+
 #[perseus::make_rx(ShortformListRx)]
 pub struct ShortformList {
     /// A list of shortforms, indexed by their IDs.
@@ -36,6 +38,9 @@ pub struct Shortform {
     pub content: String,
     /// The time at which the post was made, in UTC time.
     pub time: DateTime<Utc>,
+    /// The writer of the post.
+    pub author: PostAuthor,
+
     // TODO Other fields, such as hashtags and @ references
 }
 

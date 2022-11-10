@@ -8,7 +8,12 @@ use sycamore::prelude::*;
 #[component]
 pub fn ShortformSkeleton<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
-            // TODO
-        p { "Loading shortforms..." }
+        div(class = "flex flex-col items-center") {
+            ul(class = "max-w-4xl") {
+                li(class = "") {
+                    span { "Loading..." }
+                }
+            }
+        }
     }
 }

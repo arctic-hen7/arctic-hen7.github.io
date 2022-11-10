@@ -2,16 +2,17 @@ use std::env;
 use anyhow::{Result, bail};
 use super::Shortform;
 
-/// Lists all the current shortform posts.
-pub async fn list_shortforms() -> Result<Vec<Shortform>> {
-    let (raw, _sha) = get_shortforms_raw().await?;
+/// Lists all the current shortform posts. This also returns the
+/// hash of the file that contains them.
+pub async fn list_shortforms() -> Result<(Vec<Shortform>, String)> {
+    let (raw, sha) = get_shortforms_raw().await?;
     let mut parsed = Vec::new();
     for post in raw.into_iter() {
         let post = serde_json::from_str(&post)?;
         parsed.push(post);
     }
 
-    Ok(parsed)
+    Ok((parsed, sha))
 }
 
 /// Gets the raw list of shortforms, without parsing them. This

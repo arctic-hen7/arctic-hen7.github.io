@@ -8,10 +8,16 @@ use sycamore::prelude::*;
 #[cfg(target_arch = "wasm32")]
 #[component]
 pub fn ShortformErrorView<G: Html>(cx: Scope, err: ShortformError) -> View<G> {
+    use super::root::ERROR_ICON;
+
     view! { cx,
-        // TODO Styling
-        div(class = "bg-red-400") {
-            span(class = "text-white") { (format!("An error occurred: {}", err.to_string())) }
+        div(class = "flex justify-center") {
+            div(class = "bg-red-300 p-6 max-w-prose rounded-md text-red-900 flex mx-4") {
+                span(dangerously_set_inner_html = ERROR_ICON, class = "fill-red-900") {}
+                div(class = "pl-2") {
+                    p { (err.to_string()) }
+                }
+            }
         }
     }
 }
@@ -19,12 +25,12 @@ pub fn ShortformErrorView<G: Html>(cx: Scope, err: ShortformError) -> View<G> {
 #[derive(Clone, Serialize, Deserialize, Debug, thiserror::Error)]
 pub enum ShortformError {
     /// Couldn't fetch the posts in the first place.
-    #[error("couldn't fetch posts (are you online?)")]
+    #[error("Couldn't fetch posts (are you online?)")]
     FetchFailed,
     /// Couldn't deserialize one of the posts.
-    #[error("couldn't parse post (try reloading the page, otherwise this is a problem on our end)")]
+    #[error("Couldn't parse post (try reloading the page, otherwise this is a problem on our end)")]
     DeserFailed,
     /// The hash component of the URL references a post that doesn't exist.
-    #[error("no such post")]
+    #[error("No such post")]
     HashInvalid
 }

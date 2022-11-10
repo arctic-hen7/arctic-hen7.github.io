@@ -2,22 +2,28 @@ use sycamore::prelude::*;
 use super::*;
 use super::single::SingleShortform;
 
+pub static ERROR_ICON: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>"#;
+
 /// The root page that displays many shortforms.
 ///
 /// The shortforms this receives are guaranteed to have already been loaded.
 #[component]
 pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformListRx<'rx>) -> View<G> {
-    // TODO Does this need to be in a memo?
     let shortforms = create_memo(cx, move || {
         let list = &*shortform_list.list.get();
         let list = list.as_ref().unwrap(); // Guaranteed by caller
+        let mut posts = list.values().collect::<Vec<_>>();
+        // Sort the posts by their time of creation
+        posts.sort_by(|a, b| b.time.partial_cmp(&a.time).unwrap());
         View::new_fragment(
-            list
-                .iter()
-                .map(|(_id, post)| {
+            posts
+                .into_iter()
+                .map(|post| {
                     let post = post.clone();
                     view! { cx,
-                        SingleShortform(post)
+                        li {
+                            SingleShortform(post)
+                        }
                     }
                 })
                 .collect::<Vec<_>>()
@@ -32,7 +38,7 @@ pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: Shortform
                 .map(|err| {
                     let error = err.to_string();
                     view! { cx,
-                            li(class = "") { (error) }
+                            li(class = "ml-8") { (error) }
                     }
                 })
                 .collect::<Vec<_>>()
@@ -42,22 +48,23 @@ pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: Shortform
             View::empty()
         } else {
             view! { cx,
-                    div(class = "bg-red") {
-                        p { "One or more errors occurred while fetching the posts." }
-                        ul { (errors) }
+                div(class = "bg-red-300 p-6 max-w-prose rounded-md text-red-900 flex mx-4") {
+                    span(dangerously_set_inner_html = ERROR_ICON, class = "fill-red-900") {}
+                    div(class = "pl-2") {
+                        p { "One or more errors occurred while fetching the posts:" }
+                        ul(class = "list-disc") { (errors) }
                     }
+                }
             }
         }
     });
 
-
-
     view! { cx,
-        div {
+        div(class = "flex flex-col items-center") {
             (*list_errors.get())
-        }
-        ul {
-            (*shortforms.get())
+            ul(class = "") {
+                (*shortforms.get())
+            }
         }
     }
 }

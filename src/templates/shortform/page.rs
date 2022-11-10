@@ -3,6 +3,10 @@ use super::*;
 use super::skeleton::*;
 use crate::container::Container;
 
+/// The URL to fetch posts from.
+#[cfg(target_arch = "wasm32")]
+static POSTS_URL: &str = "https://raw.githubusercontent.com/arctic-hen7/the-ice-floes/main/posts";
+
 // This would use incremental generation if we had a server, but we don't
 /// The shortform *page*. Whether or not this resolves to the root page, or
 /// the page for a specific shortform, is dependent on the hash component of
@@ -36,13 +40,13 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
     if shortform_list.list.get().is_none() {
         // If we have critical errors, we make the map empty, not nonexistent, since that's needed for checking and actually *showing* those errors (as opposed to a loading page)
         perseus::spawn_local_scoped(cx, async {
-            let list = match gloo_net::http::Request::get("https://raw.githubusercontent.com/arctic-hen7/the-ice-floes/main/posts")
+            let list = match gloo_net::http::Request::get(POSTS_URL)
                 .send()
                 .await {
                     Ok(res) => match res.text().await {
                         Ok(full_list) => {
                             // Split the list into posts, line-by-line
-                            let posts = full_list.split("\n");
+                            let posts = full_list.split("\n").filter(|line| !line.is_empty());
                             let mut list = HashMap::new();
                             for post in posts {
                                 let res = serde_json::from_str::<Shortform>(post);
@@ -75,20 +79,21 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
         .unwrap()
         .location();
     let hash = location.hash().unwrap();
-    let hash = if hash.is_empty() {
+    // This is reactive so we can imperatively navigate
+    let hash = create_signal(cx, if hash.is_empty() {
         None
     } else {
         // If it does exist, it will have a `#` in front of it
         Some(hash.strip_prefix("#").unwrap().to_string())
-    };
+    });
 
     // This provides the single shortform to render if there's a
     // hash component to the URL. If there isn't, it will be `Root`,
     // and we'll render the root page.
-    let single_shortform = create_memo(cx, move || {
+    let shortform_status = create_memo(cx, move || {
         let shortforms = &*shortform_list.list.get();
         if let Some(shortforms) = shortforms {
-            if let Some(hash) = &hash {
+            if let Some(hash) = &*hash.get() {
                 // We have the list of shortforms along with the hash itself, so get the right one
                 let shortform = shortforms.get(hash).cloned();
                 match shortform {
@@ -104,33 +109,44 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
     });
 
     let view = create_memo(cx, move || {
-        match &*single_shortform.get() {
+        match &*shortform_status.get() {
             ShortformStatus::Single(shortform) => {
                 let shortform = shortform.clone();
                 view! { cx,
-                        Container(offset_top = true) {
+                    Container(offset_top = true) {
+                        // This can't be inside the component, because it's a page layout, and we need this inside the root page as well
+                        div(class = "flex flex-col items-center") {
+                            // A usual href leads to a non-Sycamore reload here for some reason
+                            button(
+                                class = "cursor-pointer text-blue-400 my-4",
+                                on:click = move |_| {
+                                    web_sys::window().unwrap().location().set_hash("");
+                                    hash.set(None);
+                                }
+                            ) { "← Back to all posts" }
                             SingleShortform(shortform)
                         }
+                    }
                 }
             },
             ShortformStatus::SingleNotFound => view! { cx,
-                                                       Container(offset_top = true) {
-                                                           ShortformErrorView(ShortformError::HashInvalid)
-                                                       }
+                Container(offset_top = true) {
+                    ShortformErrorView(ShortformError::HashInvalid)
+                }
             },
             ShortformStatus::Root => {
                 let shortform_list = shortform_list.clone();
                 view! { cx,
-                        Container(offset_top = true) {
-                            // By this point, we can guarantee that there's some stuff here
-                            ShortformRootPage(shortform_list)
-                        }
+                    Container(offset_top = true) {
+                        // By this point, we can guarantee that there's some stuff here
+                        ShortformRootPage(shortform_list)
+                    }
                 }
             },
             ShortformStatus::Loading => view! { cx,
-                                                    Container(offset_top = true) {
-                                                        ShortformSkeleton {}
-                                                    }
+                Container(offset_top = true) {
+                    ShortformSkeleton {}
+                }
             }
         }
     });

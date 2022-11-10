@@ -6,6 +6,8 @@ mod delete_shortform;
 mod list_shortform;
 
 pub use create_shortform::create_shortform;
+pub use list_shortform::list_shortforms;
+pub use delete_shortform::delete_shortform;
 
 use uuid::Uuid;
 
@@ -18,12 +20,15 @@ pub struct Shortform {
     pub content: String,
     /// The time at which the post was made, in UTC time.
     pub time: DateTime<Utc>,
-    // TODO Other fields, such as hashtags and @ references
+    /// The writer of the post.
+    pub author: PostAuthor,
 }
 
 use std::env;
 use anyhow::{Result, Context};
 use octocrab::Octocrab;
+
+use crate::post::PostAuthor;
 
 /// Initializes the GitHub client with authentication. Once this is called, it
 /// will insert itself into a static store. This should only be called once.
