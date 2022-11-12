@@ -103,6 +103,5 @@ bold {
     max-width: 90vw;
 }
 .katex-display > .katex > .katex-html > .tag {
-    position: relative;
-    right: 0;
+    @apply !relative xl:!absolute !-right-[5rem] xl:!right-[1rem]
 }

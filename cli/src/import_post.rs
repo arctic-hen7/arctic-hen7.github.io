@@ -113,7 +113,10 @@ impl FullPost {
         };
         // Remove the erroneous title from the table of contents (its positioning makes its role clear)
         let toc = toc.replace("<h2>Table of Contents</h2>", "");
-        // TODO Remove the erroneous title
+        // Remove the erroneous title
+        let body = Regex::new(r#"(?s)<h1 class="title">.*</h1>"#)
+            .unwrap()
+            .replace_all(&body, "");
         // Process equations with KaTeX on the server-side so they're delivered immediately
         let display_opts = Opts::builder()
             .display_mode(true)
@@ -133,6 +136,15 @@ impl FullPost {
                 // We can't handle errors here properly...
                 katex::render(inline_eqn).unwrap()
             });
+        let body = Regex::new(r#"\$(.*?)\$"#)
+            .unwrap()
+            .replace_all(&body, |caps: &Captures| {
+                let inline_eqn = caps.get(1).unwrap().as_str();
+                // We can't handle errors here properly...
+                katex::render(inline_eqn).unwrap()
+            });
+        // There will probably be some leftover newlines at the start or end
+        let body = body.trim();
 
         // Delete the HTMl file so they don't glut up my Zettelkasten folder (which is inside a Git repo)
         fs::remove_file(html_file).context("Failed to remove converted HTML file")?;
