@@ -11,12 +11,14 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
 
     view! { cx,
         header(
-            class = "shadow-md sm:p-2 w-full mb-20 backdrop-blur-lg {}",
+            class = "sm:p-2 w-full mb-20 backdrop-blur-lg {}",
         ) {
-            div(class = "flex justify-between items-center") {
-                a(class = "justify-self-start self-center m-3 ml-5 text-md sm:text-2xl text-bold title-font", href = "/") {
-                    "The Arctic Circle"
+            div(class = "flex justify-between xl:justify-center items-center") {
+                a(class = "justify-self-start self-center m-3 ml-5 text-lg sm:text-xl text-bold title-font", href = "/") {
+                    "The Arctic Site"
                 }
+                // Carefully chosen to avoid glitches
+                div(class = "xl:w-[38rem] 2xl:w-[55rem] 3xl:w-[70rem]") {}
                 // The button for opening/closing the hamburger menu on mobile
                 // This is done by a Tailwind module
                 div(

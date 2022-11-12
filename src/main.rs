@@ -11,6 +11,7 @@ static BLOG_DIR: &str = "./.blog";
 pub fn main<G: Html>() -> PerseusApp<G> {
     PerseusApp::new()
         .template(crate::templates::index::get_template)
+        .template(crate::templates::about::get_template)
         .template(crate::templates::posts::get_template)
         .template(crate::templates::tag::get_template)
         .template(crate::templates::series::get_template)
@@ -18,9 +19,9 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .index_view(|cx| sycamore::view! { cx,
             html(class = "light") {
                 head {
-                    meta(charset = "UTF-8")
-                        meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
-                        link(rel = "stylesheet", href = ".perseus/static/tailwind.css")
+                    meta(charset = "UTF-8") {}
+                    meta(name = "viewport", content = "width=device-width, initial-scale=1.0") {}
+                    link(rel = "stylesheet", href = ".perseus/static/tailwind.css") {}
                 }
                 body(class = "bg-black text-white") {
                     PerseusRoot()

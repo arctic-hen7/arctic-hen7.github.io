@@ -19,15 +19,20 @@ chrono = { version = "0.4", features = [ "serde" ] }
 tokio = { version = "1", features = [ "macros", "rt", "rt-multi-thread" ] }
 anyhow = "1"
 uuid = { version = "1", features = [ "v4", "serde" ] }
+pulldown-cmark = "0.9"
 
 # Browser-only dependencies go here
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 gloo-net = { version = "0.2", features = [ "http" ] }
 web-sys = { version = "0.3", features = [ "Location", "Window" ] }
 uuid = { version = "1", features = [ "v4", "serde", "js" ] } # Defined again here for the `js` flag
+js-sys = "0.3"
 
 [workspace]
 members = [ "cli/" ]
 
 # [patch.crates-io]
+# sycamore = { path = "../sycamore/packages/sycamore" }
 # sycamore-router = { path = "../sycamore/packages/sycamore-router" }
+# sycamore-reactive = { path = "../sycamore/packages/sycamore-reactive" }
+# sycamore-core = { path = "../sycamore/packages/sycamore-core" }

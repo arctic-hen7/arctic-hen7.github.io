@@ -1,16 +1,19 @@
 use perseus::Template;
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
+use crate::container::{Container, CurrentRoute};
 
 #[perseus::template_rx]
 pub fn index_page<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
-        // Don't worry, there are much better ways of styling in Perseus!
-        div(style = "display: flex; flex-direction: column; justify-content: center; align-items: center; height: 95vh;") {
-            h1 { "Welcome to Perseus!" }
-            p {
-                "This is just an example app. Try changing some code inside "
-                code { "src/templates/index.rs" }
-                " and you'll be able to see the results here!"
+        Container(offset_top = true, route = CurrentRoute::Home) {
+            // Don't worry, there are much better ways of styling in Perseus!
+            div(style = "display: flex; flex-direction: column; justify-content: center; align-items: center; height: 95vh;") {
+                h1 { "Welcome to Perseus!" }
+                p {
+                    "This is just an example app. Try changing some code inside "
+                        code { "src/templates/index.rs" }
+                    " and you'll be able to see the results here!"
+                }
             }
         }
     }

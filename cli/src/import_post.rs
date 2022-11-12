@@ -1,6 +1,7 @@
 use std::{fs, path::{PathBuf, Path}};
 use anyhow::{Context, Result, anyhow, bail};
-use regex::Regex;
+use katex::Opts;
+use regex::{Captures, Regex};
 use std::process::Command;
 use std::io::Write;
 use crate::{parse_post::OrgFile, post::*};
@@ -112,6 +113,26 @@ impl FullPost {
         };
         // Remove the erroneous title from the table of contents (its positioning makes its role clear)
         let toc = toc.replace("<h2>Table of Contents</h2>", "");
+        // TODO Remove the erroneous title
+        // Process equations with KaTeX on the server-side so they're delivered immediately
+        let display_opts = Opts::builder()
+            .display_mode(true)
+            .build()?;
+        let body = Regex::new(r#"(?s)\\begin\{align\*\}\n(.*?)\n\\end\{align\*\}"#)
+            .unwrap()
+            .replace_all(&body, |caps: &Captures| {
+                // We use the whole statement here, otherwise `&` is invalid
+                let display_eqn = caps.get(0).unwrap().as_str();
+                // We can't handle errors here properly...
+                katex::render_with_opts(display_eqn, &display_opts).unwrap()
+            });
+        let body = Regex::new(r#"\\\((.*?)\\\)"#)
+            .unwrap()
+            .replace_all(&body, |caps: &Captures| {
+                let inline_eqn = caps.get(1).unwrap().as_str();
+                // We can't handle errors here properly...
+                katex::render(inline_eqn).unwrap()
+            });
 
         // Delete the HTMl file so they don't glut up my Zettelkasten folder (which is inside a Git repo)
         fs::remove_file(html_file).context("Failed to remove converted HTML file")?;

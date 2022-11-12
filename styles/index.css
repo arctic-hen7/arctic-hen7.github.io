@@ -97,3 +97,12 @@ bold {
 #MathJax_Message {
     height: auto; /* Needed to override the top-level 100vh */
 }
+
+.katex-display {
+    overflow-x: auto;
+    max-width: 90vw;
+}
+.katex-display > .katex > .katex-html > .tag {
+    position: relative;
+    right: 0;
+}
