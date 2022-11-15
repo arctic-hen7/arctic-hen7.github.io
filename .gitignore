@@ -4,8 +4,9 @@ Cargo.lock
 node_modules/
 pkg/
 
-# This is generated
+# These are generated
 static/tailwind.css
+.feed.xml
 
 # TODO Remove this in prod
 .blog/

@@ -1,8 +1,9 @@
 mod templates;
 mod post;
 mod container;
+mod rss;
 
-use perseus::{Html, PerseusApp, PerseusRoot};
+use perseus::{Html, PerseusApp, PerseusRoot, plugins::Plugins};
 
 // Relative to the root of the project
 static BLOG_DIR: &str = "./.blog";
@@ -28,4 +29,8 @@ pub fn main<G: Html>() -> PerseusApp<G> {
                 }
             }
         })
+        .plugins(Plugins::new().plugin(
+                rss::get_rss_plugin,
+                (),
+        ))
 }
