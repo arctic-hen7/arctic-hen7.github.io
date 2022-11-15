@@ -100,7 +100,8 @@ bold {
 
 .katex-display {
     overflow-x: auto;
-    max-width: 90vw;
+    overflow-y: hidden;
+    max-width:  75vw;
 }
 .katex-display > .katex > .katex-html > .tag {
     @apply !relative xl:!absolute !-right-[5rem] xl:!right-[1rem]
