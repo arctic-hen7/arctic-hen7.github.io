@@ -46,6 +46,30 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
                     }
                 }
             }
+
+            // Giscus container
+            div(class = "flex justify-center w-full") {
+                div(class = "max-w-prose px-4 giscus") {}
+            }
+
+            // Giscus loader
+            script(
+                src = "https://giscus.app/client.js",
+                data-repo = "arctic-hen7/arctic-hen7.github.io",
+                data-repo-id = "MDEwOlJlcG9zaXRvcnkzNjc4MTc5Njk=",
+                data-category = "Comments",
+                data-category-id = "DIC_kwDOFex08c4CSjuT",
+                data-mapping = "pathname",
+                data-strict = "0",
+                data-reactions-enabled = "1",
+                data-emit-metadata = "0",
+                data-input-position = "top",
+                data-theme = "dark_high_contrast",
+                data-lang = "en",
+                data-loading = "lazy",
+                crossorigin = "anonymous",
+                async = true,
+            ) {}
         }
     }
 }
