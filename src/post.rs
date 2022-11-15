@@ -10,6 +10,8 @@ pub struct Post {
     pub title: String,
     /// The author.
     pub author: PostAuthor,
+    /// A short description of the post.
+    pub description: String,
     /// The ID, which is already URL encoded (composed of the title and the Org Roam ID)
     pub id: String,
     /// The HTML contents, with MathJax etc all handled. These should be inserted into a `<div>`.

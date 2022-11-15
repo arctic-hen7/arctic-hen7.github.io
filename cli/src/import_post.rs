@@ -19,6 +19,7 @@ impl FullPost {
         // We know there will always be an ID property and a title metadatum
         let id = file.properties.get("ID").ok_or(anyhow!("File '{}' had no `ID` property.", file.path.to_string_lossy()))?;
         let title = file.metadata.get("title").ok_or(anyhow!("File '{}' had no `title` metadatum.", file.path.to_string_lossy()))?;
+        let description = file.metadata.get("description").ok_or(anyhow!("File '{}' had no `description` metadatum.", file.path.to_string_lossy()))?;
 
         // Parse the author
         let author = match file.metadata.get("author") {
@@ -154,6 +155,7 @@ impl FullPost {
             title: title.to_string(),
             id: id.to_string(),
             author,
+            description: description.to_string(),
             contents: body.to_string(),
             tags,
             series,
