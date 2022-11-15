@@ -35,7 +35,7 @@ pub fn get_rss_plugin<G: perseus::Html>() -> Plugin<G, ()> {
 </item>
 "#,
                             title = post.post.title,
-                            link = format!("{}/posts/{}", perseus::utils::get_path_prefix_server(), post.post.id),
+                            link = format!("{}/post/{}", perseus::utils::get_path_prefix_server(), post.post.id),
                             description = post.post.description,
                         );
                         let rss_item = rss_item.trim();
@@ -69,10 +69,10 @@ pub fn get_rss_plugin<G: perseus::Html>() -> Plugin<G, ()> {
                         shortform_items = "", // TODO Get shortforms from GH
                     );
 
-                    fs::write(".feed.xml", rss_feed.trim()).expect("Couldn't write RSS feed");
+                    fs::write("dist/.feed.xml", rss_feed.trim()).expect("Couldn't write RSS feed");
 
                     let mut map = std::collections::HashMap::new();
-                    map.insert("/feed.xml".to_string(), ".feed.xml".to_string());
+                    map.insert("/feed.xml".to_string(), "dist/.feed.xml".to_string());
                     map
                 });
             actions

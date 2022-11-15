@@ -12,30 +12,9 @@ static ANONYMOUS_USER_PIC_SVG: &str = r#"<svg xmlns="http://www.w3.org/2000/svg"
 #[component]
 pub fn SingleShortform<G: Html>(cx: Scope, shortform: Shortform) -> View<G> {
     let post_link = format!("shortform#{}", shortform.id);
-    let author_pic = match &shortform.author {
-        PostAuthor::Me => view! { cx,
-            img(class = "rounded-full h-8 w-8", src = "https://github.com/arctic-hen7.png", alt = "My profile picture")
-        },
-        PostAuthor::Guest { profile_pic_url, .. } => match profile_pic_url {
-            Some(url) => {
-                let url = url.to_string();
-                view! { cx,
-                    img(class = "rounded-full h-8 w-8", src = url, alt = "Guest profile picture") {}
-                }
-            },
-            None => view! { cx,
-                span(class = "fill-white", dangerously_set_inner_html = &ANONYMOUS_USER_PIC_SVG) {}
-            }
-        }
-    };
-    let author_name = match &shortform.author {
-        PostAuthor::Me => "arctic-hen7",
-        PostAuthor::Guest { name, .. } => name,
-    }.to_string();
-    let author_home_url = match &shortform.author {
-        PostAuthor::Me => "", // The root of this very site
-        PostAuthor::Guest { home_url, .. } => home_url,
-    }.to_string();
+
+    let (author_name, author_home_url, author_profile_pic) = shortform.author.parse(cx);
+
     let local = shortform.time.with_timezone(&chrono::Local);
     // See https://docs.rs/chrono/latest/chrono/format/strftime/index.html
     let time = local.format("%_I:%M%P");
@@ -45,8 +24,10 @@ pub fn SingleShortform<G: Html>(cx: Scope, shortform: Shortform) -> View<G> {
         a(class = "rounded-md p-6 bg-neutral-900 block m-2 max-w-prose", href = post_link) {
             div(class = "flex justify-between items-center mb-1") {
                 div(class = "flex items-center") {
-                    (author_pic)
-                    a(class = "ml-2 font-bold", href = author_home_url, target = "blank") { (author_name) }
+                    (author_profile_pic)
+                    object(class = "inline-flex items-center max-h-[0.1rem]", type = "invalid/mime-type") {
+                        a(class = "ml-2 font-bold", href = author_home_url, target = "blank") { (author_name) }
+                    }
                 }
                 span(class = "italic text-neutral-400") { (format!("at {} on {}", time, date)) }
             }

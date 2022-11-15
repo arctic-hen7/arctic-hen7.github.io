@@ -47,7 +47,7 @@ pub struct Shortform {
 #[perseus::head]
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
-        title { ("The Ice Floes | The Arctic Circle") }
+        title { ("The Ice Floes | The Arctic Site") }
     }
 }
 

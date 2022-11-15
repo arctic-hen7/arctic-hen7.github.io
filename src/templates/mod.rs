@@ -4,3 +4,4 @@ pub mod tag;
 pub mod series;
 pub mod shortform;
 pub mod about;
+pub mod post;
