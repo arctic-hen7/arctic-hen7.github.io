@@ -7,7 +7,7 @@ pub fn index_page<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
         Container(offset_top = false, route = CurrentRoute::Home) {
             // This page is a beautiful example of extreme manual spacing control
-            div(class = "flex flex-col justify-center items-center h-[90vh] uppercase text-4xl xs:text-5xl sm:text-7xl md:text-8xl xl:text-[10rem]") {
+            div(class = "flex flex-col justify-center items-center h-[90vh] uppercase font-bold text-4xl xs:text-5xl sm:text-7xl md:text-8xl xl:text-[10rem]") {
                 div {
                     span(class = "spaced-letter") { "S" }
                     span(class = "spaced-letter") { "a" }
@@ -61,7 +61,7 @@ pub fn index_page<G: Html>(cx: Scope) -> View<G> {
                     span(class = "text-2xl") { "👋 About Me" }
                     span { "Learn more about me, and what I'm working on. If you'd like to contact me, this is the place to go." }
                 }
-                a(href = "contact", class = "underline text-blue-400 mt-8") { "📨 Contact Me" }
+                a(href = "contact", class = "underline text-blue-400 hover:text-blue-500 transition-colors duration-150 mt-8") { "📨 Contact Me" }
             }
         }
     }

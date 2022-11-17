@@ -6,17 +6,16 @@ use crate::BLOG_DIR;
 
 #[perseus::template_rx]
 pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
-    // Whenever we load a new post, reload MathJax
-    // #[cfg(target_arch = "wasm32")]
-    // {
-    //     js_sys::eval(r#"MathJax.Hub.Queue(["Typeset",MathJax.Hub]);"#);
-    // }
-
     let tags = post.tags.get();
     let tags_view = View::new_fragment(tags.iter().cloned().map(|tag| {
         let tag_link = format!("tag/{}", &tag);
         view! { cx,
-            li { a(href = tag_link) { (tag) } }
+            li(class = "inline-block") {
+                a(
+                    class = "block border-4 border-neutral-800 hover:bg-neutral-800 transition-colors duration-150 rounded-lg p-2 px-4 m-2 font-mono flex items-center",
+                    href = tag_link
+                ) { (tag) }
+            }
         }
     }).collect::<Vec<_>>());
 
@@ -40,16 +39,17 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
                 div(class = "min-w-0") {
                     // Opposite role of the above `h1`
                     h1(class = "text-4xl my-3 text-center hidden lg:block") { (post.title.get()) }
-                    div(class = "styled-prose lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl min-w-0 min-h-0", dangerously_set_inner_html = &post.contents.get()) {}
-                    ul {
-                        (tags_view)
-                    }
+                    div(class = "styled-prose lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl min-w-0 min-h-0 mb-6", dangerously_set_inner_html = &post.contents.get()) {}
                 }
             }
 
-            // Giscus container
-            div(class = "flex justify-center w-full") {
-                div(class = "max-w-prose px-4 giscus") {}
+            div(class = "flex flex-col items-center w-full") {
+                // The top margin on this is compounded by the `m-2` on each list item
+                ul(class = "flex justify-center text-center mt-4") {
+                    (tags_view)
+                }
+                // Giscus container
+                div(class = "max-w-prose px-4 mt-8 giscus") {}
             }
 
             // Giscus loader

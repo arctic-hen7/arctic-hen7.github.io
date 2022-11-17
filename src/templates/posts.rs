@@ -1,5 +1,4 @@
 use perseus::prelude::*;
-use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 use crate::post::*;
 use crate::container::{Container, CurrentRoute};
@@ -15,7 +14,7 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
             .map(|post| {
                 let (author_name, author_home_url, author_profile_pic) = post.author.parse(cx);
                 view! { cx,
-                        li {
+                        li(class = "inline-block text-left") {
                             a(
                                 class = "block border-4 border-neutral-800 hover:bg-neutral-800 transition-colors duration-150 rounded-lg p-6 m-4 max-w-md flex flex-col",
                                 href = format!("post/{}", post.id)
@@ -40,7 +39,7 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::BlogPost) {
             div(class = "flex justify-center") {
-                ul {
+                ul(class = "max-w-[80%] text-center") {
                     (posts)
                 }
             }
@@ -51,15 +50,6 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
 #[make_rx(PostsRx)]
 struct Posts {
     posts: Vec<SlimPost>,
-}
-
-/// The information necessary to display a post card.
-#[derive(Clone, Serialize, Deserialize)]
-struct SlimPost {
-    id: String,
-    title: String,
-    author: PostAuthor,
-    description: String,
 }
 
 #[perseus::head]
@@ -86,6 +76,7 @@ fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<Posts> {
             title: post.post.title,
             author: post.post.author,
             description: post.post.description,
+            series: post.post.series,
         });
     };
 

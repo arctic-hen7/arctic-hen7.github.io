@@ -8,19 +8,35 @@ use crate::BLOG_DIR;
 pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
     let posts = tag.posts_with_tag.get();
     let posts_view = View::new_fragment(posts.iter().cloned().map(|post| {
-        let post_link = format!("post/{}", post.id);
+        let (author_name, author_home_url, author_profile_pic) = post.author.parse(cx);
         view! { cx,
-            li { a(href = post_link) {
-                span { (post.title) }
-            } }
+                li(class = "inline-block text-left") {
+                    a(
+                        class = "block border-4 border-neutral-800 hover:bg-neutral-800 transition-colors duration-150 rounded-lg p-6 m-4 max-w-md flex flex-col",
+                        href = format!("post/{}", post.id)
+                    ) {
+                        span(class = "text-xl font-bold") { (post.title) }
+                        div(class = "inline-flex items-center my-2") {
+                            (author_profile_pic)
+                            // Nested links aren't allowed under the HTML spec, but this works
+                            // Source: https://kizu.dev/nested-links/
+                                object(class = "inline-flex items-center max-h-[0.1rem]", type = "invalid/mime-type") {
+                                    a(class = "ml-2 font-semibold", href = author_home_url, target = "blank") { (author_name) }
+                                }
+                        }
+                        span(class = "") { (post.description) }
+                    }
+                }
         }
     }).collect::<Vec<_>>());
 
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::Tag) {
-            p { (tag.name.get()) }
-            ul {
-                (posts_view)
+            div(class = "flex flex-col justify-center items-center") {
+                h1(class = "text-4xl p-4 text-center") { (format!("Posts tagged '{}'", tag.name.get())) }
+                ul(class = "max-w-[80%] text-center") {
+                    (posts_view)
+                }
             }
         }
     }
@@ -29,7 +45,7 @@ pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
 #[perseus::make_rx(TagRx)]
 struct Tag {
     name: String,
-    posts_with_tag: Vec<Post>,
+    posts_with_tag: Vec<SlimPost>,
 }
 
 #[perseus::head]
@@ -52,12 +68,16 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Tag> {
         let entry = entry?;
 
         let contents = fs::read_to_string(entry.path())?;
-        let mut post: FullPost = serde_json::from_str(&contents)?;
-        // Truncate the contents to a description
-        post.post.contents.truncate(50);
+        let post: FullPost = serde_json::from_str(&contents)?;
 
         if post.post.tags.iter().any(|t| t == tag) {
-            posts_with_tag.push(post.post);
+            posts_with_tag.push(SlimPost {
+                id: post.post.id,
+                title: post.post.title,
+                author: post.post.author,
+                description: post.post.description,
+                series: post.post.series,
+            });
         }
     };
 

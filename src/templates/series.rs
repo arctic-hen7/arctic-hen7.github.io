@@ -8,20 +8,39 @@ use crate::BLOG_DIR;
 #[perseus::template_rx]
 pub fn series_page<'rx, G: Html>(cx: Scope<'rx>, series: SeriesRx<'rx>) -> View<G> {
     let posts = series.posts_in_series.get();
-    let posts_view = View::new_fragment(posts.iter().cloned().map(|post| {
-        let post_link = format!("post/{}", post.id);
+    let posts_view = View::new_fragment(posts.iter().cloned().enumerate().map(|(idx, post)| {
+        let (author_name, author_home_url, author_profile_pic) = post.author.parse(cx);
         view! { cx,
-            li { a(href = post_link) {
-                span { (post.title) }
-            } }
+                li(class = "inline-block text-left") {
+                    a(
+                        class = "block border-4 border-neutral-800 hover:bg-neutral-800 transition-colors duration-150 rounded-lg p-6 m-4 max-w-md flex flex-col",
+                        href = format!("post/{}", post.id)
+                    ) {
+                        div(class = "text-xl font-bold flex flex-row items-center") {
+                            span(class = "p-2 px-4 rounded-full bg-neutral-700 mr-3") { (idx + 1) }
+                            span { (post.title) }
+                        }
+                        div(class = "inline-flex items-center my-2") {
+                            (author_profile_pic)
+                            // Nested links aren't allowed under the HTML spec, but this works
+                            // Source: https://kizu.dev/nested-links/
+                                object(class = "inline-flex items-center max-h-[0.1rem]", type = "invalid/mime-type") {
+                                    a(class = "ml-2 font-semibold", href = author_home_url, target = "blank") { (author_name) }
+                                }
+                        }
+                        span(class = "") { (post.description) }
+                    }
+                }
         }
     }).collect::<Vec<_>>());
 
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::Series) {
-            p { (series.name.get()) }
-            ul {
-                (posts_view)
+            div(class = "flex flex-col justify-center items-center") {
+                h1(class = "text-4xl p-4 text-center") { (format!("Posts in series '{}'", series.name.get())) }
+                ul(class = "max-w-[80%] text-center") {
+                    (posts_view)
+                }
             }
         }
     }
@@ -30,7 +49,7 @@ pub fn series_page<'rx, G: Html>(cx: Scope<'rx>, series: SeriesRx<'rx>) -> View<
 #[perseus::make_rx(SeriesRx)]
 struct Series {
     name: String,
-    posts_in_series: Vec<Post>,
+    posts_in_series: Vec<SlimPost>,
 }
 
 #[perseus::head]
@@ -56,7 +75,13 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Series> {
         let post: FullPost = serde_json::from_str(&contents)?;
 
         if post.post.series.is_some() && post.post.series.as_ref().unwrap().0 == series {
-            posts_in_series.push(post.post);
+            posts_in_series.push(SlimPost {
+                id: post.post.id,
+                title: post.post.title,
+                author: post.post.author,
+                description: post.post.description,
+                series: post.post.series,
+            });
         }
     };
 

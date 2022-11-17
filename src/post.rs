@@ -54,6 +54,17 @@ pub enum PostAuthor {
     }
 }
 
+
+/// The information necessary to display a post card.
+#[derive(Clone, Serialize, Deserialize)]
+pub struct SlimPost {
+    pub id: String,
+    pub title: String,
+    pub author: PostAuthor,
+    pub description: String,
+    pub series: Option<(String, usize)>,
+}
+
 use sycamore::prelude::*;
 
 impl PostAuthor {
