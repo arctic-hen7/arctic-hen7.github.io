@@ -1,10 +1,13 @@
-use std::{fs, path::{PathBuf, Path}};
-use anyhow::{Context, Result, anyhow, bail};
+use crate::{parse_post::OrgFile, post::*};
+use anyhow::{anyhow, bail, Context, Result};
 use katex::Opts;
 use regex::{Captures, Regex};
-use std::process::Command;
 use std::io::Write;
-use crate::{parse_post::OrgFile, post::*};
+use std::process::Command;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 impl FullPost {
     /// Imports a single post from my Zettelkasten in Org Roam and converts it to HTML. This function could easily take quite a while.
@@ -13,13 +16,25 @@ impl FullPost {
     /// This will add the post to the index on-disk!
     pub fn new(file: &OrgFile, blog_dir: &Path) -> Result<(Self, PathBuf)> {
         if !file.is_post() {
-            bail!("File '{}' is not a blog post ready for publication", file.path.to_string_lossy());
+            bail!(
+                "File '{}' is not a blog post ready for publication",
+                file.path.to_string_lossy()
+            );
         }
 
         // We know there will always be an ID property and a title metadatum
-        let id = file.properties.get("ID").ok_or(anyhow!("File '{}' had no `ID` property.", file.path.to_string_lossy()))?;
-        let title = file.metadata.get("title").ok_or(anyhow!("File '{}' had no `title` metadatum.", file.path.to_string_lossy()))?;
-        let description = file.metadata.get("description").ok_or(anyhow!("File '{}' had no `description` metadatum.", file.path.to_string_lossy()))?;
+        let id = file.properties.get("ID").ok_or(anyhow!(
+            "File '{}' had no `ID` property.",
+            file.path.to_string_lossy()
+        ))?;
+        let title = file.metadata.get("title").ok_or(anyhow!(
+            "File '{}' had no `title` metadatum.",
+            file.path.to_string_lossy()
+        ))?;
+        let description = file.metadata.get("description").ok_or(anyhow!(
+            "File '{}' had no `description` metadatum.",
+            file.path.to_string_lossy()
+        ))?;
 
         // Parse the author
         let author = match file.metadata.get("author") {
@@ -29,18 +44,34 @@ impl FullPost {
         };
 
         // Get the tags
-        let tags = file.properties.get("BLOG_TAGS").ok_or(anyhow!("File '{}' had no blog tags (these should be specified under the `BLOG_TAGS` property)", file.path.to_string_lossy()))?;
-        let tags = tags.split(", ").map(|s| s.to_string()).collect::<Vec<String>>();
+        let tags = file.properties.get("BLOG_TAGS").ok_or(anyhow!(
+            "File '{}' had no blog tags (these should be specified under the `BLOG_TAGS` property)",
+            file.path.to_string_lossy()
+        ))?;
+        let tags = tags
+            .split(", ")
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>();
         // Get the series (if there is one)
-        let series: Option<Result<(String, usize)>> = file.properties.get("BLOG_SERIES").map(|series| {
-            // Series are of the form `Series name(<index>)`
-            let mut series_parts = series.split('(').collect::<Vec<_>>();
-            let series_idx = series_parts.remove(series_parts.len() - 1).strip_suffix(")").ok_or(anyhow!("File '{}' has an invalid series specification (must include the index)", file.path.to_string_lossy()))?;
-            let series_name = series_parts.join("(");
-            let series_idx = series_idx.parse::<usize>().context(anyhow!("Invalid series index for file '{}'", file.path.to_string_lossy()))?;
+        let series: Option<Result<(String, usize)>> =
+            file.properties.get("BLOG_SERIES").map(|series| {
+                // Series are of the form `Series name(<index>)`
+                let mut series_parts = series.split('(').collect::<Vec<_>>();
+                let series_idx = series_parts
+                    .remove(series_parts.len() - 1)
+                    .strip_suffix(")")
+                    .ok_or(anyhow!(
+                        "File '{}' has an invalid series specification (must include the index)",
+                        file.path.to_string_lossy()
+                    ))?;
+                let series_name = series_parts.join("(");
+                let series_idx = series_idx.parse::<usize>().context(anyhow!(
+                    "Invalid series index for file '{}'",
+                    file.path.to_string_lossy()
+                ))?;
 
-            Ok((series_name, series_idx))
-        });
+                Ok((series_name, series_idx))
+            });
         let series = match series {
             Some(v) => Some(v?),
             None => None,
@@ -71,7 +102,7 @@ impl FullPost {
             None if output.status.success() => 0, /* If we don't, but we know the command succeeded, */
             // return 0 (success code)
             None => 1, /* If we don't know an exit code but we know that the command failed, return 1
-             * (general error code) */
+                        * (general error code) */
         };
         // Print `stderr` and `stdout` only if there's something therein and the exit
         // code is non-zero
@@ -86,10 +117,17 @@ impl FullPost {
         let mut html_file = file.path.to_path_buf();
         html_file.set_extension("html");
 
-        let html_contents = fs::read_to_string(&html_file).context("Failed to read converted HTML file")?;
+        let html_contents =
+            fs::read_to_string(&html_file).context("Failed to read converted HTML file")?;
         // We don't need any of the `<head>` in that generated file, so just grab the body
-        let html_parts = html_contents.trim().split(r#"<div id="content" class="content">"#).collect::<Vec<_>>(); // Yes, we need this `.trim()`!
-        let body = html_parts[1].strip_suffix("</div>\n</body>\n</html>").unwrap().trim();
+        let html_parts = html_contents
+            .trim()
+            .split(r#"<div id="content" class="content">"#)
+            .collect::<Vec<_>>(); // Yes, we need this `.trim()`!
+        let body = html_parts[1]
+            .strip_suffix("</div>\n</body>\n</html>")
+            .unwrap()
+            .trim();
         // Parse links
         // Links are of the form `<a href="[filename]#ID-[post-id]">[title]</a>`
         let body = Regex::new(r#"<a(.*?)href=".*?#ID-(.*?)"(.*?)>"#)
@@ -108,9 +146,9 @@ impl FullPost {
                 let toc = toc.as_str();
                 // Delete it from the current body text
                 (toc, body.replace(toc, ""))
-            },
+            }
             // If there were no sections, that's fine, we just won't have a table of contents
-            None => ("<div></div>", body.to_string())
+            None => ("<div></div>", body.to_string()),
         };
         // Remove the erroneous title from the table of contents (its positioning makes its role clear)
         let toc = toc.replace("<h2>Table of Contents</h2>", "");
@@ -119,9 +157,7 @@ impl FullPost {
             .unwrap()
             .replace_all(&body, "");
         // Process equations with KaTeX on the server-side so they're delivered immediately
-        let display_opts = Opts::builder()
-            .display_mode(true)
-            .build()?;
+        let display_opts = Opts::builder().display_mode(true).build()?;
         let body = Regex::new(r#"(?s)\\begin\{align\*\}\n(.*?)\n\\end\{align\*\}"#)
             .unwrap()
             .replace_all(&body, |caps: &Captures| {
@@ -164,7 +200,10 @@ impl FullPost {
         let full_post = FullPost {
             post,
             source: file.path.to_path_buf(),
-            mtime: fs::metadata(&file.path).context("Failed to get metadata for source of post file")?.modified().context("Failed to get modification time for source of post file")?
+            mtime: fs::metadata(&file.path)
+                .context("Failed to get metadata for source of post file")?
+                .modified()
+                .context("Failed to get modification time for source of post file")?,
         };
         // This really shouldn't fail...
         let full_post_str = serde_json::to_string(&full_post).unwrap();

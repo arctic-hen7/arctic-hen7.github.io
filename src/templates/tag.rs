@@ -1,8 +1,8 @@
+use crate::container::{Container, CurrentRoute};
+use crate::post::*;
+use crate::BLOG_DIR;
 use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
-use crate::post::*;
-use crate::container::{Container, CurrentRoute};
-use crate::BLOG_DIR;
 
 #[perseus::template_rx]
 pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
@@ -79,23 +79,28 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Tag> {
                 series: post.post.series,
             });
         }
-    };
+    }
 
-    Ok(Tag { posts_with_tag, name: tag.to_string() })
+    Ok(Tag {
+        posts_with_tag,
+        name: tag.to_string(),
+    })
 }
 
 #[perseus::build_paths]
 fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use std::fs;
     use anyhow::Context;
+    use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut tags = Vec::new();
     for entry in fs::read_dir(BLOG_DIR)? {
         let entry = entry?;
 
-        let contents = fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents =
+            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
+        let post: FullPost =
+            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
 
         // Add all the tags of this post to the list of paths, making sure we don't have any duplications
         for tag in post.post.tags.into_iter() {
@@ -103,7 +108,7 @@ fn get_build_paths() -> RenderFnResult<Vec<String>> {
                 tags.push(tag);
             }
         }
-    };
+    }
 
     Ok(tags)
 }

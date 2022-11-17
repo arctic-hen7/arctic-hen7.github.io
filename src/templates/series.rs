@@ -1,8 +1,8 @@
+use crate::container::{Container, CurrentRoute};
+use crate::post::*;
+use crate::BLOG_DIR;
 use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
-use crate::post::*;
-use crate::container::{Container, CurrentRoute};
-use crate::BLOG_DIR;
 
 // Note: when Perseus has islands, this will be a component with state, which can be included on the page of each post in a series.
 #[perseus::template_rx]
@@ -83,26 +83,38 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Series> {
                 series: post.post.series,
             });
         }
-    };
+    }
 
     // Now order those by their indices to make sure we display the right order
-    posts_in_series.sort_by(|a, b| a.series.as_ref().unwrap().1.partial_cmp(&b.series.as_ref().unwrap().1).unwrap());
+    posts_in_series.sort_by(|a, b| {
+        a.series
+            .as_ref()
+            .unwrap()
+            .1
+            .partial_cmp(&b.series.as_ref().unwrap().1)
+            .unwrap()
+    });
 
-    Ok(Series { posts_in_series, name: series.to_string() })
+    Ok(Series {
+        posts_in_series,
+        name: series.to_string(),
+    })
 }
 
 #[perseus::build_paths]
 fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use std::fs;
     use anyhow::Context;
+    use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut series_list = Vec::new();
     for entry in fs::read_dir(BLOG_DIR)? {
         let entry = entry?;
 
-        let contents = fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents =
+            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
+        let post: FullPost =
+            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
 
         // If this post is in a series, add that series to our list
         if let Some(series) = post.post.series {
@@ -110,7 +122,7 @@ fn get_build_paths() -> RenderFnResult<Vec<String>> {
                 series_list.push(series.0);
             }
         }
-    };
+    }
 
     Ok(series_list)
 }

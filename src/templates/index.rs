@@ -1,6 +1,6 @@
+use crate::container::{Container, CurrentRoute};
 use perseus::Template;
 use sycamore::prelude::{view, Html, Scope, SsrNode, View};
-use crate::container::{Container, CurrentRoute};
 
 #[perseus::template_rx]
 pub fn index_page<G: Html>(cx: Scope) -> View<G> {

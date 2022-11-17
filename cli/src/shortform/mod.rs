@@ -6,8 +6,8 @@ mod delete_shortform;
 mod list_shortform;
 
 pub use create_shortform::create_shortform;
-pub use list_shortform::list_shortforms;
 pub use delete_shortform::delete_shortform;
+pub use list_shortform::list_shortforms;
 
 use uuid::Uuid;
 
@@ -24,9 +24,9 @@ pub struct Shortform {
     pub author: PostAuthor,
 }
 
-use std::env;
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use octocrab::Octocrab;
+use std::env;
 
 use crate::post::PostAuthor;
 
@@ -38,11 +38,9 @@ pub async fn get_client() -> Result<()> {
             "Personal access token for GitHub must be specified through `GITHUB_TOKEN` environment variable (expected to be in `.env`)"
         )?;
 
-    let octocrab = Octocrab::builder()
-        .personal_token(token);
+    let octocrab = Octocrab::builder().personal_token(token);
 
     octocrab::initialise(octocrab)?;
 
     Ok(())
 }
-

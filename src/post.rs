@@ -51,9 +51,8 @@ pub enum PostAuthor {
         profile_pic_url: Option<String>,
         /// Their home page URL (this could be a Twitter account, GitHub, a personal site, anything).
         home_url: String,
-    }
+    },
 }
-
 
 /// The information necessary to display a post card.
 #[derive(Clone, Serialize, Deserialize)]
@@ -74,26 +73,30 @@ impl PostAuthor {
             PostAuthor::Me => view! { cx,
                 img(class = "rounded-full h-8 w-8", src = "https://github.com/arctic-hen7.png", alt = "My profile picture")
             },
-            PostAuthor::Guest { profile_pic_url, .. } => match profile_pic_url {
+            PostAuthor::Guest {
+                profile_pic_url, ..
+            } => match profile_pic_url {
                 Some(url) => {
                     let url = url.to_string();
                     view! { cx,
                         img(class = "rounded-full h-8 w-8", src = url, alt = "Guest profile picture") {}
                     }
-                },
-                None => view! { cx,
-                    span(class = "fill-white", dangerously_set_inner_html = &ANONYMOUS_USER_PIC_SVG) {}
                 }
-            }
+                None => view! { cx,
+                    span(class = "fill-white", dangerously_set_inner_html = ANONYMOUS_USER_PIC_SVG) {}
+                },
+            },
         };
         let author_name = match &self {
             PostAuthor::Me => "arctic-hen7",
             PostAuthor::Guest { name, .. } => name,
-        }.to_string();
+        }
+        .to_string();
         let author_home_url = match &self {
             PostAuthor::Me => "", // The root of this very site
             PostAuthor::Guest { home_url, .. } => home_url,
-        }.to_string();
+        }
+        .to_string();
 
         (author_name, author_home_url, author_pic)
     }

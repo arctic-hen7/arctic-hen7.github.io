@@ -1,17 +1,17 @@
-mod skeleton;
+mod error;
+mod page;
 #[cfg(target_arch = "wasm32")]
 mod root;
 #[cfg(target_arch = "wasm32")]
 mod single;
-mod error;
-mod page;
+mod skeleton;
 
 use chrono::{DateTime, Utc};
 use perseus::prelude::*;
-use sycamore::prelude::*;
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use sycamore::prelude::*;
+use uuid::Uuid;
 
 use error::ShortformError;
 
@@ -26,7 +26,7 @@ pub struct ShortformList {
     list: Option<HashMap<String, Shortform>>,
     /// Errors applying to the fetching of all posts. These will be displayed
     /// in error boxes above the posts themselves.
-    errors: Vec<ShortformError>
+    errors: Vec<ShortformError>,
 }
 
 /// A representation of a single shortform message.
@@ -40,7 +40,6 @@ pub struct Shortform {
     pub time: DateTime<Utc>,
     /// The writer of the post.
     pub author: PostAuthor,
-
     // TODO Other fields, such as hashtags and @ references
 }
 
@@ -56,7 +55,7 @@ fn head(cx: Scope) -> View<SsrNode> {
 fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<ShortformList> {
     Ok(ShortformList {
         list: None,
-        errors: Vec::new()
+        errors: Vec::new(),
     })
 }
 

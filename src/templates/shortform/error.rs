@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use sycamore::prelude::*;
 
@@ -28,9 +28,11 @@ pub enum ShortformError {
     #[error("Couldn't fetch posts (are you online?)")]
     FetchFailed,
     /// Couldn't deserialize one of the posts.
-    #[error("Couldn't parse post (try reloading the page, otherwise this is a problem on our end)")]
+    #[error(
+        "Couldn't parse post (try reloading the page, otherwise this is a problem on our end)"
+    )]
     DeserFailed,
     /// The hash component of the URL references a post that doesn't exist.
     #[error("No such post")]
-    HashInvalid
+    HashInvalid,
 }

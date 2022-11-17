@@ -1,6 +1,6 @@
-use sycamore::prelude::*;
-use super::*;
 use super::single::SingleShortform;
+use super::*;
+use sycamore::prelude::*;
 
 pub static ERROR_ICON: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>"#;
 
@@ -8,7 +8,10 @@ pub static ERROR_ICON: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" height=
 ///
 /// The shortforms this receives are guaranteed to have already been loaded.
 #[component]
-pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformListRx<'rx>) -> View<G> {
+pub fn ShortformRootPage<'rx, G: Html>(
+    cx: Scope<'rx>,
+    shortform_list: ShortformListRx<'rx>,
+) -> View<G> {
     let shortforms = create_memo(cx, move || {
         let list = &*shortform_list.list.get();
         let list = list.as_ref().unwrap(); // Guaranteed by caller
@@ -26,7 +29,7 @@ pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: Shortform
                         }
                     }
                 })
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         )
     });
     // Any errors affecting the whole list
@@ -41,7 +44,7 @@ pub fn ShortformRootPage<'rx, G: Html>(cx: Scope<'rx>, shortform_list: Shortform
                             li(class = "ml-8") { (error) }
                     }
                 })
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         );
         // We don't use the system for displaying a single error when we're displaying many
         if errors_list.is_empty() {

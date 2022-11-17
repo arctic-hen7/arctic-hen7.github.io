@@ -1,8 +1,8 @@
-use std::env;
 use anyhow::Result;
+use std::env;
 use uuid::Uuid;
 
-use super::{Shortform, list_shortform::list_shortforms};
+use super::{list_shortform::list_shortforms, Shortform};
 
 /// Deletes the given post from the public repository. Note that this
 /// deletion is hardly infallible, since whatever the original post
@@ -27,17 +27,9 @@ pub async fn delete_shortform(id: &str) -> Result<()> {
     let posts = posts.join("\n");
     // Update the `posts` file at the root
     octocrab::instance()
-        .repos(
-            env::var("GITHUB_USERNAME")?,
-            env::var("GITHUB_REPO_NAME")?,
-        )
-        .update_file(
-            "posts",
-            "Removed post from CLI",
-            &posts,
-            sha,
-        )
-    // Committer/author will be set to the authenticated user by default
+        .repos(env::var("GITHUB_USERNAME")?, env::var("GITHUB_REPO_NAME")?)
+        .update_file("posts", "Removed post from CLI", &posts, sha)
+        // Committer/author will be set to the authenticated user by default
         .send()
         .await?;
     Ok(())

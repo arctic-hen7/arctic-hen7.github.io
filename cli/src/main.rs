@@ -1,11 +1,11 @@
 use crate::cli::CliState;
 
+mod cli;
 mod import_post;
-mod post;
 mod list_posts;
 mod parse_post;
+mod post;
 mod shortform;
-mod cli;
 
 #[tokio::main]
 async fn main() {
@@ -13,7 +13,8 @@ async fn main() {
 
     // Preamble
     // Source: https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Bloody&text=Delilah
-    println!(r#"
+    println!(
+        r#"
 ▓█████▄ ▓█████  ██▓     ██▓ ██▓    ▄▄▄       ██░ ██
 ▒██▀ ██▌▓█   ▀ ▓██▒    ▓██▒▓██▒   ▒████▄    ▓██░ ██▒
 ░██   █▌▒███   ▒██░    ▒██▒▒██░   ▒██  ▀█▄  ▒██▀▀██░
@@ -24,13 +25,15 @@ async fn main() {
  ░ ░  ░    ░     ░ ░    ▒ ░  ░ ░    ░   ▒    ░  ░░ ░
    ░       ░  ░    ░  ░ ░      ░  ░     ░  ░ ░  ░  ░
  ░
-    "#);
+    "#
+    );
 
     // We rely on `C-C` to exit, so give a nice message when that happens
     ctrlc::set_handler(move || {
         println!();
         println!("Exiting...have a lovely day! 😊");
-    }).expect("Error setting Ctrl-C handler");
+    })
+    .expect("Error setting Ctrl-C handler");
 
     let search_dir = std::env::var("SEARCH_DIR").expect("No search directory provided");
 
@@ -41,9 +44,7 @@ async fn main() {
     // 3. Start the CLI
     let res = shortform::get_client()
         .await
-        .map(|_| CliState::new("../.blog", search_dir)
-             .map(|mut state| state.start())
-        );
+        .map(|_| CliState::new("../.blog", search_dir).map(|mut state| state.start()));
     if let Err(err) = res {
         eprintln!("{:#?}", err);
     }

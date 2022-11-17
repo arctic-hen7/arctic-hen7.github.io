@@ -1,6 +1,6 @@
-use std::env;
-use anyhow::{Result, bail};
 use super::Shortform;
+use anyhow::{bail, Result};
+use std::env;
 
 /// Lists all the current shortform posts. This also returns the
 /// hash of the file that contains them.
@@ -20,10 +20,7 @@ pub async fn list_shortforms() -> Result<(Vec<Shortform>, String)> {
 pub async fn get_shortforms_raw() -> Result<(Vec<String>, String)> {
     // First, we need to know the SHA of the file
     let mut repo_matches = octocrab::instance()
-        .repos(
-            env::var("GITHUB_USERNAME")?,
-            env::var("GITHUB_REPO_NAME")?,
-        )
+        .repos(env::var("GITHUB_USERNAME")?, env::var("GITHUB_REPO_NAME")?)
         .get_content()
         .path("posts")
         .send()
@@ -33,7 +30,7 @@ pub async fn get_shortforms_raw() -> Result<(Vec<String>, String)> {
         let sha = &file.sha;
         let curr_content = match &file.content {
             Some(content) => content,
-            None => ""
+            None => "",
         };
         // Now we have to decode that content from base64
         let curr_content = base64::decode_config(curr_content, base64::MIME)?;

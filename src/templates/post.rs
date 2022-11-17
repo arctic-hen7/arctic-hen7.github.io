@@ -1,8 +1,8 @@
+use crate::container::{Container, CurrentRoute};
+use crate::post::*;
+use crate::BLOG_DIR;
 use perseus::prelude::*;
 use sycamore::prelude::*;
-use crate::post::*;
-use crate::container::{Container, CurrentRoute};
-use crate::BLOG_DIR;
 
 #[perseus::template_rx]
 pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
@@ -85,12 +85,12 @@ pub fn head(cx: Scope, post: Post) -> View<SsrNode> {
 
 #[perseus::build_state]
 fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Post> {
-    use std::path::Path;
     use std::fs;
+    use std::path::Path;
 
     let id = path.strip_prefix("post/").unwrap();
     let filename = format!("{id}.json");
-    let file_path = Path::new(BLOG_DIR).join(&filename);
+    let file_path = Path::new(BLOG_DIR).join(filename);
 
     let contents = fs::read_to_string(file_path)?;
     let post: FullPost = serde_json::from_str(&contents)?;
@@ -100,19 +100,21 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Post> {
 
 #[perseus::build_paths]
 fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use std::fs;
     use anyhow::Context;
+    use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut paths = Vec::new();
     for entry in fs::read_dir(BLOG_DIR)? {
         let entry = entry?;
 
-        let contents = fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents =
+            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
+        let post: FullPost =
+            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
 
         paths.push(post.post.id)
-    };
+    }
 
     Ok(paths)
 }

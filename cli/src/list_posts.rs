@@ -1,6 +1,11 @@
-use std::{collections::HashMap, ffi::OsStr, fs, path::{Path, PathBuf}};
-use anyhow::{Context, Result, bail, anyhow};
 use crate::{parse_post::OrgFile, post::*};
+use anyhow::{anyhow, bail, Context, Result};
+use std::{
+    collections::HashMap,
+    ffi::OsStr,
+    fs,
+    path::{Path, PathBuf},
+};
 
 /// A list of all the currently indexed posts for publication.
 pub struct PostsList {
@@ -15,15 +20,20 @@ impl PostsList {
         // We know the blog directory is a flat file system, with each file named by its Org ID
         for entry in fs::read_dir(blog_dir)? {
             let entry = entry?;
-            let contents = fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-            let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+            let contents =
+                fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
+            let post: FullPost = serde_json::from_str(&contents)
+                .context("Failed to deserialize file in blog index")?;
 
-            posts.insert(get_post_display(&post.post.title, &post.post.author), entry.path());
+            posts.insert(
+                get_post_display(&post.post.title, &post.post.author),
+                entry.path(),
+            );
         }
 
         Ok(Self {
             posts,
-            blog_dir: blog_dir.to_path_buf()
+            blog_dir: blog_dir.to_path_buf(),
         })
     }
     /// Detects any changes to currently indexed posts, returning a list of them for the user to choose to act on
@@ -34,10 +44,14 @@ impl PostsList {
         for (display, path) in self.posts.iter() {
             // Get the full post details
             let contents = fs::read_to_string(path).context("Failed to read file in blog index")?;
-            let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+            let post: FullPost = serde_json::from_str(&contents)
+                .context("Failed to deserialize file in blog index")?;
 
             // Now check if the source file has changed on disk by modification time
-            let curr_mtime = fs::metadata(&post.source).context("Failed to get metadata for source of post file")?.modified().context("Failed to get modification time for source of post file")?;
+            let curr_mtime = fs::metadata(&post.source)
+                .context("Failed to get metadata for source of post file")?
+                .modified()
+                .context("Failed to get modification time for source of post file")?;
             let last_known_mtime = post.mtime;
             if last_known_mtime < curr_mtime {
                 modified.push(display.to_string());
@@ -55,13 +69,21 @@ impl PostsList {
         for entry in fs::read_dir(search_dir)? {
             let entry = entry?;
             // Rule out any directories or non-Org files
-            if entry.file_type().context("Failed to get file type of original Org file")?.is_dir() || entry.path().extension() != Some(OsStr::new("org")) {
+            if entry
+                .file_type()
+                .context("Failed to get file type of original Org file")?
+                .is_dir()
+                || entry.path().extension() != Some(OsStr::new("org"))
+            {
                 continue;
             }
             // Parse this file as an Org file
             let file = OrgFile::new(&entry.path())?;
             if file.is_post() {
-                let title = file.metadata.get("title").ok_or(anyhow!("Post file '{}' has no title", entry.path().to_string_lossy()))?;
+                let title = file.metadata.get("title").ok_or(anyhow!(
+                    "Post file '{}' has no title",
+                    entry.path().to_string_lossy()
+                ))?;
                 let author = match file.metadata.get("author") {
                     Some(author) => PostAuthor::from_metadata(author)?,
                     // I am the default
@@ -106,8 +128,10 @@ impl PostsList {
         // Get the post itself (removing it, since we'll re-add it completely, potentially with a new title)
         let index_path = self.posts.remove(title);
         if let Some(index_path) = index_path {
-            let contents = fs::read_to_string(index_path).context("Failed to read file in blog index")?;
-            let post: FullPost = serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+            let contents =
+                fs::read_to_string(index_path).context("Failed to read file in blog index")?;
+            let post: FullPost = serde_json::from_str(&contents)
+                .context("Failed to deserialize file in blog index")?;
 
             // And now add it back as usual!
             self.add_post(&post.source)

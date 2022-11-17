@@ -1,7 +1,7 @@
-use sycamore::prelude::*;
-use super::*;
 use super::skeleton::*;
+use super::*;
 use crate::container::{Container, CurrentRoute};
+use sycamore::prelude::*;
 
 /// The URL to fetch posts from.
 #[cfg(target_arch = "wasm32")]
@@ -21,8 +21,10 @@ static POSTS_URL: &str = "https://raw.githubusercontent.com/arctic-hen7/the-ice-
 /// on the browser-side.
 #[cfg(not(target_arch = "wasm32"))]
 #[perseus::template_rx]
-pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, _shortform_list: ShortformListRx<'rx>) -> View<G> {
-
+pub fn shortform_page<'rx, G: Html>(
+    cx: Scope<'rx>,
+    _shortform_list: ShortformListRx<'rx>,
+) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::Shortform) {
             ShortformSkeleton {}
@@ -31,44 +33,56 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, _shortform_list: ShortformLi
 }
 #[cfg(target_arch = "wasm32")]
 #[perseus::template_rx]
-pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformListRx<'rx>) -> View<G> {
-    use super::single::SingleShortform;
-    use super::root::ShortformRootPage;
+pub fn shortform_page<'rx, G: Html>(
+    cx: Scope<'rx>,
+    shortform_list: ShortformListRx<'rx>,
+) -> View<G> {
     use super::error::ShortformErrorView;
+    use super::root::ShortformRootPage;
+    use super::single::SingleShortform;
 
     // We need to make sure the shortforms aren't already filled out, for when we re-render (and everything is in the PSS!)
     #[cfg(target_arch = "wasm32")]
     if shortform_list.list.get().is_none() {
         // If we have critical errors, we make the map empty, not nonexistent, since that's needed for checking and actually *showing* those errors (as opposed to a loading page)
         perseus::spawn_local_scoped(cx, async {
-            let list = match gloo_net::http::Request::get(POSTS_URL)
-                .send()
-                .await {
-                    Ok(res) => match res.text().await {
-                        Ok(full_list) => {
-                            // Split the list into posts, line-by-line
-                            let posts = full_list.split("\n").filter(|line| !line.is_empty());
-                            let mut list = HashMap::new();
-                            for post in posts {
-                                let res = serde_json::from_str::<Shortform>(post);
-                                match res {
-                                    Ok(post) => { list.insert(post.id.to_string(), post); },
-                                    // If deserialization failed, we don't even know the ID, so add this to the top-level errors
-                                    Err(_) => shortform_list.errors.modify().push(ShortformError::DeserFailed)
-                                };
-                            }
-                            list
-                        },
-                        Err(_) => {
-                            shortform_list.errors.modify().push(ShortformError::FetchFailed);
-                            HashMap::new()
-                        },
-                    },
+            let list = match gloo_net::http::Request::get(POSTS_URL).send().await {
+                Ok(res) => match res.text().await {
+                    Ok(full_list) => {
+                        // Split the list into posts, line-by-line
+                        let posts = full_list.split("\n").filter(|line| !line.is_empty());
+                        let mut list = HashMap::new();
+                        for post in posts {
+                            let res = serde_json::from_str::<Shortform>(post);
+                            match res {
+                                Ok(post) => {
+                                    list.insert(post.id.to_string(), post);
+                                }
+                                // If deserialization failed, we don't even know the ID, so add this to the top-level errors
+                                Err(_) => shortform_list
+                                    .errors
+                                    .modify()
+                                    .push(ShortformError::DeserFailed),
+                            };
+                        }
+                        list
+                    }
                     Err(_) => {
-                        shortform_list.errors.modify().push(ShortformError::FetchFailed);
+                        shortform_list
+                            .errors
+                            .modify()
+                            .push(ShortformError::FetchFailed);
                         HashMap::new()
                     }
-                };
+                },
+                Err(_) => {
+                    shortform_list
+                        .errors
+                        .modify()
+                        .push(ShortformError::FetchFailed);
+                    HashMap::new()
+                }
+            };
 
             // Completely override whatever else was already in the list (even if there were all errors
             // and we have nothing, this still shouldn't be `None`)
@@ -76,17 +90,18 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
         });
     }
 
-    let location = web_sys::window()
-        .unwrap()
-        .location();
+    let location = web_sys::window().unwrap().location();
     let hash = location.hash().unwrap();
     // This is reactive so we can imperatively navigate
-    let hash = create_signal(cx, if hash.is_empty() {
-        None
-    } else {
-        // If it does exist, it will have a `#` in front of it
-        Some(hash.strip_prefix("#").unwrap().to_string())
-    });
+    let hash = create_signal(
+        cx,
+        if hash.is_empty() {
+            None
+        } else {
+            // If it does exist, it will have a `#` in front of it
+            Some(hash.strip_prefix("#").unwrap().to_string())
+        },
+    );
 
     // This provides the single shortform to render if there's a
     // hash component to the URL. If there isn't, it will be `Root`,
@@ -99,7 +114,7 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
                 let shortform = shortforms.get(hash).cloned();
                 match shortform {
                     Some(shortform) => ShortformStatus::Single(shortform),
-                    None => ShortformStatus::SingleNotFound
+                    None => ShortformStatus::SingleNotFound,
                 }
             } else {
                 ShortformStatus::Root
@@ -129,7 +144,7 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
                         }
                     }
                 }
-            },
+            }
             ShortformStatus::SingleNotFound => view! { cx,
                 Container(offset_top = true, route = CurrentRoute::Shortform) {
                     ShortformErrorView(ShortformError::HashInvalid)
@@ -143,12 +158,12 @@ pub fn shortform_page<'rx, G: Html>(cx: Scope<'rx>, shortform_list: ShortformLis
                         ShortformRootPage(shortform_list)
                     }
                 }
-            },
+            }
             ShortformStatus::Loading => view! { cx,
                 Container(offset_top = true, route = CurrentRoute::Shortform) {
                     ShortformSkeleton {}
                 }
-            }
+            },
         }
     });
 

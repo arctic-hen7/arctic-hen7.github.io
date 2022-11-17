@@ -1,8 +1,9 @@
-use std::collections::HashMap;
-
-use perseus::Template;
-use sycamore::{Prop, prelude::{view, Html, Scope, SsrNode, View}};
 use crate::container::{Container, CurrentRoute};
+use perseus::Template;
+use sycamore::{
+    prelude::{view, Html, Scope, SsrNode, View},
+    Prop,
+};
 
 #[perseus::template_rx]
 pub fn contact_page<G: Html>(cx: Scope) -> View<G> {
@@ -72,7 +73,7 @@ pub fn contact_page<G: Html>(cx: Scope) -> View<G> {
 #[derive(Prop)]
 struct ContactEntryProps<'a> {
     title: &'a str,
-    links: Vec<(&'a str, &'a str)>
+    links: Vec<(&'a str, &'a str)>,
 }
 
 #[sycamore::component]

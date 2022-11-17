@@ -1,8 +1,14 @@
-use std::{io::{self, Write}, path::{Path, PathBuf}};
 use anyhow::Result;
 use futures::executor::block_on;
+use std::{
+    io::{self, Write},
+    path::{Path, PathBuf},
+};
 
-use crate::{list_posts::PostsList, shortform::{create_shortform, delete_shortform, list_shortforms}};
+use crate::{
+    list_posts::PostsList,
+    shortform::{create_shortform, delete_shortform, list_shortforms},
+};
 
 static HELP_MENU: &str = r#"You can run any of the following commands:
 help                    Prints this help page
@@ -28,7 +34,7 @@ impl CliState {
     pub fn new(blog_dir: impl AsRef<Path>, search_dir: impl AsRef<Path>) -> Result<Self> {
         Ok(Self {
             posts_list: PostsList::new(blog_dir.as_ref())?,
-            search_dir: search_dir.as_ref().to_path_buf()
+            search_dir: search_dir.as_ref().to_path_buf(),
         })
     }
     /// Starts the CLI off with an initial prompt.
@@ -44,11 +50,9 @@ impl CliState {
         io::stdout().flush()?;
 
         let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)?;
+        io::stdin().read_line(&mut input)?;
         let input = input.trim();
         Ok(input.to_string())
-
     }
     /// Parses the given user input as a command. This should only be called when no other operation is in progress.
     fn parse_cmd(&mut self, cmd: &str) -> Result<()> {
@@ -70,7 +74,7 @@ impl CliState {
                     };
                     self.posts_list.add_post(&path)?;
                 }
-            },
+            }
             "blog detect changes" => {
                 let new = self.posts_list.detect_changes()?;
                 let list = new
@@ -87,11 +91,11 @@ impl CliState {
                     };
                     self.posts_list.update_post(&display)?;
                 }
-            },
+            }
             "blog import file" => {
                 let path = self.prompt("path")?;
                 self.posts_list.add_post(Path::new(&path))?;
-            },
+            }
             "shortform new" => {
                 // Prompt the user for contents (Markdown)
                 let contents = self.prompt("markdown contents")?;
@@ -118,20 +122,30 @@ impl CliState {
                     &author_form,
                     // "Arctic Hen (https://example.com\\https://github.com/arctic-hen7.png)"
                 ))?;
-            },
+            }
             "shortform list" => {
                 let (list, _sha) = block_on(list_shortforms())?;
                 let list = list
                     .into_iter()
-                    .map(|shortform| (format!("{}", shortform.content), ListData::String(shortform.id.to_string())))
+                    .map(|shortform| {
+                        (
+                            format!("{}", shortform.content),
+                            ListData::String(shortform.id.to_string()),
+                        )
+                    })
                     .collect::<Vec<_>>();
                 self.list(list, false)?;
-            },
+            }
             "shortform delete" => {
                 let (list, _sha) = block_on(list_shortforms())?;
                 let list = list
                     .into_iter()
-                    .map(|shortform| (format!("{}", shortform.content), ListData::String(shortform.id.to_string())))
+                    .map(|shortform| {
+                        (
+                            format!("{}", shortform.content),
+                            ListData::String(shortform.id.to_string()),
+                        )
+                    })
                     .collect::<Vec<_>>();
                 let selected = self.list(list, true)?;
                 for id in selected {
@@ -142,8 +156,11 @@ impl CliState {
                     };
                     block_on(delete_shortform(&id))?;
                 }
-            },
-            _ => eprintln!("Invalid command '{}', type 'help' to see the available commands.", cmd)
+            }
+            _ => eprintln!(
+                "Invalid command '{}', type 'help' to see the available commands.",
+                cmd
+            ),
         };
         Ok(())
     }
@@ -174,14 +191,14 @@ impl CliState {
                     Ok(lower) => lower,
                     Err(_) => {
                         eprintln!("Selections must use integers only, please try again.");
-                        return self.list(list, true)
+                        return self.list(list, true);
                     }
                 };
                 let upper = match components[1].parse::<usize>() {
                     Ok(lower) => lower,
                     Err(_) => {
                         eprintln!("Selections must use integers only, please try again.");
-                        return self.list(list, true)
+                        return self.list(list, true);
                     }
                 };
                 if upper > lower {
@@ -192,7 +209,7 @@ impl CliState {
                             Some(tuple) => tuple.1.clone(),
                             None => {
                                 eprintln!("Please select elements within the bounds of the list.");
-                                return self.list(list, true)
+                                return self.list(list, true);
                             }
                         };
                         selected.push(list_data);
@@ -200,7 +217,7 @@ impl CliState {
                 } else {
                     eprintln!("Selection ranges must go from a smaller number to a larger one, please try again.");
                     // Recurse until we get something valid
-                    return self.list(list, true)
+                    return self.list(list, true);
                 }
             } else if components.len() == 1 {
                 // It's a single index, make sure it's valid
@@ -208,7 +225,7 @@ impl CliState {
                     Ok(lower) => lower,
                     Err(_) => {
                         eprintln!("Selections must use integers only, please try again.");
-                        return self.list(list, true)
+                        return self.list(list, true);
                     }
                 };
                 // We subtract one to translate 1-indexing back to 0-indexing
@@ -216,14 +233,16 @@ impl CliState {
                     Some(tuple) => tuple.1.clone(),
                     None => {
                         eprintln!("Please select elements within the bounds of the list.");
-                        return self.list(list, true)
+                        return self.list(list, true);
                     }
                 };
                 selected.push(list_data);
             } else {
-                eprintln!("Selection parts cannot have more than one dash separator, please try again.");
+                eprintln!(
+                    "Selection parts cannot have more than one dash separator, please try again."
+                );
                 // Recurse until we get something valid
-                return self.list(list, true)
+                return self.list(list, true);
             }
         }
 

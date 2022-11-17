@@ -1,5 +1,5 @@
+use crate::{post::FullPost, BLOG_DIR};
 use perseus::plugins::{empty_control_actions_registrar, Plugin, PluginAction, PluginEnv};
-use crate::{BLOG_DIR, post::FullPost};
 
 /// Gets an instance of the RSS plugin, which takes no data.
 ///
@@ -29,13 +29,14 @@ pub fn get_rss_plugin<G: perseus::Html>() -> Plugin<G, ()> {
                             r#"
 <item>
     <title>{title}</title>
-    <link>{link}</link>
+    <link>{root_path}/post/{post_id}</link>
     <description>{description}</description>
     <language>en-us</language>
 </item>
 "#,
                             title = post.post.title,
-                            link = format!("{}/post/{}", perseus::utils::get_path_prefix_server(), post.post.id),
+                            root_path = perseus::utils::get_path_prefix_server(),
+                            post_id = post.post.id,
                             description = post.post.description,
                         );
                         let rss_item = rss_item.trim();

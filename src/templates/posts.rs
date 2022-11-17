@@ -1,8 +1,8 @@
+use crate::container::{Container, CurrentRoute};
+use crate::post::*;
+use crate::BLOG_DIR;
 use perseus::prelude::*;
 use sycamore::prelude::*;
-use crate::post::*;
-use crate::container::{Container, CurrentRoute};
-use crate::BLOG_DIR;
 
 #[perseus::template_rx]
 pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
@@ -78,7 +78,7 @@ fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<Posts> {
             description: post.post.description,
             series: post.post.series,
         });
-    };
+    }
 
     Ok(Posts { posts })
 }

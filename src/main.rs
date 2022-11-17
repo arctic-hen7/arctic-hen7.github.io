@@ -1,9 +1,9 @@
-mod templates;
-mod post;
 mod container;
+mod post;
 mod rss;
+mod templates;
 
-use perseus::{Html, PerseusApp, PerseusRoot, plugins::Plugins};
+use perseus::{plugins::Plugins, Html, PerseusApp, PerseusRoot};
 
 // Relative to the root of the project
 static BLOG_DIR: &str = "./.blog";

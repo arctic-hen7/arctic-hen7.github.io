@@ -1,7 +1,7 @@
-use std::path::{Path, PathBuf};
-use anyhow::{Context, bail, Result};
+use anyhow::{bail, Context, Result};
 use std::collections::HashMap;
 use std::fs;
+use std::path::{Path, PathBuf};
 
 /// A representation of an Org Mode file, fully parsed for checking if it's a post.
 pub struct OrgFile {
@@ -18,7 +18,7 @@ impl OrgFile {
         let mut properties: HashMap<String, String> = HashMap::new(); // Stuff in the `:PROPERTIES:` drawer at the top
         let mut metadata: HashMap<String, String> = HashMap::new(); // Stuff with `#+` at the start
         let mut contents = Vec::new(); // Everything else
-        // We always start with the properties drawer
+                                       // We always start with the properties drawer
         let mut file_loc = FileLocation::Properties;
         for line in contents_str.lines() {
             // If we've moved on to the contents, then we should do no further processing
@@ -38,16 +38,14 @@ impl OrgFile {
             // Deal with any comments in the properties/metadata
             else if line.starts_with("# ") {
                 continue;
-            }
-            else if file_loc == FileLocation::Properties {
+            } else if file_loc == FileLocation::Properties {
                 // Form: `:KEY:  VALUE`
                 let mut parts = line.split(':').collect::<Vec<_>>();
                 parts.remove(0); // Meaningless
                 let key = parts.remove(0);
                 let val = parts.join(":");
                 properties.insert(key.to_string(), val.trim().to_string());
-            }
-            else if file_loc == FileLocation::Metadata {
+            } else if file_loc == FileLocation::Metadata {
                 // Handle the possibility that we've finished with the metadata
                 if !line.starts_with("#+") {
                     file_loc = FileLocation::Contents;
@@ -90,5 +88,5 @@ impl OrgFile {
 enum FileLocation {
     Properties,
     Metadata,
-    Contents
+    Contents,
 }

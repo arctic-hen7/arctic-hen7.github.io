@@ -1,8 +1,8 @@
+pub mod about;
+pub mod contact;
 pub mod index;
+pub mod post;
 pub mod posts;
-pub mod tag;
 pub mod series;
 pub mod shortform;
-pub mod about;
-pub mod post;
-pub mod contact;
+pub mod tag;

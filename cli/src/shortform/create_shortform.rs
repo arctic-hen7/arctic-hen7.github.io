@@ -1,11 +1,11 @@
-use std::env;
+use super::{list_shortform::get_shortforms_raw, Shortform};
+use crate::post::PostAuthor;
 use anyhow::Result;
 use chrono::Utc;
+use pulldown_cmark::{html, Options, Parser};
 use regex::Regex;
+use std::env;
 use uuid::Uuid;
-use pulldown_cmark::{Parser, Options, html};
-use crate::post::PostAuthor;
-use super::{Shortform, list_shortform::get_shortforms_raw};
 
 /// Creates a new shortform post and publishes it to GitHub, from which it can be imported
 /// to my personal site automatically. This takes a post author as they would be specified
@@ -38,17 +38,9 @@ pub async fn create_shortform(md_content: &str, author: &str) -> Result<()> {
     let new_content = raw_posts.join("\n");
     // Update the `posts` file at the root
     octocrab::instance()
-        .repos(
-            env::var("GITHUB_USERNAME")?,
-            env::var("GITHUB_REPO_NAME")?,
-        )
-        .update_file(
-            "posts",
-            "Added new post from CLI",
-            &new_content,
-            sha,
-        )
-    // Committer/author will be set to the authenticated user by default
+        .repos(env::var("GITHUB_USERNAME")?, env::var("GITHUB_REPO_NAME")?)
+        .update_file("posts", "Added new post from CLI", &new_content, sha)
+        // Committer/author will be set to the authenticated user by default
         .send()
         .await?;
     Ok(())

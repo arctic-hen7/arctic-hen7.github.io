@@ -1,9 +1,12 @@
+use crate::container::{Container, CurrentRoute};
 use perseus::prelude::*;
 use sycamore::prelude::*;
-use crate::container::{Container, CurrentRoute};
 
 #[perseus::template_rx]
-fn about_page<'rx, G: Html>(cx: Scope<'rx>, AboutPropsRx { content }: AboutPropsRx<'rx>) -> View<G> {
+fn about_page<'rx, G: Html>(
+    cx: Scope<'rx>,
+    AboutPropsRx { content }: AboutPropsRx<'rx>,
+) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::About) {
             div(class = "flex flex-col md:flex-row justify-center items-center md:items-start") {
@@ -30,7 +33,7 @@ fn head(cx: Scope) -> View<SsrNode> {
 
 #[build_state]
 fn get_build_state(_path: String, _locale: String) -> RenderFnResultWithCause<AboutProps> {
-    use pulldown_cmark::{Options, Parser, html};
+    use pulldown_cmark::{html, Options, Parser};
 
     let md_content = std::fs::read_to_string("about.md")?;
 

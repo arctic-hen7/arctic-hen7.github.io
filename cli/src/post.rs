@@ -1,6 +1,6 @@
 // WARNING: This must be kept in sync with the site version!
 
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, time::SystemTime};
 
@@ -50,7 +50,7 @@ pub enum PostAuthor {
         profile_pic_url: Option<String>,
         /// Their home page URL (this could be a Twitter account, GitHub, a personal site, anything).
         home_url: String,
-    }
+    },
 }
 impl PostAuthor {
     /// Parses an author as specified in a file.
