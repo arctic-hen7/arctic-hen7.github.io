@@ -139,4 +139,5 @@ pub enum CurrentRoute {
     Shortform,
     Series,
     Tag,
+    Contact,
 }

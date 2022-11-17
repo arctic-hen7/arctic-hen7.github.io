@@ -18,6 +18,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::tag::get_template)
         .template(crate::templates::series::get_template)
         .template(crate::templates::shortform::get_template)
+        .template(crate::templates::contact::get_template)
         .index_view(|cx| sycamore::view! { cx,
             html(class = "light") {
                 head {

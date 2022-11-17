@@ -6,9 +6,9 @@ use crate::container::{Container, CurrentRoute};
 fn about_page<'rx, G: Html>(cx: Scope<'rx>, AboutPropsRx { content }: AboutPropsRx<'rx>) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::About) {
-            div(class = "flex flex-col md:flex-row justify-center") {
-                img(class = "rounded-full h-52 w-52 mr-2", src = "https://github.com/arctic-hen7.png", alt = "My GitHub profile picture") {}
-                div(class = "ml-2 styled-prose max-w-prose", dangerously_set_inner_html = &content.get()) {}
+            div(class = "flex flex-col md:flex-row justify-center items-center md:items-start") {
+                img(class = "rounded-full h-52 w-52 md:mr-2 mb-4", src = "https://github.com/arctic-hen7.png", alt = "My GitHub profile picture") {}
+                div(class = "md:ml-2 p-4 styled-prose max-w-prose", dangerously_set_inner_html = &content.get()) {}
             }
         }
 
