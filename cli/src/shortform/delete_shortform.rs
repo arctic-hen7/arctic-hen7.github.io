@@ -1,8 +1,7 @@
 use anyhow::Result;
 use std::env;
 use uuid::Uuid;
-
-use super::{list_shortform::list_shortforms, Shortform};
+use super::{list_shortform::list_shortforms};
 
 /// Deletes the given post from the public repository. Note that this
 /// deletion is hardly infallible, since whatever the original post

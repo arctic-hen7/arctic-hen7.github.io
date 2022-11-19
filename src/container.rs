@@ -140,4 +140,5 @@ pub enum CurrentRoute {
     Series,
     Tag,
     Contact,
+    NotFound,
 }

@@ -2,6 +2,7 @@ mod container;
 mod post;
 mod rss;
 mod templates;
+mod error_pages;
 
 use perseus::{plugins::Plugins, Html, PerseusApp, PerseusRoot};
 
@@ -19,6 +20,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::series::get_template)
         .template(crate::templates::shortform::get_template)
         .template(crate::templates::contact::get_template)
+        .error_pages(crate::error_pages::get_error_pages)
         .index_view(|cx| sycamore::view! { cx,
             html(class = "light") {
                 head {
