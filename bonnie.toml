@@ -28,7 +28,7 @@ site.subcommands.deploy.desc = "builds the website for production and finalizes 
 site.subcommands.deploy-prod.cmd = [
     "bonnie site build-tailwind prod",
     # Point this live version of the CLI at the given example
-    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus deploy -e",
+    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus deploy -e --wasm-opt-version version_110",
     "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus export-error-page --code 404 --output pkg/404.html",
 ]
 site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `pkg`"
