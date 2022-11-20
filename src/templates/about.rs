@@ -27,7 +27,7 @@ struct AboutProps {
 #[perseus::head]
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
-        title { "Welcome to Perseus!" }
+        title { "About Me | The Arctic Site" }
     }
 }
 
