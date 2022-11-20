@@ -77,9 +77,12 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Tag> {
                 author: post.post.author,
                 description: post.post.description,
                 series: post.post.series,
+                date: post.post.date,
             });
         }
     }
+
+    posts_with_tag.sort_by(|a, b| b.date.partial_cmp(&a.date).unwrap());
 
     Ok(Tag {
         posts_with_tag,

@@ -1,0 +1,29 @@
+/* This file defines syntax highlighting, based on `htmlize`. Compare this to the bulk of usual syntax highlighting libraries, and understand the beauty of Emacs. */
+
+.org-builtin {
+    color: #ff0000;
+}
+.org-comment {
+    color: lightgray;
+}
+.org-constant {
+    color: orange;
+}
+.org-function-name {
+    color: #21a7a7;
+}
+.org-keyword {
+    color: violet;
+}
+.org-string {
+    color: lightblue;
+}
+.org-type {
+    color: #21a7a7;
+}
+.org-variable-name {
+    color: #f17272;
+}
+.org-warning {
+    color: #f17272;
+}

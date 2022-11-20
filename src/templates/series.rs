@@ -81,6 +81,7 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Series> {
                 author: post.post.author,
                 description: post.post.description,
                 series: post.post.series,
+                date: post.post.date,
             });
         }
     }

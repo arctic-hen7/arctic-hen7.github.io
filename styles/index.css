@@ -76,6 +76,17 @@ bold {
 .styled-prose h6 {
     @apply leading-tight my-3;
 }
+.styled-prose pre {
+    background-color: #2d2d2d;
+    /* This is just a backup for those not handled by Org */
+    color: #cccccc;
+    white-space: pre-wrap;
+    word-break: break-all;
+    @apply p-4 rounded-md my-4 overflow-x-auto;
+}
+.styled-prose .org-src-container {
+    @apply overflow-x-auto;
+}
 .styled-prose :not(pre) code {
     @apply rounded-lg p-1;
     /* Similar styling as the syntax highlighted `pre` blocks */

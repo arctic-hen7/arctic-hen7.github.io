@@ -77,8 +77,11 @@ fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<Posts> {
             author: post.post.author,
             description: post.post.description,
             series: post.post.series,
+            date: post.post.date,
         });
     }
+
+    posts.sort_by(|a, b| b.date.partial_cmp(&a.date).unwrap());
 
     Ok(Posts { posts })
 }

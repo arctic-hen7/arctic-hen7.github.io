@@ -3,6 +3,7 @@
 use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, time::SystemTime};
+use chrono::NaiveDate;
 
 /// A post on the site.
 #[derive(Serialize, Deserialize)]
@@ -23,6 +24,8 @@ pub struct Post {
     pub series: Option<(String, usize)>,
     /// The HTML table of contents, to be interpolated as a sticky sidebar.
     pub toc: String,
+    /// The user-given date of the file, which avoids the ephemerality of modification times.
+    pub date: NaiveDate,
 }
 
 /// A post's full representation on-disk (including information that won't be sent to the browser).

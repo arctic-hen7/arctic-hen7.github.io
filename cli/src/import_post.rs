@@ -1,5 +1,6 @@
 use crate::{parse_post::OrgFile, post::*};
 use anyhow::{anyhow, bail, Context, Result};
+use chrono::NaiveDate;
 use katex::Opts;
 use regex::{Captures, Regex};
 use std::io::Write;
@@ -35,6 +36,24 @@ impl FullPost {
             "File '{}' had no `description` metadatum.",
             file.path.to_string_lossy()
         ))?;
+        let date = file.metadata.get("date").ok_or(anyhow!(
+            "File '{}' had no `date` metadatum.",
+            file.path.to_string_lossy()
+        ))?;
+
+        // Now parse the date
+        let date = {
+            // Dates are of the form `<year>-<month>-<day>`
+            let date_parts = date.split('-').collect::<Vec<_>>();
+            if date_parts.len() != 3 {
+                bail!("File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)", file.path.to_string_lossy());
+            }
+            NaiveDate::from_ymd_opt(
+                date_parts[0].parse::<i32>().context("Invalid year")?,
+                date_parts[1].parse::<u32>().context("Invalid month")?,
+                date_parts[2].parse::<u32>().context("Invalid day")?,
+            ).ok_or(anyhow!("File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)", file.path.to_string_lossy()))?
+        };
 
         // Parse the author
         let author = match file.metadata.get("author") {
@@ -196,6 +215,7 @@ impl FullPost {
             tags,
             series,
             toc: toc.to_string(),
+            date,
         };
         let full_post = FullPost {
             post,

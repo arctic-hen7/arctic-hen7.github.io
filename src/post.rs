@@ -1,5 +1,6 @@
 // WARNING: This must be kept in sync with the CLI version!
 
+use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, time::SystemTime};
 
@@ -24,6 +25,8 @@ pub struct Post {
     pub series: Option<(String, usize)>,
     /// The HTML table of contents, to be interpolated as a sticky sidebar.
     pub toc: String,
+    /// The user-given date of the file, which avoids the ephemerality of modification times.
+    pub date: NaiveDate,
 }
 
 /// A post's full representation on-disk (including information that won't be sent to the browser).
@@ -62,6 +65,7 @@ pub struct SlimPost {
     pub author: PostAuthor,
     pub description: String,
     pub series: Option<(String, usize)>,
+    pub date: NaiveDate,
 }
 
 use sycamore::prelude::*;
