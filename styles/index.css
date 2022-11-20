@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    scroll-behavior: smooth;
+}
+
+/* Page layout of the header, content, and footer */
+html, body, body > div, #root {
+    height: 100vh;
+}
+#root {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr min-content;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
+}
+/* This is equivalent to `main`, but also works on docs pages with a sidebar */
+header {
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    grid-area: header;
+}
+main {
+    grid-area: main;
+}
+footer {
+    grid-area: footer;
+}
+
+/* Handling of hash links with the header */
+h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+    display: block;
+    content: " ";
+    /* This is the same as is used in the container */
+    @apply h-14 xs:h-16 sm:h-20 lg:h-24;
+    @apply -mt-14 xs:-mt-16 sm:-mt-20 lg:-mt-24;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Styling for posts */
+.styled-prose > * + *,
+.styled-prose li + li,
+.styled-prose li > p + p,
+.styled-prose li > ul > li:nth-child(1) {
+    @apply mt-6;
+}
+.styled-prose strong,
+bold {
+    font-weight: 900;
+}
+.styled-prose a {
+    @apply text-blue-400 hover:text-blue-500 transition-colors duration-150;
+}
+.styled-prose h1 {
+    @apply text-4xl my-3;
+}
+.styled-prose h2 {
+    @apply text-3xl my-3;
+}
+.styled-prose h3 {
+    @apply text-2xl my-3;
+}
+.styled-prose h4 {
+    @apply text-xl my-3;
+}
+.styled-prose h5 {
+    @apply text-lg my-3;
+}
+.styled-prose h6 {
+    @apply leading-tight my-3;
+}
+.styled-prose pre {
+    background-color: #2d2d2d;
+    /* This is just a backup for those not handled by Org */
+    color: #cccccc;
+    white-space: pre-wrap;
+    word-break: break-all;
+    @apply p-4 rounded-md my-4 overflow-x-auto;
+}
+.styled-prose .org-src-container {
+    @apply overflow-x-auto;
+}
+.styled-prose :not(pre) code {
+    @apply rounded-lg p-1;
+    /* Similar styling as the syntax highlighted `pre` blocks */
+    background-color: #2d2d2d;
+    color: #cccccc;
+}
+.styled-prose blockquote {
+    @apply border-l-4 pl-4 italic;
+}
+.styled-prose ul {
+    @apply list-disc pl-5;
+    @apply pl-10;
+}
+.styled-prose ol {
+    @apply list-decimal pl-5;
+    @apply pl-10;
+}
+
+#MathJax_Message {
+    height: auto; /* Needed to override the top-level 100vh */
+}
+
+.katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width:  75vw;
+}
+.katex-display > .katex > .katex-html > .tag {
+    @apply !relative xl:!absolute !-right-[5rem] xl:!right-[1rem]
+}
+
+/* Styling for the lettering on the index page */
+.spaced-letter {
+    @apply tracking-[3rem] xs:tracking-[5rem] sm:tracking-[7rem] md:tracking-[10rem] xl:tracking-[12rem]
+}

@@ -1,51 +1,40 @@
 version="0.3.2"
 
 [scripts]
-clean.cmd = "rm -rf dist/*"
-clean.desc = "cleans the Eleventy output folder"
-dev.cmd = [
-    "bonnie clean",
-    "yarn eleventy --serve"
+site.cmd = "concurrently \"bonnie site export\" \"bonnie site build-tailwind\""
+site.desc = "builds and serves the site for local development (requires `concurrently`)"
+site.subcommands.export.cmd = [
+    "perseus export -sw --cargo-engine-path cargo-clif"
 ]
-dev.desc = "runs Eleventy for development"
-build.cmd = [
-    "bonnie build-css --prod",
-    "ELEVENTY_PRODUCTION=true yarn eleventy"
+site.subcommands.export.desc = "exports and serves the site, watching for changes"
+site.subcommands.check.cmd = [
+    "perseus check -w --cargo-engine-path cargo-clif"
 ]
-build.desc = "builds the site for production"
+site.subcommands.check.desc = "checks the code of the website"
+site.subcommands.build-tailwind.cmd = [
+    "tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css -w"
+]
+site.subcommands.build-tailwind.desc = "builds a tailwind stylesheet for development, watching for changes"
+site.subcommands.build-tailwind.subcommands.prod.cmd = [
+    "NODE_ENV=production tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css --minify"
+]
+site.subcommands.build-tailwind.subcommands.prod.desc = "builds a tailwind stylesheet for production (minifying)"
+site.subcommands.deploy.cmd = [
+    "bonnie site build-tailwind prod",
+    # Point this live version of the CLI at the given example
+    "PERSEUS_BASE_PATH=http://localhost:8080 perseus deploy -e"
+]
+site.subcommands.deploy.desc = "builds the website for production and finalizes it at `pkg`"
+site.subcommands.deploy-prod.cmd = [
+    "bonnie site build-tailwind prod",
+    # Point this live version of the CLI at the given example
+    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus deploy -e",
+    "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus export-error-page --code 404 --output pkg/404.html",
+]
+site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `pkg`"
 
-build-css.cmd = "yarn postcss \"src/styles/**/*.css\" -o ./_tmp/style.css"
-build-css.desc = "runs PostCSS to build Tailwind"
-build-css.subcommands.--watch = "find . -name \"*.css\" -not -path \"./node_modules/*\" -not -path \"./_tmp/*\" -not -path \"./dist/*\" | entr -s \"bonnie build-css\""
-build-css.subcommands.-w = "bonnie build-css --watch"
-build-css.subcommands.--prod = "NODE_ENV=production bonnie build-css"
-build-css.subcommands.-p = "bonnie build-css --prod"
-
-setup.cmd = [
-    "yarn",
-    "bonnie build-css"
+cli.cmd = [
+    "cd cli",
+    "cargo run %%"
 ]
-setup.desc = "sets up the project for development"
-
-## Change this if you ever want to use another editor
-open.cmd = "abricotine src/blog/%type/%slug.md"
-open.args = ["type", "slug"]
-open.desc = "opens the given post in Abricotine"
-
-new.cmd = [
-    "cp templates/template_%type.md src/blog/%type/%slug.md",
-    "bonnie open %type %slug"
-]
-new.args = ["type", "slug"]
-new.desc = "creates a new post and opens it"
-tab2spaces.cmd = "find -name \"*.md\" -exec sed -i 's/\t/    /g' {} \\;"
-tab2spaces.desc = "replaces Abricotine tabs with YAML spaces in all markdown files"
-commit.cmd = [
-    "bonnie tab2spaces",
-    "git add src/blog/**/*.md",
-    "git commit -m \"feat: 📝 added new post (%message)\""
-]
-commit.args = ["message"]
-commit.desc = "stages and commits all markdown files"
-push.cmd = "git push origin main"
-push.desc = "pushes the latest changes to GitHub"
+cli.desc = "runs the given command in the cli for the site"

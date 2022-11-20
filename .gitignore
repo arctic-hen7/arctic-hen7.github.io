@@ -1,3 +1,10 @@
 dist/
-node_modules
-_tmp/
+target/
+Cargo.lock
+node_modules/
+pkg/
+
+# This is generated
+static/tailwind.css
+
+.env
