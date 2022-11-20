@@ -92,7 +92,7 @@ impl PostAuthor {
             },
         };
         let author_name = match &self {
-            PostAuthor::Me => "arctic-hen7",
+            PostAuthor::Me => "Sam Brew",
             PostAuthor::Guest { name, .. } => name,
         }
         .to_string();

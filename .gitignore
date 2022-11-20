@@ -7,8 +7,4 @@ pkg/
 # This is generated
 static/tailwind.css
 
-# TODO Remove this in prod
-.blog/
-about.md
-
 .env
