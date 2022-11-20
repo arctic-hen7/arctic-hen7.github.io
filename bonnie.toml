@@ -15,33 +15,23 @@ site.subcommands.build-tailwind.cmd = [
     "tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css -w"
 ]
 site.subcommands.build-tailwind.desc = "builds a tailwind stylesheet for development, watching for changes"
-site.subcommands.build-tailwind.subcommands.prod.cmd.generic = [
+site.subcommands.build-tailwind.subcommands.prod.cmd = [
     "NODE_ENV=production tailwindcss -i ./styles/index.css -c ./tailwind.config.js -o ./static/tailwind.css --minify"
 ]
-site.subcommands.build-tailwind.subcommands.prod.cmd.targets.windows = [
-    "powershell -Command { $env:NODE_ENV=\"production\"; tailwindcss -s tailwind.config.js -o static/tailwind.css --minify }"
-]
 site.subcommands.build-tailwind.subcommands.prod.desc = "builds a tailwind stylesheet for production (minifying)"
-site.subcommands.deploy.cmd.generic = [
+site.subcommands.deploy.cmd = [
     "bonnie site build-tailwind prod",
     # Point this live version of the CLI at the given example
     "PERSEUS_BASE_PATH=http://localhost:8080 perseus deploy -e"
 ]
 site.subcommands.deploy.desc = "builds the website for production and finalizes it at `pkg`"
-site.subcommands.deploy-prod.cmd.generic = [
+site.subcommands.deploy-prod.cmd = [
     "bonnie site build-tailwind prod",
     # Point this live version of the CLI at the given example
     "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus deploy -e",
     "PERSEUS_BASE_PATH=https://arctic-hen7.github.io perseus export-error-page --code 404 --output pkg/404.html",
 ]
 site.subcommands.deploy-prod.desc = "builds the website for production on GitHub Pages and finalizes it at `pkg`"
-site.subcommands.run.cmd = [
-    "bonnie site build-tailwind",
-    "cd website",
-    # Point this live version of the CLI at the given example
-    "perseus serve",
-]
-site.subcommands.run.desc = "runs the website without watching for changes"
 
 cli.cmd = [
     "cd cli",
