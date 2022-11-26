@@ -1,9 +1,9 @@
 // WARNING: This must be kept in sync with the site version!
 
 use anyhow::{bail, Result};
+use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, time::SystemTime};
-use chrono::NaiveDate;
 
 /// A post on the site.
 #[derive(Serialize, Deserialize)]

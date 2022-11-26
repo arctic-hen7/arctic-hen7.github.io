@@ -1,7 +1,7 @@
+use crate::container::{Container, CurrentRoute};
 use perseus::{i18n::Translator, ErrorPages, Html};
 use std::rc::Rc;
 use sycamore::prelude::*;
-use crate::container::{Container, CurrentRoute};
 
 // This site will be exported statically, so we only have control over 404 pages
 // for broken links in the site itself
@@ -34,6 +34,21 @@ fn not_found_page<G: Html>(
     _err: String,
     _translator: Option<Rc<Translator>>,
 ) -> View<G> {
+    #[cfg(target_arch = "wasm32")]
+    {
+        // Attempt to redirect the user to Framesurge if they came for the Perseus website
+        let location = web_sys::window().unwrap().location();
+        let pathname = location.pathname();
+        match pathname {
+            Ok(pathname) if pathname.starts_with("/perseus") => {
+                let redirect = pathname.replace("/perseus", "https://framesurge.sh/perseus");
+                location.set_href(&redirect);
+            }
+            // Anything else is either a weird JS error or a genuine mistake from the user
+            _ => (),
+        };
+    }
+
     view! { cx,
         Container(offset_top = false, route = CurrentRoute::NotFound) {
             div(class = "flex flex-col justify-center items-center h-screen") {
@@ -42,6 +57,10 @@ fn not_found_page<G: Html>(
                         span(class = "font-mono pl-4") { "404: Page not found!" }
                     }
                     div(class = "p-4 pt-0 my-4") {
+                        span {
+                            strong { "If you came here from an old Perseus page, you will be redirected now..." }
+                        }
+                        br {}
                         span { "That page doesn't seem to exist. If you came here from a link elsewhere on the site, I'm terribly sorry, I clearly can't type properly. If you came here another website, or a search engine, this page probably existed once, but has since been moved. Here are some pages you might like to try instead:" }
                         ul(class = "pl-6 mt-4 w-full list-disc") {
                             li {

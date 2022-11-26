@@ -1,8 +1,8 @@
 mod container;
+mod error_pages;
 mod post;
 mod rss;
 mod templates;
-mod error_pages;
 
 use perseus::{plugins::Plugins, Html, PerseusApp, PerseusRoot};
 

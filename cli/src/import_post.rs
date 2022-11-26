@@ -46,13 +46,20 @@ impl FullPost {
             // Dates are of the form `<year>-<month>-<day>`
             let date_parts = date.split('-').collect::<Vec<_>>();
             if date_parts.len() != 3 {
-                bail!("File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)", file.path.to_string_lossy());
+                bail!(
+                    "File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)",
+                    file.path.to_string_lossy()
+                );
             }
             NaiveDate::from_ymd_opt(
                 date_parts[0].parse::<i32>().context("Invalid year")?,
                 date_parts[1].parse::<u32>().context("Invalid month")?,
                 date_parts[2].parse::<u32>().context("Invalid day")?,
-            ).ok_or(anyhow!("File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)", file.path.to_string_lossy()))?
+            )
+            .ok_or(anyhow!(
+                "File '{}' had an invalid date (must be of the form `<year>-<month>-<day>`)",
+                file.path.to_string_lossy()
+            ))?
         };
 
         // Parse the author
