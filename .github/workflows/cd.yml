@@ -48,7 +48,9 @@ jobs:
             # Only install the NPM dependencies if the cache doesn't have them
             - name: Install NPM dependencies
               if: steps.npm-cache.outputs.cache-hit != 'true'
-              run: npm install -g tailwindcss && npm install
+              run: npm install
+            - name: Install Tailwind
+              run: npm i -g tailwindcss
 
             - name: Build site
               run: bonnie site deploy-prod
