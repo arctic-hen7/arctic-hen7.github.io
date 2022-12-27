@@ -1,6 +1,6 @@
 # Personal Site
 
-This is my personal GitHub pages site, which includes some information about me and my personal blog! Check it out at <https://arctic-hen7.github.io>!
+This is my personal GitHub pages site, which includes some information about me and my personal blog! Check it out at <https://arctic-hen7.github.io/>!
 
 ## How does it work?
 
