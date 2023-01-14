@@ -45,9 +45,9 @@ jobs:
                 key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
                 restore-keys: |
                   ${{ runner.os }}-node-
-            # Only install the NPM dependencies if the cache doesn't have them
+            # TODO Only install the NPM dependencies if the cache doesn't have them
             - name: Install NPM dependencies
-              if: steps.npm-cache.outputs.cache-hit != 'true'
+              # if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm install
             - name: Install Tailwind
               run: npm i -g tailwindcss
