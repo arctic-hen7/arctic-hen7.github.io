@@ -1,12 +1,14 @@
 use crate::container::{Container, CurrentRoute};
 use crate::post::*;
-use crate::BLOG_DIR;
-use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
-use sycamore::prelude::{view, Html, Scope, SsrNode, View};
+#[cfg(engine)]
+use crate::{Error, BLOG_DIR};
+use perseus::prelude::*;
+use serde::{Deserialize, Serialize};
+use sycamore::prelude::*;
 
 // Note: when Perseus has islands, this will be a component with state, which can be included on the page of each post in a series.
-#[perseus::template_rx]
-pub fn series_page<'rx, G: Html>(cx: Scope<'rx>, series: SeriesRx<'rx>) -> View<G> {
+#[auto_scope]
+fn series_page<G: Html>(cx: Scope, series: &SeriesRx) -> View<G> {
     let posts = series.posts_in_series.get();
     let posts_view = View::new_fragment(posts.iter().cloned().enumerate().map(|(idx, post)| {
         let (author_name, author_home_url, author_profile_pic) = post.author.parse(cx);
@@ -46,35 +48,36 @@ pub fn series_page<'rx, G: Html>(cx: Scope<'rx>, series: SeriesRx<'rx>) -> View<
     }
 }
 
-#[perseus::make_rx(SeriesRx)]
+#[derive(Serialize, Deserialize, Clone, ReactiveState)]
+#[rx(alias = "SeriesRx")]
 struct Series {
     name: String,
     posts_in_series: Vec<SlimPost>,
 }
 
-#[perseus::head]
-pub fn head(cx: Scope, series: Series) -> View<SsrNode> {
+#[engine_only_fn]
+fn head(cx: Scope, series: Series) -> View<SsrNode> {
     view! { cx,
         title { (format!("{} (Series) | The Arctic Circle", series.name)) }
     }
 }
 
-#[perseus::build_state]
-fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Series> {
+#[engine_only_fn]
+async fn get_build_state(
+    StateGeneratorInfo { path, .. }: StateGeneratorInfo<()>,
+) -> Result<Series, BlamedError<Error>> {
     use std::fs;
-
-    let series = path.strip_prefix("series/").unwrap();
 
     // Get all the blog posts, and figure out which ones are in this series
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut posts_in_series = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents = fs::read_to_string(entry.path())?;
-        let post: FullPost = serde_json::from_str(&contents)?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
-        if post.post.series.is_some() && post.post.series.as_ref().unwrap().0 == series {
+        if post.post.series.is_some() && post.post.series.as_ref().unwrap().0 == path {
             posts_in_series.push(SlimPost {
                 id: post.post.id,
                 title: post.post.title,
@@ -98,24 +101,21 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Series> {
 
     Ok(Series {
         posts_in_series,
-        name: series.to_string(),
+        name: path,
     })
 }
 
-#[perseus::build_paths]
-fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use anyhow::Context;
+#[engine_only_fn]
+async fn get_build_paths() -> Result<BuildPaths, Error> {
     use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut series_list = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents =
-            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost =
-            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
         // If this post is in a series, add that series to our list
         if let Some(series) = post.post.series {
@@ -125,13 +125,17 @@ fn get_build_paths() -> RenderFnResult<Vec<String>> {
         }
     }
 
-    Ok(series_list)
+    Ok(BuildPaths {
+        paths: series_list,
+        extra: ().into(),
+    })
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("series")
-        .template(series_page)
-        .head(head)
+    Template::build("series")
+        .view_with_state(series_page)
+        .head_with_state(head)
         .build_paths_fn(get_build_paths)
         .build_state_fn(get_build_state)
+        .build()
 }

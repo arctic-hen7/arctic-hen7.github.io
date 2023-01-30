@@ -1,11 +1,13 @@
 use crate::container::{Container, CurrentRoute};
 use crate::post::*;
-use crate::BLOG_DIR;
-use perseus::{RenderFnResult, RenderFnResultWithCause, Template};
-use sycamore::prelude::{view, Html, Scope, SsrNode, View};
+#[cfg(engine)]
+use crate::{Error, BLOG_DIR};
+use perseus::prelude::*;
+use serde::{Deserialize, Serialize};
+use sycamore::prelude::*;
 
-#[perseus::template_rx]
-pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
+#[auto_scope]
+fn tag_page<G: Html>(cx: Scope, tag: &TagRx) -> View<G> {
     let posts = tag.posts_with_tag.get();
     let posts_view = View::new_fragment(posts.iter().cloned().map(|post| {
         let (author_name, author_home_url, author_profile_pic) = post.author.parse(cx);
@@ -42,35 +44,36 @@ pub fn tag_page<'rx, G: Html>(cx: Scope<'rx>, tag: TagRx<'rx>) -> View<G> {
     }
 }
 
-#[perseus::make_rx(TagRx)]
+#[derive(Serialize, Deserialize, Clone, ReactiveState)]
+#[rx(alias = "TagRx")]
 struct Tag {
     name: String,
     posts_with_tag: Vec<SlimPost>,
 }
 
-#[perseus::head]
-pub fn head(cx: Scope, tag: Tag) -> View<SsrNode> {
+#[engine_only_fn]
+fn head(cx: Scope, tag: Tag) -> View<SsrNode> {
     view! { cx,
         title { (format!("Posts tagged '{}' | The Arctic Circle", tag.name)) }
     }
 }
 
-#[perseus::build_state]
-fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Tag> {
+#[engine_only_fn]
+async fn get_build_state(
+    StateGeneratorInfo { path, .. }: StateGeneratorInfo<()>,
+) -> Result<Tag, BlamedError<Error>> {
     use std::fs;
-
-    let tag = path.strip_prefix("tag/").unwrap();
 
     // Get all the blog posts, and figure out which ones have this tag
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut posts_with_tag = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents = fs::read_to_string(entry.path())?;
-        let post: FullPost = serde_json::from_str(&contents)?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
-        if post.post.tags.iter().any(|t| t == tag) {
+        if post.post.tags.iter().any(|t| t == &path) {
             posts_with_tag.push(SlimPost {
                 id: post.post.id,
                 title: post.post.title,
@@ -86,24 +89,21 @@ fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Tag> {
 
     Ok(Tag {
         posts_with_tag,
-        name: tag.to_string(),
+        name: path,
     })
 }
 
-#[perseus::build_paths]
-fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use anyhow::Context;
+#[engine_only_fn]
+async fn get_build_paths() -> Result<BuildPaths, Error> {
     use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut tags = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents =
-            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost =
-            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
         // Add all the tags of this post to the list of paths, making sure we don't have any duplications
         for tag in post.post.tags.into_iter() {
@@ -113,13 +113,17 @@ fn get_build_paths() -> RenderFnResult<Vec<String>> {
         }
     }
 
-    Ok(tags)
+    Ok(BuildPaths {
+        paths: tags,
+        extra: ().into(),
+    })
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("tag")
-        .template(tag_page)
-        .head(head)
+    Template::build("tag")
+        .view_with_state(tag_page)
+        .head_with_state(head)
         .build_paths_fn(get_build_paths)
         .build_state_fn(get_build_state)
+        .build()
 }

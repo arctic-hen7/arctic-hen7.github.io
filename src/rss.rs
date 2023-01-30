@@ -1,15 +1,18 @@
+#[cfg(engine)]
 use crate::{post::FullPost, BLOG_DIR};
-use perseus::plugins::{empty_control_actions_registrar, Plugin, PluginAction, PluginEnv};
+#[cfg(engine)]
+use perseus::plugins::PluginAction;
+use perseus::plugins::{empty_control_actions_registrar, Plugin, PluginEnv};
 
 /// Gets an instance of the RSS plugin, which takes no data.
 ///
 /// Note: you should add `.feed.*.rss` to your `.gitignore`, as it will be auto-generated
 /// on every build from the render context.
-pub fn get_rss_plugin<G: perseus::Html>() -> Plugin<G, ()> {
+pub fn get_rss_plugin() -> Plugin<()> {
     Plugin::new(
         "rss-plugin",
         |mut actions| {
-            #[cfg(not(target_arch = "wasm32"))]
+            #[cfg(engine)]
             actions
                 .settings_actions
                 .add_static_aliases
@@ -74,7 +77,7 @@ pub fn get_rss_plugin<G: perseus::Html>() -> Plugin<G, ()> {
 
                     let mut map = std::collections::HashMap::new();
                     map.insert("/feed.xml".to_string(), "dist/.feed.xml".to_string());
-                    map
+                    Ok(map)
                 });
             actions
         },

@@ -1,8 +1,8 @@
 mod error;
 mod page;
-#[cfg(target_arch = "wasm32")]
+#[cfg(client)]
 mod root;
-#[cfg(target_arch = "wasm32")]
+#[cfg(client)]
 mod single;
 mod skeleton;
 
@@ -10,6 +10,7 @@ use chrono::{DateTime, Utc};
 use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+#[cfg(engine)]
 use sycamore::prelude::*;
 use uuid::Uuid;
 
@@ -17,7 +18,8 @@ use error::ShortformError;
 
 use crate::post::PostAuthor;
 
-#[perseus::make_rx(ShortformListRx)]
+#[derive(Serialize, Deserialize, Clone, ReactiveState)]
+#[rx(alias = "ShortformListRx")]
 pub struct ShortformList {
     /// A list of shortforms, indexed by their IDs.
     ///
@@ -43,7 +45,7 @@ pub struct Shortform {
     // TODO Other fields, such as hashtags and @ references
 }
 
-#[perseus::head]
+#[engine_only_fn]
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { ("The Ice Floes | The Arctic Site") }
@@ -51,17 +53,18 @@ fn head(cx: Scope) -> View<SsrNode> {
 }
 
 // This exists solely to initialise the shortform list as empty
-#[perseus::build_state]
-fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<ShortformList> {
-    Ok(ShortformList {
+#[engine_only_fn]
+async fn get_build_state(_: StateGeneratorInfo<()>) -> ShortformList {
+    ShortformList {
         list: None,
         errors: Vec::new(),
-    })
+    }
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("shortform")
-        .template(page::shortform_page)
+    Template::build("shortform")
+        .view_with_state(page::shortform_page)
         .head(head)
         .build_state_fn(get_build_state)
+        .build()
 }

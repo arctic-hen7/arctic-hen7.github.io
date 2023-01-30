@@ -1,11 +1,12 @@
 use crate::container::{Container, CurrentRoute};
 use crate::post::*;
-use crate::BLOG_DIR;
+#[cfg(engine)]
+use crate::{Error, BLOG_DIR};
 use perseus::prelude::*;
 use sycamore::prelude::*;
 
-#[perseus::template_rx]
-pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
+#[auto_scope]
+fn post_page<G: Html>(cx: Scope, post: &PostRx) -> View<G> {
     let tags = post.tags.get();
     let tags_view = View::new_fragment(tags.iter().cloned().map(|tag| {
         let tag_link = format!("tag/{}", &tag);
@@ -74,8 +75,8 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, post: PostRx<'rx>) -> View<G> {
     }
 }
 
-#[perseus::head]
-pub fn head(cx: Scope, post: Post) -> View<SsrNode> {
+#[engine_only_fn]
+fn head(cx: Scope, post: Post) -> View<SsrNode> {
     view! { cx,
         title { (format!("{} | The Arctic Circle", post.title)) }
         // We only need the KaTeX stylesheet, since everything has been prerendered on the server-side!
@@ -84,46 +85,48 @@ pub fn head(cx: Scope, post: Post) -> View<SsrNode> {
     }
 }
 
-#[perseus::build_state]
-fn get_build_state(path: String, _: String) -> RenderFnResultWithCause<Post> {
+#[engine_only_fn]
+async fn get_build_state(
+    StateGeneratorInfo { path, .. }: StateGeneratorInfo<()>,
+) -> Result<Post, BlamedError<Error>> {
     use std::fs;
     use std::path::Path;
 
-    let id = path.strip_prefix("post/").unwrap();
-    let filename = format!("{id}.json");
+    let filename = format!("{path}.json");
     let file_path = Path::new(BLOG_DIR).join(filename);
 
-    let contents = fs::read_to_string(file_path)?;
-    let post: FullPost = serde_json::from_str(&contents)?;
+    let contents = fs::read_to_string(file_path).map_err(Error::from)?;
+    let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
     Ok(post.post)
 }
 
-#[perseus::build_paths]
-fn get_build_paths() -> RenderFnResult<Vec<String>> {
-    use anyhow::Context;
+#[engine_only_fn]
+async fn get_build_paths() -> Result<BuildPaths, Error> {
     use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut paths = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents =
-            fs::read_to_string(entry.path()).context("Failed to read file in blog index")?;
-        let post: FullPost =
-            serde_json::from_str(&contents).context("Failed to deserialize file in blog index")?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
         paths.push(post.post.id)
     }
 
-    Ok(paths)
+    Ok(BuildPaths {
+        paths,
+        extra: ().into(),
+    })
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("post")
-        .template(post_page)
-        .head(head)
+    Template::build("post")
+        .view_with_state(post_page)
+        .head_with_state(head)
         .build_paths_fn(get_build_paths)
         .build_state_fn(get_build_state)
+        .build()
 }

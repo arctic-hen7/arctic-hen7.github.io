@@ -8,9 +8,9 @@ pub static ERROR_ICON: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" height=
 ///
 /// The shortforms this receives are guaranteed to have already been loaded.
 #[component]
-pub fn ShortformRootPage<'rx, G: Html>(
-    cx: Scope<'rx>,
-    shortform_list: ShortformListRx<'rx>,
+pub fn ShortformRootPage<'a, G: Html>(
+    cx: BoundedScope<'_, 'a>,
+    shortform_list: &'a ShortformListRx,
 ) -> View<G> {
     let shortforms = create_memo(cx, move || {
         let list = &*shortform_list.list.get();

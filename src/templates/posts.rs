@@ -1,11 +1,13 @@
 use crate::container::{Container, CurrentRoute};
 use crate::post::*;
-use crate::BLOG_DIR;
+#[cfg(engine)]
+use crate::{Error, BLOG_DIR};
 use perseus::prelude::*;
+use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 
-#[perseus::template_rx]
-pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
+#[auto_scope]
+fn post_page<G: Html>(cx: Scope, posts: &PostsRx) -> View<G> {
     let posts = posts.posts.get();
     let posts = View::new_fragment(
         posts
@@ -47,29 +49,30 @@ pub fn post_page<'rx, G: Html>(cx: Scope<'rx>, posts: PostsRx<'rx>) -> View<G> {
     }
 }
 
-#[make_rx(PostsRx)]
+#[derive(Serialize, Deserialize, Clone, ReactiveState)]
+#[rx(alias = "PostsRx")]
 struct Posts {
     posts: Vec<SlimPost>,
 }
 
-#[perseus::head]
-pub fn head(cx: Scope) -> View<SsrNode> {
+#[engine_only_fn]
+fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "The Arctic Circle | The Arctic Site" }
     }
 }
 
-#[perseus::build_state]
-fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<Posts> {
+#[engine_only_fn]
+async fn get_build_state(_: StateGeneratorInfo<()>) -> Result<Posts, BlamedError<Error>> {
     use std::fs;
 
     // Get everything in the blog directory (which just has flat files, indexed by Org ID)
     let mut posts = Vec::new();
-    for entry in fs::read_dir(BLOG_DIR)? {
-        let entry = entry?;
+    for entry in fs::read_dir(BLOG_DIR).map_err(Error::from)? {
+        let entry = entry.map_err(Error::from)?;
 
-        let contents = fs::read_to_string(entry.path())?;
-        let post: FullPost = serde_json::from_str(&contents)?;
+        let contents = fs::read_to_string(entry.path()).map_err(Error::from)?;
+        let post: FullPost = serde_json::from_str(&contents).map_err(Error::from)?;
 
         posts.push(SlimPost {
             id: post.post.id,
@@ -87,8 +90,9 @@ fn get_build_state(_: String, _: String) -> RenderFnResultWithCause<Posts> {
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("posts")
-        .template(post_page)
+    Template::build("posts")
+        .view_with_state(post_page)
         .head(head)
         .build_state_fn(get_build_state)
+        .build()
 }

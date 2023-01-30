@@ -1,9 +1,8 @@
 use crate::container::{Container, CurrentRoute};
-use perseus::Template;
-use sycamore::prelude::{view, Html, Scope, SsrNode, View};
+use perseus::prelude::*;
+use sycamore::prelude::*;
 
-#[perseus::template_rx]
-pub fn index_page<G: Html>(cx: Scope) -> View<G> {
+fn index_page<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
         Container(offset_top = false, route = CurrentRoute::Home) {
             // This page is a beautiful example of extreme manual spacing control
@@ -67,7 +66,7 @@ pub fn index_page<G: Html>(cx: Scope) -> View<G> {
     }
 }
 
-#[perseus::head]
+#[engine_only_fn]
 pub fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "Home | The Arctic Site" }
@@ -75,5 +74,5 @@ pub fn head(cx: Scope) -> View<SsrNode> {
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("index").template(index_page).head(head)
+    Template::build("index").view(index_page).head(head).build()
 }

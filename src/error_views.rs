@@ -3,9 +3,11 @@ use perseus::{i18n::Translator, ErrorPages, Html};
 use std::rc::Rc;
 use sycamore::prelude::*;
 
+// TODO
+
 // This site will be exported statically, so we only have control over 404 pages
 // for broken links in the site itself
-pub fn get_error_pages<G: Html>() -> ErrorPages<G> {
+pub fn get_error_views<G: Html>() -> ErrorPages<G> {
     let mut error_pages = ErrorPages::new(
         |cx, url, status, err, _| {
             view! { cx,
@@ -29,10 +31,6 @@ pub fn get_error_pages<G: Html>() -> ErrorPages<G> {
 
 fn not_found_page<G: Html>(
     cx: Scope,
-    _url: String,
-    _status: u16,
-    _err: String,
-    _translator: Option<Rc<Translator>>,
 ) -> View<G> {
     #[cfg(target_arch = "wasm32")]
     {

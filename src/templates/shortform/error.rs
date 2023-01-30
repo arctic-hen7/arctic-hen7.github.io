@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-#[cfg(target_arch = "wasm32")]
+#[cfg(client)]
 use sycamore::prelude::*;
 
 /// A function responsible for displaying any errors that occur while fetching shortforms.

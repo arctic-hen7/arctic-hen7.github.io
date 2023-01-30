@@ -19,33 +19,29 @@ static POSTS_URL: &str = "https://raw.githubusercontent.com/arctic-hen7/the-ice-
 ///
 /// On the engine-side, this will produce a skeleton, which will then be filled out
 /// on the browser-side.
-#[cfg(not(target_arch = "wasm32"))]
-#[perseus::template_rx]
-pub fn shortform_page<'rx, G: Html>(
-    cx: Scope<'rx>,
-    _shortform_list: ShortformListRx<'rx>,
-) -> View<G> {
+#[cfg(engine)]
+#[auto_scope]
+pub fn shortform_page<G: Html>(cx: Scope, _shortform_list: &ShortformListRx) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::Shortform) {
             ShortformSkeleton {}
         }
     }
 }
-#[cfg(target_arch = "wasm32")]
-#[perseus::template_rx]
-pub fn shortform_page<'rx, G: Html>(
-    cx: Scope<'rx>,
-    shortform_list: ShortformListRx<'rx>,
+#[cfg(client)]
+pub fn shortform_page<'a, G: Html>(
+    cx: BoundedScope<'_, 'a>,
+    shortform_list: &'a ShortformListRx,
 ) -> View<G> {
     use super::error::ShortformErrorView;
     use super::root::ShortformRootPage;
     use super::single::SingleShortform;
 
     // We need to make sure the shortforms aren't already filled out, for when we re-render (and everything is in the PSS!)
-    #[cfg(target_arch = "wasm32")]
+    #[cfg(client)]
     if shortform_list.list.get().is_none() {
         // If we have critical errors, we make the map empty, not nonexistent, since that's needed for checking and actually *showing* those errors (as opposed to a loading page)
-        perseus::spawn_local_scoped(cx, async {
+        perseus::prelude::spawn_local_scoped(cx, async {
             let list = match gloo_net::http::Request::get(POSTS_URL).send().await {
                 Ok(res) => match res.text().await {
                     Ok(full_list) => {
@@ -151,7 +147,6 @@ pub fn shortform_page<'rx, G: Html>(
                 }
             },
             ShortformStatus::Root => {
-                let shortform_list = shortform_list.clone();
                 view! { cx,
                     Container(offset_top = true, route = CurrentRoute::Shortform) {
                         // By this point, we can guarantee that there's some stuff here
@@ -176,7 +171,7 @@ pub fn shortform_page<'rx, G: Html>(
 /// on the client-side, which is a product of my wanting to run this as an exported app, rather
 /// than using a server (which could use revalidation and incremental generation to make this
 /// a piece of cake).
-#[cfg(target_arch = "wasm32")]
+#[cfg(client)]
 enum ShortformStatus {
     /// There's no hash component, the root page should be rendered.
     Root,

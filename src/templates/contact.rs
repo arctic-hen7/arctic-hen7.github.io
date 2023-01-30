@@ -1,12 +1,8 @@
 use crate::container::{Container, CurrentRoute};
-use perseus::Template;
-use sycamore::{
-    prelude::{view, Html, Scope, SsrNode, View},
-    Prop,
-};
+use perseus::prelude::*;
+use sycamore::prelude::*;
 
-#[perseus::template_rx]
-pub fn contact_page<G: Html>(cx: Scope) -> View<G> {
+fn contact_page<G: Html>(cx: Scope) -> View<G> {
     view! { cx,
         Container(offset_top = true, route = CurrentRoute::Contact) {
             div(class = "flex flex-col justify-center items-center") {
@@ -102,13 +98,16 @@ fn ContactEntry<'a, G: Html>(cx: Scope<'a>, props: ContactEntryProps<'a>) -> Vie
     }
 }
 
-#[perseus::head]
-pub fn head(cx: Scope) -> View<SsrNode> {
+#[engine_only_fn]
+fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "Contact Me | The Arctic Site" }
     }
 }
 
 pub fn get_template<G: Html>() -> Template<G> {
-    Template::new("contact").template(contact_page).head(head)
+    Template::build("contact")
+        .view(contact_page)
+        .head(head)
+        .build()
 }
