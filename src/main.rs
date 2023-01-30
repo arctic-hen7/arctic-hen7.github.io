@@ -1,5 +1,5 @@
 mod container;
-// mod error_views;
+mod error_views;
 mod post;
 mod rss;
 mod templates;
@@ -20,7 +20,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::series::get_template())
         .template(crate::templates::shortform::get_template())
         .template(crate::templates::contact::get_template())
-        .error_views(ErrorViews::unlocalized_development_default())
+        .error_views(crate::error_views::get_error_views())
         .index_view(|cx| sycamore::view! { cx,
             html(class = "light") {
                 head {

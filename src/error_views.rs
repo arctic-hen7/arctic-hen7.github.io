@@ -1,37 +1,110 @@
 use crate::container::{Container, CurrentRoute};
-use perseus::{i18n::Translator, ErrorPages, Html};
-use std::rc::Rc;
+use fmterr::fmt_err;
+use perseus::{error_views::ErrorPosition, errors::ClientError, prelude::*};
 use sycamore::prelude::*;
-
-// TODO
 
 // This site will be exported statically, so we only have control over 404 pages
 // for broken links in the site itself
-pub fn get_error_views<G: Html>() -> ErrorPages<G> {
-    let mut error_pages = ErrorPages::new(
-        |cx, url, status, err, _| {
-            view! { cx,
-                p { (format!("An error with HTTP code {} occurred at '{}': '{}'.", status, url, err)) }
-            }
-        },
-        |cx, _, _, _, _| {
-            view! { cx,
-                title { "Error" }
-            }
-        },
-    );
-    error_pages.add_page(404, not_found_page, |cx, _, _, _, _| {
-        view! { cx,
-            title { "Not Found" }
-        }
-    });
+pub fn get_error_views<G: Html>() -> ErrorViews<G> {
+    ErrorViews::new(|cx, err, _err_info, pos| {
+        match err {
+            // Special case for 404 due to its frequency
+            ClientError::ServerError { status, .. } if status == 404 => (
+                view! { cx,
+                    title { "Page not found" }
+                },
+                not_found_page(cx),
+            ),
+            ClientError::Panic(panic_msg) => (
+                // Panics are popups
+                View::empty(),
+                view! { cx,
+                        div(
+                            class = "absolute bottom-0 right-0 bg-red-400 text-white m-4 rounded-lg max-w-[30rem]"
+                        ) {
+                            h2(
+                                class = "text-2xl font-bold w-full border-b border-white my-4"
+                            ) {
+                                span(class = "pl-4") { "Critical error!" }
+                            }
+                            div(
+                                class = "p-4 pt-0 mt-4"
+                            ) {
+                                p { "This website has panicked! Details are below if you'd like to report this to me (since this really shouldn't happen...)." }
+                                pre(
+                                    class = "bg-amber-500 p-4 mt-4 rounded-lg whitespace-pre-wrap",
+                                    // TODO Tailwind doesn't support this?
+                                    style = "word-wrap: break-word;"
+                                ) {
+                                    (panic_msg)
+                                }
+                            }
+                        }
+                },
+            ),
+            err => {
+                let err_msg = fmt_err(&err);
 
-    error_pages
+                // This will be placed in either a popup or across the page
+                let inner_view = view! { cx,
+                    div(
+                        class = "bg-red-400 text-white m-4 rounded-lg max-w-[30rem]"
+                    ) {
+                        h2(
+                            class = "text-2xl font-bold w-full pb-4 border-b border-white my-4"
+                        ) {
+                            span(class = "pl-4") { "Error!" }
+                        }
+                        div(
+                            class = "p-4 pt-0 mt-4"
+                        ) {
+                            p { "This website has encountered an internal error, sorry! Details are below if you'd like to report this to me." }
+                            pre(
+                                class = "bg-amber-500 p-4 mt-4 rounded-lg whitespace-pre-wrap",
+                                style = "word-break: break-word;"
+                            ) {
+                                (err_msg)
+                            }
+                        }
+                    }
+                };
+
+                (
+                    view! { cx,
+                            title { "Error" }
+                    },
+                    match pos {
+                        ErrorPosition::Page => view! { cx,
+                            Container(offset_top = false, route = CurrentRoute::NotFound) {
+                                div(
+                                    class = "flex flex-col justify-center items-center h-[95vh] w-full"
+                                ) {
+                                    (inner_view)
+                                }
+                            }
+                        },
+                        ErrorPosition::Popup => view! { cx,
+                            div(
+                                class = "absolute bottom-0 right-0 flex justify-center items-center"
+                            ) {
+                                (inner_view)
+                            }
+                        },
+                        ErrorPosition::Widget => view! { cx,
+                            div(
+                                class = "flex flex-col"
+                            ) {
+                                (inner_view)
+                            }
+                        },
+                    },
+                )
+            }
+        }
+    })
 }
 
-fn not_found_page<G: Html>(
-    cx: Scope,
-) -> View<G> {
+fn not_found_page<G: Html>(cx: Scope) -> View<G> {
     #[cfg(target_arch = "wasm32")]
     {
         // Attempt to redirect the user to Framesurge if they came for the Perseus website
