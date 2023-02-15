@@ -92,7 +92,7 @@ fn about_page<G: Html>(cx: Scope, AboutStateRx { resume }: &AboutStateRx) -> Vie
                         b { "distributed systems designer" }
                         ", and budding "
                         b { "economist" }
-                        "! This page is where you can learn more about me, and the things I've done so far in my short life on this Earth."
+                        "! This page is where you can learn more about me, and the things I've done so far in my short life on this Earth. I provide my full resumé externally to this website as required."
                     }
                     div(class = "mt-4") {
                         (resume)
