@@ -44,7 +44,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
 #[cfg(engine)]
 #[derive(thiserror::Error, Debug)]
 #[error(transparent)]
-struct Error(#[from] Box<dyn std::error::Error + Send + Sync>);
+pub struct Error(#[from] Box<dyn std::error::Error + Send + Sync>);
 // This is not designed to be used as a 'proper' `From<E>` implementation, it's
 // designed to be used in `some_function().map_err(Error::from)?`, which allows
 // converting any error type straight into this for convenience.
