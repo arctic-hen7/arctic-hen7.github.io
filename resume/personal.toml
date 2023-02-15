@@ -1,0 +1,64 @@
+name = "Personal"
+role = "Myself!"
+description = "My personal projects throughout my life."
+time = [ "2005", "Present" ]
+
+[[projects]]
+name = "Bonnie"
+role = "Founder and maintainer"
+status = "Ongoing"
+time = [ "2021", "Present" ]
+link = "https://github.com/arctic-hen7/bonnie"
+description = "Simple, cross-platform, and lightning fast command aliases with superpowers."
+achievements = [
+    "Led the project to over 7,000 downloads"
+]
+
+[[projects]]
+name = "Tribble"
+role = "Founder and maintainer"
+status = "Ongoing"
+time = [ "2021", "Present" ]
+link = "https://github.com/arctic-hen7/tribble"
+description = "Automatic issue triaging through mini-websites for guiding users through contributing to open-source projects."
+achievements = []
+
+[[projects]]
+name = "Diana"
+role = "Founder and maintainer"
+status = "Archived"
+time = [ "2021", "2022" ]
+link = "https://github.com/arctic-hen7/diana"
+description = "A Rust GraphQL system with full support for subscriptions and authentication that works out of the box."
+achievements = [
+    "Pioneered the experimental model of securely linking a GraphQL subscriptions server to parallel serverless architectures for queries and mutations"
+]
+
+[[projects]]
+name = "Fmterr"
+role = "Founder and maintainer"
+status = "Ongoing"
+time = [ "2021", "Present" ]
+link = "https://github.com/arctic-hen7/fmterr"
+description = "A drop-dead-simple error reporting library for Rust."
+achievements = [
+    "Brought the project to over 12,000 downloads without a single GitHub star 😉!"
+]
+
+[[projects]]
+name = "Personal website"
+role = "Creator"
+status = "Ongoing"
+time = [ "2021", "Present" ]
+link = "https://arctic-hen7.github.io"
+description = "This very website!"
+achievements = []
+
+[[projects]]
+name = "IPEMS"
+role = "Founder and maintainer"
+status = "Archived (for now?)"
+time = [ "2020", "2021" ]
+link = "https://github.com/arctic-hen7/ipems"
+description = "<i>(My very first open-source project, give it a star!)</i> The Internal Program Error Management System, designed for bringing the portability of HTTP status codes to all programs. This consists of a protocol and a JavaScript implementation."
+achievements = []

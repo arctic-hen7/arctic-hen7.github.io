@@ -1,0 +1,37 @@
+name = "Framesurge"
+role = "Founder"
+description = "An organisation dedicated to building the frameworks of the future, founded on the principle that a general solution is better than a specific one."
+time = [ "2022", "Present" ]
+
+[[projects]]
+name = "Perseus"
+role = "Founder and maintainer"
+status = "Ongoing"
+time = [ "2021", "Present" ]
+link = "https://framesurge.sh/perseus/en-US"
+description = "A state-driven web development framework for Rust with full support for server-side rendering and static generation."
+achievements = [
+    "Led the project to over 1,200 stars on GitHub",
+    "Led the project to over 12,000 downloads",
+    "Developed <i>hot state reloading</i>, a revolutionary new approach to state management in development that brought faster development cycles to WebAssembly",
+    "Developed the capsules system, pioneering the model of page-driven development",
+    "Built the infrastructure for Perseus to generate some of the fastest websites in the world consistently"
+]
+
+[[projects]]
+name = "Andromeda"
+role = "Founder and maintainer"
+status = "In development"
+time = [ "2022", "Present" ]
+link = "https://github.com/framesurge/andromeda"
+description = "A backend framework for building fast and flexible APIs rapidly."
+achievements = []
+
+[[projects]]
+name = "Jacaranda"
+role = "Founder and maintainer"
+status = "In development"
+time = [ "2022", "Present" ]
+link = "https://github.com/framesurge/jacaranda"
+description = "A typed and reactive Rust styling system for the web and beyond."
+achievements = []

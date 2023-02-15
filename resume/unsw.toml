@@ -1,0 +1,13 @@
+name = "University of New South Wales"
+role = "Undergraduate"
+description = "I am currently enrolled in the Bachelor of Economics/Computer Science degree at UNSW."
+time = [ "2023", "Present" ]
+
+[[projects]]
+name = "Consortium for Inclusive Economics Education"
+role = "Website administrator"
+status = "Ongoing"
+time = [ "2023", "Present" ]
+link = "https://www.ciee.unsw.edu.au/"
+description = "An organisation founded to promote inclusion, equity, and quality in economics education and economic literacy, whose website I administer."
+achievements = []

@@ -1,0 +1,31 @@
+name = "The Quantorium"
+role = "Founder"
+description = "An organisation building foundational distributed systems for the security and integrity of the future of the internet."
+time = [ "2022", "Present" ]
+
+[[projects]]
+name = "Lykros"
+role = "Founder and maintainer"
+status = "In development"
+time = [ "2018", "Present" ]
+link = "https://github.com/TheQuantorium/lykros"
+description = "A next-generation general data security platform."
+achievements = []
+
+[[projects]]
+name = "Kolaris"
+role = "Founder and maintainer"
+status = "In development"
+time = [ "2020", "Present" ]
+link = "https://github.com/TheQuantorium/kolaris"
+description = "A revolutionary distributed network for cryptographically verifiable and decentralised storage and computation."
+achievements = []
+
+[[projects]]
+name = "Miriar"
+role = "Founder and maintainer"
+status = "In development"
+time = [ "2023", "Present" ]
+link = "https://github.com/TheQuantorium/miriar"
+description = "A novel append-only ledger system to replace blockchain, while improving flexibility, environmental sustainability, and security."
+achievements = []
