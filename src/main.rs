@@ -37,6 +37,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
                 rss::get_rss_plugin,
                 (),
         ))
+        .static_alias("/favicon.ico", "static/logo.ico")
 }
 
 /// A universal representation of error messages that can occur in the app. This

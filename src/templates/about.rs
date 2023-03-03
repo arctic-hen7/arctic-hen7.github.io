@@ -120,7 +120,7 @@ fn head(cx: Scope) -> View<SsrNode> {
 
 #[engine_only_fn]
 async fn get_build_state(_: StateGeneratorInfo<()>) -> Result<AboutState, BlamedError<Error>> {
-    let resume = resume::Resume::from_directory("resume").map_err(Error::from)?;
+    let resume = resume::Resume::from_directory("resume")?;
 
     Ok(AboutState { resume })
 }
