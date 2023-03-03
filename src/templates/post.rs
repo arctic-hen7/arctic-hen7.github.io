@@ -81,7 +81,8 @@ fn head(cx: Scope, post: Post) -> View<SsrNode> {
         title { (format!("{} | The Arctic Circle", post.title)) }
         // We only need the KaTeX stylesheet, since everything has been prerendered on the server-side!
         link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css") {}
-        link(rel = "stylesheet", href = ".perseus/static/org.css")
+        link(rel = "stylesheet", href = ".perseus/static/org.css") {}
+        meta(name = "description", content = post.description) {}
     }
 }
 

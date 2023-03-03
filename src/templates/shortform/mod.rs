@@ -49,6 +49,7 @@ pub struct Shortform {
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { ("The Ice Floes | The Arctic Site") }
+        meta(name = "description", content = "A list of shortform posts I've made.") {}
     }
 }
 

@@ -59,6 +59,7 @@ struct Posts {
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "The Arctic Circle | The Arctic Site" }
+        meta(name = "description", content = "A list of all the posts I've made on my blog.") {}
     }
 }
 

@@ -22,7 +22,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::contact::get_template())
         .error_views(crate::error_views::get_error_views())
         .index_view(|cx| sycamore::view! { cx,
-            html(class = "light") {
+            html(lang = "en-US", class = "light") {
                 head {
                     meta(charset = "UTF-8") {}
                     meta(name = "viewport", content = "width=device-width, initial-scale=1.0") {}

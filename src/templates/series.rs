@@ -57,8 +57,10 @@ struct Series {
 
 #[engine_only_fn]
 fn head(cx: Scope, series: Series) -> View<SsrNode> {
+    let series = create_ref(cx, series);
     view! { cx,
-        title { (format!("{} (Series) | The Arctic Circle", series.name)) }
+        title { (format!("{} (Series) | The Arctic Circle", &series.name)) }
+        meta(name = "description", content = format!("The post series entitled '{}'.", &series.name)) {}
     }
 }
 

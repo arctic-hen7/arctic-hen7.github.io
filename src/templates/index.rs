@@ -70,6 +70,7 @@ fn index_page<G: Html>(cx: Scope) -> View<G> {
 pub fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "Home | The Arctic Site" }
+        meta(name = "description", content = "The landing page, where you can learn about who I am and what I do.")
     }
 }
 

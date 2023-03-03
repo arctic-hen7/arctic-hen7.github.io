@@ -53,8 +53,10 @@ struct Tag {
 
 #[engine_only_fn]
 fn head(cx: Scope, tag: Tag) -> View<SsrNode> {
+    let tag = create_ref(cx, tag);
     view! { cx,
         title { (format!("Posts tagged '{}' | The Arctic Circle", tag.name)) }
+        meta(name = "description", content = format!("A list of posts in the '{}' tag.", &tag.name)) {}
     }
 }
 

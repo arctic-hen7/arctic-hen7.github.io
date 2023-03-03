@@ -102,6 +102,7 @@ fn ContactEntry<'a, G: Html>(cx: Scope<'a>, props: ContactEntryProps<'a>) -> Vie
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "Contact Me | The Arctic Site" }
+        meta(name = "description", content = "How you can contact me.")
     }
 }
 

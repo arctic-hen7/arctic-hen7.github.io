@@ -115,6 +115,7 @@ struct AboutState {
 fn head(cx: Scope) -> View<SsrNode> {
     view! { cx,
         title { "About Me | The Arctic Site" }
+        meta(name = "description", content = "All about me, and what I've done.") {}
     }
 }
 
