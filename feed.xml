@@ -12,6 +12,12 @@
     <language>en-us</language>
 </item>
 <item>
+    <title>Learn Rust Webdev by Creating a Custom CV Site</title>
+    <link>https://arctic-hen7.github.io/post/7adca2f7-ab95-41e1-8d0d-4bbc020ca018</link>
+    <description>A crash-course in Rust web development using Perseus to create a custom CV website.</description>
+    <language>en-us</language>
+</item>
+<item>
     <title>Gradient Text on Safari</title>
     <link>https://arctic-hen7.github.io/post/eede1692-be41-404a-93e8-d4b048db21bc</link>
     <description>How to fix missing gradient text on Safari.</description>
