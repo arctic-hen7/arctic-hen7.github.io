@@ -24,11 +24,11 @@ pub fn SingleShortform<G: Html>(cx: Scope, shortform: Shortform) -> View<G> {
             div(class = "flex justify-between items-center mb-1") {
                 div(class = "flex items-center") {
                     (author_profile_pic)
-                    object(class = "inline-flex items-center max-h-[0.1rem]", type = "invalid/mime-type") {
+                    object(class = "inline-flex items-center", type = "invalid/mime-type") {
                         a(class = "ml-2 font-bold", href = author_home_url, target = "blank") { (author_name) }
                     }
                 }
-                span(class = "italic text-neutral-400") { (format!("at {} on {}", time, date)) }
+                span(class = "ml-2 italic text-neutral-400") { (format!("at {} on {}", time, date)) }
             }
             // TODO Is this unacceptably risky?
             div(class = "styled-prose", dangerously_set_inner_html = &shortform.content)

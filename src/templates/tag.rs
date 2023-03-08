@@ -22,7 +22,7 @@ fn tag_page<G: Html>(cx: Scope, tag: &TagRx) -> View<G> {
                             (author_profile_pic)
                             // Nested links aren't allowed under the HTML spec, but this works
                             // Source: https://kizu.dev/nested-links/
-                                object(class = "inline-flex items-center max-h-[0.1rem]", type = "invalid/mime-type") {
+                                object(class = "inline-flex items-center", type = "invalid/mime-type") {
                                     a(class = "ml-2 font-semibold", href = author_home_url, target = "blank") { (author_name) }
                                 }
                         }
