@@ -3,6 +3,9 @@ on:
     push:
         branches:
             - main
+    # Rebuild for the gong at 6:15am Sydney time daily
+    schedule:
+      - cron: "15 20 * * *"
 
 jobs:
     build:
