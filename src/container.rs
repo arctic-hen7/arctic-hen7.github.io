@@ -38,7 +38,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
                         p {
                             "Error: I did not wake up on time today! "
                             a(
-                                href = "test",
+                                href = "post/4726b90d-613e-4a45-b419-44cd6ec887a4",
                                 class = "underline"
                             ) { "Learn more" }
                             "."
