@@ -22,6 +22,8 @@ anyhow = "1"
 uuid = { version = "1", features = [ "v4", "serde" ] }
 pulldown-cmark = "0.9"
 toml = "0.7"
+reqwest = { version = "0.11", features = [ "json" ] }
+chrono = "0.4"
 
 # Browser-only dependencies go here
 [target.'cfg(client)'.dependencies]

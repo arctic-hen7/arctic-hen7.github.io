@@ -1,5 +1,6 @@
 mod container;
 mod error_views;
+mod global_state;
 mod post;
 mod rss;
 mod templates;
@@ -20,6 +21,7 @@ pub fn main<G: Html>() -> PerseusApp<G> {
         .template(crate::templates::series::get_template())
         .template(crate::templates::shortform::get_template())
         .template(crate::templates::contact::get_template())
+        .global_state_creator(crate::global_state::get_gsc())
         .error_views(crate::error_views::get_error_views())
         .index_view(|cx| sycamore::view! { cx,
             html(lang = "en-US", class = "light") {

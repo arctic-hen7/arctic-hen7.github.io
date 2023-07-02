@@ -1,3 +1,5 @@
+use crate::global_state::AppStateRx;
+use perseus::reactor::Reactor;
 use sycamore::prelude::*;
 
 static COPYRIGHT_YEARS: &str = "2021-2022";
@@ -9,11 +11,45 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
     let menu_open = create_signal(cx, false);
     let toggle_menu = |_| menu_open.set(!*menu_open.get());
 
+    // Global state isn't accessible in error views, but we sometimes use global state there
+    let show_gong = !if props.route != CurrentRoute::NotFound {
+        let global_state: &AppStateRx = Reactor::<G>::from_cx(cx).get_global_state(cx);
+        *global_state.woke_up_on_time.get()
+    } else {
+        // Never display the gong in error views (the pages will cover my humiliation enough)
+        false
+    };
+
+    // The gong message takes up some room in the header, so our offset styles have to be adjusted a little
+    let offset_style = if show_gong {
+        "mt-24"
+    } else {
+        "mt-14 xs:mt-16 sm:mt-20 lg:mt-24"
+    };
+
     view! { cx,
         header(
-            class = "sm:p-2 w-full mb-20 backdrop-blur-lg {}",
+            class = "w-full mb-20 backdrop-blur-lg {}",
         ) {
-            div(class = "flex justify-between xl:justify-center items-center") {
+            (if show_gong {
+                view! {
+                    cx,
+                    div(class = "bg-red-400 text-white w-full flex justify-center p-1 px-2 font-bold font-mono") {
+                        p {
+                            "Error: I did not wake up on time today! "
+                            a(
+                                href = "test",
+                                class = "underline"
+                            ) { "Learn more" }
+                            "."
+                        }
+                    }
+                }
+            } else {
+                View::empty()
+            })
+
+            div(class = "sm:p-2 flex justify-between xl:justify-center items-center") {
                 a(class = "justify-self-start self-center m-3 ml-5 text-lg sm:text-xl text-bold title-font", href = "/") {
                     "The Arctic Site"
                 }
@@ -50,7 +86,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
             nav(
                 id = "mobile_nav_menu",
                 class = format!(
-                    "md:hidden w-full text-center justify-center {}",
+                    "sm:p-2 md:hidden w-full text-center justify-center {}",
                     if *menu_open.get() {
                         "flex flex-col"
                     } else {
@@ -65,7 +101,7 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
         }
         main(
             class = if props.offset_top {
-                "mt-14 xs:mt-16 sm:mt-20 lg:mt-24"
+                offset_style
             } else { "" }
         ) {
             (children)
