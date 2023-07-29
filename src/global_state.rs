@@ -25,9 +25,9 @@ async fn get_build_state() -> Result<AppState, anyhow::Error> {
     let local_tz = FixedOffset::east_opt(10 * 3600).unwrap(); // UTC + 10:00
     let local_wakeup = Utc::now()
         .with_timezone(&local_tz)
-        .with_hour(6)
+        .with_hour(5)
         .unwrap()
-        .with_minute(5)
+        .with_minute(53)
         .unwrap()
         .with_second(0)
         .unwrap()
