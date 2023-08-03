@@ -31,23 +31,23 @@ pub fn Container<'a, G: Html>(cx: Scope<'a>, props: ContainerProps<'a, G>) -> Vi
         header(
             class = "w-full mb-20 backdrop-blur-lg {}",
         ) {
-            (if show_gong {
-                view! {
-                    cx,
-                    div(class = "bg-red-400 text-white w-full flex justify-center p-1 px-2 font-bold font-mono") {
-                        p {
-                            "Error: I did not wake up on time today! "
-                            a(
-                                href = "post/4726b90d-613e-4a45-b419-44cd6ec887a4",
-                                class = "underline"
-                            ) { "Learn more" }
-                            "."
-                        }
-                    }
-                }
-            } else {
-                View::empty()
-            })
+            // (if show_gong {
+            //     view! {
+            //         cx,
+            //         div(class = "bg-red-400 text-white w-full flex justify-center p-1 px-2 font-bold font-mono") {
+            //             p {
+            //                 "Error: I did not wake up on time today! "
+            //                 a(
+            //                     href = "post/4726b90d-613e-4a45-b419-44cd6ec887a4",
+            //                     class = "underline"
+            //                 ) { "Learn more" }
+            //                 "."
+            //             }
+            //         }
+            //     }
+            // } else {
+            //     View::empty()
+            // })
 
             div(class = "sm:p-2 flex justify-between xl:justify-center items-center") {
                 a(class = "justify-self-start self-center m-3 ml-5 text-lg sm:text-xl text-bold title-font", href = "/") {
