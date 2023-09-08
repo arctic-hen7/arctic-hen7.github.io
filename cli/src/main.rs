@@ -1,10 +1,14 @@
-use anyhow::{anyhow, Result};
-
+use anyhow::{Result, Context};
 use crate::cli::CliState;
+#[cfg(feature = "blog")]
+use anyhow::anyhow;
 
 mod cli;
+#[cfg(feature = "blog")]
 mod import_post;
+#[cfg(feature = "blog")]
 mod list_posts;
+#[cfg(feature = "blog")]
 mod parse_post;
 mod post;
 mod shortform;
@@ -40,14 +44,23 @@ async fn main() {
 }
 
 async fn core() -> Result<()> {
-    let args = std::env::args().collect::<Vec<_>>();
-    let search_dir = args.get(1).ok_or(anyhow!("no search directory provided"))?;
+    #[cfg(feature = "blog")]
+    let search_dir = {
+        let args = std::env::args().collect::<Vec<_>>();
+        let search_dir = args.get(1).ok_or(anyhow!("no search directory provided"))?;
+        search_dir.to_string()
+    };
 
     // We'll find our dotenv config file from another environment variable
     let dotenv_location = std::env::var("DELILAH_CONF").unwrap_or(".env".to_string());
-    dotenv::from_filename(dotenv_location).expect("Failed to load environment variables");
+    dotenv::from_filename(dotenv_location).context("Failed to load environment variables")?;
 
     shortform::get_client().await?;
-    let mut state = CliState::new("../.blog", search_dir)?;
+    let mut state = CliState::new(
+        #[cfg(feature = "blog")]
+        "../.blog",
+        #[cfg(feature = "blog")]
+        search_dir
+    )?;
     state.start()
 }

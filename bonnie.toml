@@ -35,6 +35,6 @@ site.subcommands.deploy-prod.desc = "builds the website for production on GitHub
 
 cli.cmd = [
     "cd cli",
-    "cargo run %%"
+    "cargo run --features blog -- %%"
 ]
 cli.desc = "runs the given command in the cli for the site"

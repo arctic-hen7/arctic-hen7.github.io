@@ -1,14 +1,12 @@
 use anyhow::Result;
 use futures::executor::block_on;
-use std::{
-    io::{self, Write},
-    path::{Path, PathBuf},
-};
+use std::io::{self, Write};
+#[cfg(feature = "blog")]
+use std::path::{Path, PathBuf};
 
-use crate::{
-    list_posts::PostsList,
-    shortform::{create_shortform, delete_shortform, list_shortforms},
-};
+use crate::shortform::{create_shortform, delete_shortform, list_shortforms};
+#[cfg(feature = "blog")]
+use crate::list_posts::PostsList;
 
 static HELP_MENU: &str = r#"You can run any of the following commands:
 help                    Prints this help page
@@ -25,15 +23,24 @@ exit                    Exits the CLI
 /// The current state of the CLI.
 pub struct CliState {
     /// An internal list of posts for actually working with the blog post system.
+    #[cfg(feature = "blog")]
     posts_list: PostsList,
     /// The directory to search for posts in.
+    #[cfg(feature = "blog")]
     search_dir: PathBuf,
 }
 impl CliState {
     /// Instantiates a new CLI state.
-    pub fn new(blog_dir: impl AsRef<Path>, search_dir: impl AsRef<Path>) -> Result<Self> {
+    pub fn new(
+        #[cfg(feature = "blog")]
+        blog_dir: impl AsRef<Path>,
+        #[cfg(feature = "blog")]
+        search_dir: impl AsRef<Path>
+    ) -> Result<Self> {
         Ok(Self {
+            #[cfg(feature = "blog")]
             posts_list: PostsList::new(blog_dir.as_ref())?,
+            #[cfg(feature = "blog")]
             search_dir: search_dir.as_ref().to_path_buf(),
         })
     }
@@ -64,6 +71,7 @@ impl CliState {
         match cmd {
             // No continued conversation from help
             "help" => Self::show_help(),
+            #[cfg(feature = "blog")]
             "blog detect new" => {
                 let new = self.posts_list.detect_new(&self.search_dir)?;
                 let list = new
@@ -83,6 +91,7 @@ impl CliState {
                     self.posts_list.add_post(&path, &self.search_dir)?;
                 }
             }
+            #[cfg(feature = "blog")]
             "blog detect changes" => {
                 let new = self.posts_list.detect_changes(&self.search_dir)?;
                 let list = new
@@ -103,6 +112,7 @@ impl CliState {
                     self.posts_list.update_post(&display, &self.search_dir)?;
                 }
             }
+            #[cfg(feature = "blog")]
             "blog import file" => {
                 let path = self.prompt("path")?;
                 self.posts_list
@@ -164,6 +174,7 @@ impl CliState {
                     let id = match id {
                         ListData::String(id) => id,
                         // We know what we put in
+                        #[cfg(feature = "blog")]
                         _ => unreachable!(),
                     };
                     block_on(delete_shortform(&id))?;
@@ -271,5 +282,6 @@ impl CliState {
 #[derive(Clone)]
 pub enum ListData {
     String(String),
+    #[cfg(feature = "blog")]
     Path(PathBuf),
 }
