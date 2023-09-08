@@ -11,8 +11,6 @@ mod shortform;
 
 #[tokio::main]
 async fn main() {
-    dotenv::dotenv().expect("Failed to load environment variables");
-
     // Preamble
     // Source: https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Bloody&text=Delilah
     println!(
@@ -44,6 +42,10 @@ async fn main() {
 async fn core() -> Result<()> {
     let args = std::env::args().collect::<Vec<_>>();
     let search_dir = args.get(1).ok_or(anyhow!("no search directory provided"))?;
+
+    // We'll find our dotenv config file from another environment variable
+    let dotenv_location = std::env::var("DELILAH_CONF").unwrap_or(".env".to_string());
+    dotenv::from_filename(dotenv_location).expect("Failed to load environment variables");
 
     shortform::get_client().await?;
     let mut state = CliState::new("../.blog", search_dir)?;

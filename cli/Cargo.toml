@@ -20,3 +20,7 @@ base64 = "0.5" # Yes, this is outdated, but it supports MIME encodings
 pulldown-cmark = "0.9"
 katex = "0.4"
 futures = "0.3"
+
+[[bin]]
+path = "src/main.rs"
+name = "delilah"
