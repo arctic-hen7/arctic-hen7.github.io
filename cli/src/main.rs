@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use crate::cli::CliState;
 
@@ -30,13 +30,6 @@ async fn main() {
     "#
     );
 
-    // We rely on `C-C` to exit, so give a nice message when that happens
-    ctrlc::set_handler(move || {
-        println!();
-        println!("Exiting...have a lovely day! 😊");
-    })
-    .expect("Error setting Ctrl-C handler");
-
     println!("Hey there, I'm Delilah! I'm your personal blog assistant, you can ask me to import blog posts automatically from your Zettelkasten, or any arbitrary file. Many of the commands you use here will produce a numbered list, which can be acted on using operators like `1, 2 , 3`, and ranges like `1-4, 5-6`.");
 
     // 1. Initialise a shortform client
@@ -49,7 +42,8 @@ async fn main() {
 }
 
 async fn core() -> Result<()> {
-    let search_dir = std::env::var("SEARCH_DIR").expect("No search directory provided");
+    let args = std::env::args().collect::<Vec<_>>();
+    let search_dir = args.get(1).ok_or(anyhow!("no search directory provided"))?;
 
     shortform::get_client().await?;
     let mut state = CliState::new("../.blog", search_dir)?;

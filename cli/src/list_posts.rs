@@ -1,4 +1,7 @@
-use crate::{parse_post::OrgFile, post::*};
+use crate::{
+    parse_post::{is_post_public, parse_frontmatter},
+    post::*,
+};
 use anyhow::{anyhow, bail, Context, Result};
 use std::{
     collections::HashMap,
@@ -38,7 +41,7 @@ impl PostsList {
     }
     /// Detects any changes to currently indexed posts, returning a list of them for the user to choose to act on
     /// individually.
-    pub fn detect_changes(&self) -> Result<Vec<String>> {
+    pub fn detect_changes(&self, search_dir: &Path) -> Result<Vec<String>> {
         let mut modified = Vec::new();
 
         for (display, path) in self.posts.iter() {
@@ -48,19 +51,23 @@ impl PostsList {
                 .context("Failed to deserialize file in blog index")?;
 
             // Now check if the source file has changed on disk by modification time
-            let curr_mtime = fs::metadata(&post.source)
-                .context("Failed to get metadata for source of post file")?
-                .modified()
-                .context("Failed to get modification time for source of post file")?;
-            let last_known_mtime = post.mtime;
-            if last_known_mtime < curr_mtime {
-                modified.push(display.to_string());
+            // Some posts are legacy from the old system, we won't check those
+            if post.source != Path::new(".") {
+                let full_path = search_dir.join(&post.source);
+                let curr_mtime = fs::metadata(&full_path)
+                    .context("Failed to get metadata for source of post file")?
+                    .modified()
+                    .context("Failed to get modification time for source of post file")?;
+                let last_known_mtime = post.mtime;
+                if last_known_mtime < curr_mtime {
+                    modified.push(display.to_string());
+                }
             }
         }
 
         Ok(modified)
     }
-    /// Detects any new posts in the given Zettelkasten directory, which is assumed to be a flat file system.
+    /// Detects any new posts in the given directory, which is assumed to be a flat file system.
     ///
     /// This returns a list of display names for posts, and their source file paths. This function parses all
     /// the Org files in the gioven search directory, but does not attempt to convert any to posts.
@@ -71,20 +78,23 @@ impl PostsList {
             // Rule out any directories or non-Org files
             if entry
                 .file_type()
-                .context("Failed to get file type of original Org file")?
+                .context("Failed to get file type of original markdown file")?
                 .is_dir()
-                || entry.path().extension() != Some(OsStr::new("org"))
+                || entry.path().extension() != Some(OsStr::new("md"))
             {
                 continue;
             }
-            // Parse this file as an Org file
-            let file = OrgFile::new(&entry.path())?;
-            if file.is_post() {
-                let title = file.metadata.get("title").ok_or(anyhow!(
+            let contents =
+                fs::read_to_string(&entry.path()).with_context(|| "failed to read post file")?;
+            // Parse the frontmatter (not the content)
+            let (metadata, _) = parse_frontmatter(contents, false);
+            // Check if it's ready for publication
+            if is_post_public(&metadata) {
+                let title = metadata.get("title").ok_or(anyhow!(
                     "Post file '{}' has no title",
                     entry.path().to_string_lossy()
                 ))?;
-                let author = match file.metadata.get("author") {
+                let author = match metadata.get("author") {
                     Some(author) => PostAuthor::from_metadata(author)?,
                     // I am the default
                     None => PostAuthor::Me,
@@ -116,15 +126,15 @@ impl PostsList {
         }
     }
     /// Adds the post at the given path on the filesystem.
-    pub fn add_post(&mut self, path: &Path) -> Result<()> {
+    pub fn add_post(&mut self, path: &Path, search_dir: &Path) -> Result<()> {
         // Just import the file
-        let (post, index_path) = FullPost::new(&OrgFile::new(path)?, &self.blog_dir)?;
+        let (post, index_path) = FullPost::new(path, &self.blog_dir, search_dir)?;
         let display = get_post_display(&post.post.title, &post.post.author);
         self.posts.insert(display, index_path);
         Ok(())
     }
     /// Updates a given post by its title by re-importing it (this may lead to the title changing).
-    pub fn update_post(&mut self, title: &str) -> Result<()> {
+    pub fn update_post(&mut self, title: &str, search_dir: &Path) -> Result<()> {
         // Get the post itself (removing it, since we'll re-add it completely, potentially with a new title)
         let index_path = self.posts.remove(title);
         if let Some(index_path) = index_path {
@@ -134,7 +144,7 @@ impl PostsList {
                 .context("Failed to deserialize file in blog index")?;
 
             // And now add it back as usual!
-            self.add_post(&post.source)
+            self.add_post(&post.source, search_dir)
         } else {
             bail!("No post exists in the current posts list by the title '{}' (filesystem modification?)", title);
         }

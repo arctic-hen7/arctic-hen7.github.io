@@ -19,7 +19,7 @@ shortform new           Creates a new shortform post
 shortform delete        Deletes an existing shortform post
 shortform list          Lists all shortform posts
 
-(To leave, just press C-C.)
+exit                    Exits the CLI
 "#;
 
 /// The current state of the CLI.
@@ -39,10 +39,13 @@ impl CliState {
     }
     /// Starts the CLI off with an initial prompt.
     pub fn start(&mut self) -> Result<()> {
-        let input = self.prompt("command")?;
-        // This will start a cycle that will terminate once the command is complete, in which case we should restart
-        self.parse_cmd(&input)?;
-        self.start()
+        loop {
+            let input = self.prompt("command")?;
+            // This will start a cycle that will terminate once the command is complete, in which case we should restart
+            if self.parse_cmd(&input)? {
+                break Ok(());
+            }
+        }
     }
     /// Present the given prompt to the user and waits for their input, returning it.
     pub fn prompt(&mut self, prompt: &str) -> Result<String> {
@@ -55,7 +58,9 @@ impl CliState {
         Ok(input.to_string())
     }
     /// Parses the given user input as a command. This should only be called when no other operation is in progress.
-    fn parse_cmd(&mut self, cmd: &str) -> Result<()> {
+    ///
+    /// This will return `Ok(true)` if the CLI should terminate.
+    fn parse_cmd(&mut self, cmd: &str) -> Result<bool> {
         match cmd {
             // No continued conversation from help
             "help" => Self::show_help(),
@@ -65,6 +70,9 @@ impl CliState {
                     .into_iter()
                     .map(|(display, path)| (display, ListData::Path(path)))
                     .collect::<Vec<_>>();
+                if list.is_empty() {
+                    return Ok(false);
+                }
                 let selected = self.list(list, true)?;
                 for data in selected.into_iter() {
                     let path = match data {
@@ -72,16 +80,19 @@ impl CliState {
                         // We know what we put in
                         _ => unreachable!(),
                     };
-                    self.posts_list.add_post(&path)?;
+                    self.posts_list.add_post(&path, &self.search_dir)?;
                 }
             }
             "blog detect changes" => {
-                let new = self.posts_list.detect_changes()?;
+                let new = self.posts_list.detect_changes(&self.search_dir)?;
                 let list = new
                     .into_iter()
                     // We can use the display as an index for updating
                     .map(|display| (display.to_string(), ListData::String(display)))
                     .collect::<Vec<_>>();
+                if list.is_empty() {
+                    return Ok(false);
+                }
                 let selected = self.list(list, true)?;
                 for data in selected.into_iter() {
                     let display = match data {
@@ -89,12 +100,13 @@ impl CliState {
                         // We know what we put in
                         _ => unreachable!(),
                     };
-                    self.posts_list.update_post(&display)?;
+                    self.posts_list.update_post(&display, &self.search_dir)?;
                 }
             }
             "blog import file" => {
                 let path = self.prompt("path")?;
-                self.posts_list.add_post(Path::new(&path))?;
+                self.posts_list
+                    .add_post(Path::new(&path), &self.search_dir)?;
             }
             "shortform new" => {
                 // Prompt the user for contents (Markdown)
@@ -157,12 +169,13 @@ impl CliState {
                     block_on(delete_shortform(&id))?;
                 }
             }
+            "exit" => return Ok(true),
             _ => eprintln!(
                 "Invalid command '{}', type 'help' to see the available commands.",
                 cmd
             ),
         };
-        Ok(())
+        Ok(false)
     }
     /// Present the given list to the user, updating the internal cache. This will await the user's choices.
     pub fn list(&mut self, list: Vec<(String, ListData)>, select: bool) -> Result<Vec<ListData>> {
