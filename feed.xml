@@ -53,6 +53,12 @@
     <description>A crash-course in Rust web development using Perseus to create a custom CV website.</description>
     <language>en-us</language>
 </item>
+<item>
+    <title>Introducing Sotto</title>
+    <link>https://arctic-hen7.github.io/post/sotto</link>
+    <description>It's time to empower the visually impaired to use computers just as effectively as the rest of us.</description>
+    <language>en-us</language>
+</item>
 </channel>
 <channel>
     <title>The Ice Floes</title>
