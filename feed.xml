@@ -6,33 +6,9 @@
     <link>https://arctic-hen7.github.io/posts</link>
     <description>Blog posts and papers about programming, economics, philosophy, and just about everything else.</description>
     <item>
-    <title>Versioned Docs with mdBook</title>
-    <link>https://arctic-hen7.github.io/post/03ab02d7-f196-46d7-a1f9-d0c951245889</link>
-    <description>How to create performant, versioned documentation for free with mdBook and GitHub Pages.</description>
-    <language>en-us</language>
-</item>
-<item>
-    <title>Learn Rust Webdev by Creating a Custom CV Site</title>
-    <link>https://arctic-hen7.github.io/post/7adca2f7-ab95-41e1-8d0d-4bbc020ca018</link>
-    <description>A crash-course in Rust web development using Perseus to create a custom CV website.</description>
-    <language>en-us</language>
-</item>
-<item>
-    <title>Introducing Sotto</title>
-    <link>https://arctic-hen7.github.io/post/sotto</link>
-    <description>It's time to empower the visually impaired to use computers just as effectively as the rest of us.</description>
-    <language>en-us</language>
-</item>
-<item>
-    <title>How to Build Good Habits Like an Autocrat</title>
-    <link>https://arctic-hen7.github.io/post/4726b90d-613e-4a45-b419-44cd6ec887a4</link>
-    <description>An introduction to the FaRR method.</description>
-    <language>en-us</language>
-</item>
-<item>
-    <title>How to Fix a Broken Ubuntu Machine After Uninstalling Rollup</title>
-    <link>https://arctic-hen7.github.io/post/bbb3e057-0f97-45a2-aa05-e791802fceee</link>
-    <description>A pretty simple fix to a downright weird problem.</description>
+    <title>Humans Will Still Have Jobs in 500 Years — Here's Why</title>
+    <link>https://arctic-hen7.github.io/post/5633d380-fede-4c98-8c31-fc21610e4e5e</link>
+    <description>Some basic economics quickly dispells this particular doomsday prediction.</description>
     <language>en-us</language>
 </item>
 <item>
@@ -42,21 +18,45 @@
     <language>en-us</language>
 </item>
 <item>
+    <title>How to Build Good Habits Like an Autocrat</title>
+    <link>https://arctic-hen7.github.io/post/4726b90d-613e-4a45-b419-44cd6ec887a4</link>
+    <description>An introduction to the FaRR method.</description>
+    <language>en-us</language>
+</item>
+<item>
+    <title>Introducing Sotto</title>
+    <link>https://arctic-hen7.github.io/post/sotto</link>
+    <description>It's time to empower the visually impaired to use computers just as effectively as the rest of us.</description>
+    <language>en-us</language>
+</item>
+<item>
+    <title>How to Fix a Broken Ubuntu Machine After Uninstalling Rollup</title>
+    <link>https://arctic-hen7.github.io/post/bbb3e057-0f97-45a2-aa05-e791802fceee</link>
+    <description>A pretty simple fix to a downright weird problem.</description>
+    <language>en-us</language>
+</item>
+<item>
     <title>Welcome to the 'Layer 2' of AI</title>
     <link>https://arctic-hen7.github.io/post/496eb33a-c137-4afa-a03c-2f165d522a98</link>
     <description>We're entering a brave new world, but it's not why you think.</description>
     <language>en-us</language>
 </item>
 <item>
-    <title>Humans Will Still Have Jobs in 500 Years — Here's Why</title>
-    <link>https://arctic-hen7.github.io/post/5633d380-fede-4c98-8c31-fc21610e4e5e</link>
-    <description>Some basic economics quickly dispells this particular doomsday prediction.</description>
-    <language>en-us</language>
-</item>
-<item>
     <title>Automation with Bonnie</title>
     <link>https://arctic-hen7.github.io/post/c26d230f-a546-4da0-be18-9857e168d7b9</link>
     <description>How to automate repetitive tasks in your projects with Bonnie.</description>
+    <language>en-us</language>
+</item>
+<item>
+    <title>Versioned Docs with mdBook</title>
+    <link>https://arctic-hen7.github.io/post/03ab02d7-f196-46d7-a1f9-d0c951245889</link>
+    <description>How to create performant, versioned documentation for free with mdBook and GitHub Pages.</description>
+    <language>en-us</language>
+</item>
+<item>
+    <title>Learn Rust Webdev by Creating a Custom CV Site</title>
+    <link>https://arctic-hen7.github.io/post/7adca2f7-ab95-41e1-8d0d-4bbc020ca018</link>
+    <description>A crash-course in Rust web development using Perseus to create a custom CV website.</description>
     <language>en-us</language>
 </item>
 </channel>
