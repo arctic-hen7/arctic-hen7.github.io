@@ -4,21 +4,50 @@ description = "My personal projects throughout my life."
 time = [ "2005", "Present" ]
 
 [[projects]]
-name = "Bonnie"
+name = "Sotto"
 role = "Founder and maintainer"
 status = "Ongoing"
-time = [ "2021", "Present" ]
+time = [ "2023", "Present" ]
+link = "https://github.com/arctic-hen7/sotto"
+description = "An app that lets users write and edit text using purely their voice. (Link is to a less capable open-source version.)"
+achievements = [
+    "Received micro-grant funding from UNSW Founders after pitching in the 2023 Digital Makers Competition"
+]
+
+[[projects]]
+name = "Bonnie"
+role = "Founder and maintainer"
+status = "Complete for now"
+time = [ "2021", "2023" ]
 link = "https://github.com/arctic-hen7/bonnie"
 description = "Simple, cross-platform, and lightning fast command aliases with superpowers."
 achievements = [
-    "Led the project to over 7,000 downloads"
+    "Led the project to over 8,000 downloads"
 ]
+
+[[projects]]
+name = "Forne"
+role = "Founder and maintainer"
+status = "Complete for now"
+time = [ "2023", "2023" ]
+link = "https://github.com/arctic-hen7/forne"
+description = "A spaced repetition CLI/engine that can be programmed with completely custom learning algorithms (used regularly by me)."
+achievements = []
+
+[[projects]]
+name = "Bananapeel"
+role = "Founder and maintainer"
+status = "Ongoing"
+time = [ "2023", "Present" ]
+link = "https://github.com/arctic-hen7/bananapeel"
+description = "An obfuscation library with extremely powerful novel security properties. (Pending cryptographic review.)"
+achievements = []
 
 [[projects]]
 name = "Tribble"
 role = "Founder and maintainer"
-status = "Ongoing"
-time = [ "2021", "Present" ]
+status = "Complete for now"
+time = [ "2021", "2023" ]
 link = "https://github.com/arctic-hen7/tribble"
 description = "Automatic issue triaging through mini-websites for guiding users through contributing to open-source projects."
 achievements = []
@@ -37,12 +66,12 @@ achievements = [
 [[projects]]
 name = "Fmterr"
 role = "Founder and maintainer"
-status = "Ongoing"
+status = "Complete"
 time = [ "2021", "Present" ]
 link = "https://github.com/arctic-hen7/fmterr"
 description = "A drop-dead-simple error reporting library for Rust."
 achievements = [
-    "Brought the project to over 12,000 downloads without a single GitHub star 😉!"
+    "Brought the project to over 22,000 downloads without a single GitHub star 😉!"
 ]
 
 [[projects]]
@@ -57,7 +86,7 @@ achievements = []
 [[projects]]
 name = "IPEMS"
 role = "Founder and maintainer"
-status = "Archived (for now?)"
+status = "Archived"
 time = [ "2020", "2021" ]
 link = "https://github.com/arctic-hen7/ipems"
 description = "<i>(My very first open-source project, give it a star!)</i> The Internal Program Error Management System, designed for bringing the portability of HTTP status codes to all programs. This consists of a protocol and a JavaScript implementation."

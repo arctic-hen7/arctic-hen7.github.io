@@ -4,10 +4,54 @@ description = "I am currently enrolled in the Bachelor of Economics/Computer Sci
 time = [ "2023", "Present" ]
 
 [[projects]]
+name = "Bachelor of Economics/Computer Science"
+role = "Student (Undergraduate)"
+status = "Ongoing"
+time = [ "2023", "Present" ]
+link = "https://www.unsw.edu.au/study/undergraduate/bachelor-of-economics-computer-science"
+description = "The course I'm currently enrolled in. Achievements below list the courses I've completed in order. Weighted average mark: <b>86.9</b>."
+achievements = [
+    "COMP1511: Programming Fundamentals (97 HD)",
+    "ECON1101: Microeconomics 1 (83 DN)",
+    "MATH1131: Mathematics 1A (77 DN)",
+    "ECON1201: Macroeconomics 1 (87 HD)",
+    "COMM1190: Data, Insights and Decisions (80 DN)",
+    "MATH1081: Discrete Mathematics (86 HD)",
+    "ECON1401: Economic Perspectives (88 HD)",
+    "COMP1531: Software Engineering Fundamentals (94 HD)",
+    "MATH1231: Mathematics 1B (90 HD)"
+]
+
+[[projects]]
+name = "UNSW Founders"
+role = "Participant and regular event attendee"
+status = "Ongoing"
+time = [ "2023", "Present" ]
+link = "https://unswfounders.com"
+description = "I participate regularly in UNSW Founders events, coaching, and hackathons."
+achievements = [
+    "Jointly let a team of seven to first place in the 2023 Sustainable Development Goals hackathon, pitching a solution to raise awareness of relative poverty in Australia",
+    "Made the finals of the 2023 Digital Makers Competition, pitching <a class=\"text-blue-300 hover:text-blue-200 transition-colors duration-150\" href=\"/post/sotto\">Sotto</a>",
+    "Completed the 2023 Startup Year Bootcamp (intensive two-day program on pitching, idea validation, and core principles of startups)"
+]
+
+[[projects]]
 name = "Consortium for Inclusive Economics Education"
 role = "Website administrator"
 status = "Ongoing"
 time = [ "2023", "Present" ]
 link = "https://www.ciee.unsw.edu.au/"
 description = "An organisation founded to promote inclusion, equity, and quality in economics education and economic literacy, whose website I administer."
+achievements = [
+    "Built the website for the Australasian Economics Olympiad (AAEO): australasianeconolympiad.org",
+    "Helped run the inaugural AAEO in person in 2023"
+]
+
+[[projects]]
+name = "Leadership Foundations"
+role = "Participant and graduate"
+status = "Complete"
+time = [ "June 2023", "June 2023" ]
+link = "https://www.unsw.edu.au/employability/discover/unsw-leadership-foundations"
+description = "Completed the Leadership Foundations course, achieving AHEGS recognition."
 achievements = []
