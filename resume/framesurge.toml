@@ -17,21 +17,3 @@ achievements = [
     "Developed the capsules system, pioneering the model of page-driven development",
     "Built the infrastructure for Perseus to generate some of the fastest websites in the world consistently"
 ]
-
-[[projects]]
-name = "Andromeda"
-role = "Founder and maintainer"
-status = "In development"
-time = [ "2022", "Present" ]
-link = "https://github.com/framesurge/andromeda"
-description = "A backend framework for building fast and flexible APIs rapidly."
-achievements = []
-
-[[projects]]
-name = "Jacaranda"
-role = "Founder and maintainer"
-status = "In development"
-time = [ "2022", "Present" ]
-link = "https://github.com/framesurge/jacaranda"
-description = "A typed and reactive Rust styling system for the web and beyond."
-achievements = []
