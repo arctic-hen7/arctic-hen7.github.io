@@ -178,11 +178,17 @@ mod resume {
             ResumeTime::Year(year) => year.to_string(),
         };
 
-        view! { cx,
-            span {
-                (start)
-                span(dangerously_set_inner_html = "&ndash;") {}
-                (end)
+        if start == end {
+            view! { cx,
+                span { (start) }
+            }
+        } else {
+            view! { cx,
+                span {
+                    (start)
+                        span(dangerously_set_inner_html = "&ndash;") {}
+                    (end)
+                }
             }
         }
     }
