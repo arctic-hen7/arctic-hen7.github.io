@@ -55,7 +55,7 @@ jobs:
             - name: Install Tailwind
               run: npm i -g tailwindcss
 
-            - name: Build site
+            - name: Build site (including projects)
               run: bonnie site deploy-prod
 
             - name: Deploy site to GitHub Pages
