@@ -1,0 +1,62 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="{{ config.extra.primary_color }}" />
+  <link rel="canonical" href="{{ current_url | default(value='/') }}" />
+
+  <title>
+    {% if page.title %}
+      {{ page.title }} - {{ config.title }}
+    {% elif section.title %}
+      {{ section.title }} - {{ config.title }}
+    {% else %}
+      {{ config.title }}
+    {% endif %}
+  </title>
+
+  <link rel="stylesheet" href="{{ get_url(path='style.css') }}" />
+  {% if config.extra.stylesheets %}
+    {% for stylesheet in config.extra.stylesheets %}
+      <link rel="stylesheet" href="{{ get_url(path=stylesheet) }}" />
+    {% endfor %}
+  {% endif %}
+
+  <style>
+    :root {
+      --primary-color-alpha: {{ config.extra.primary_color_alpha }};
+      --primary-color: {{ config.extra.primary_color }};
+    }
+  </style>
+
+  {% if page.extra.emoji_favicon %}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ page.extra.emoji_favicon }}</text></svg>">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ page.extra.emoji_favicon }}</text></svg>">
+  {% elif section.extra.emoji_favicon %}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ section.extra.emoji_favicon }}</text></svg>">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ section.extra.emoji_favicon }}</text></svg>">
+  {% elif config.extra.emoji_favicon %}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ config.extra.emoji_favicon }}</text></svg>">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2290%22>{{ config.extra.emoji_favicon }}</text></svg>">
+  {% elif config.extra.animated_favicon %}
+    <link rel="icon" type="image/gif" href="{{ get_url(path='favicon.gif') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ get_url(path='apple-touch-icon.png') }}" />
+  {% else %}
+    <link rel="icon" type="image/png" href="{{ get_url(path='favicon.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ get_url(path='apple-touch-icon.png') }}" />
+  {% endif %}
+  {% if config.extra.comments %}
+  <link rel="me" href="https://{{ config.extra.comments.host }}/@{{ config.extra.comments.user }}" />
+  {% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ config.title }}" />
+  <meta property="og:title" content="
+    {% if page.title %} {{ page.title }} - {{ config.title }}
+    {% elif section.title %} {{ section.title }} - {{ config.title }}
+    {% else %} {{ config.title }} {% endif %}" />
+  <meta property="og:url" content="{{ current_url | default(value='/') }}" />
+  <meta property="og:description" content="{{ page.description | default(value=config.description) }}" />
+  <meta property="og:image" content="{{ get_url(path='card.png') }}" />
+  <meta property="twitter:card" content="summary_large_image" />
+</head>

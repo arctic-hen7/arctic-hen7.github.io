@@ -1,0 +1,40 @@
+<header id="site-nav">
+  <nav>
+    <a id="home" href="{{ get_url(path='') }}">
+      {% if config.extra.nav.icons %}
+        <i class="bi bi-house"></i>
+        <span>{{ config.title }}</span>
+      {% else %}
+        {{ config.title }}
+      {% endif %}
+    </a>
+    <ul>
+      {% for link in config.extra.nav.links %}
+      <li>
+        <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}">
+          {% if config.extra.nav.icons %}
+            {% if link.icon %}
+              <i class="bi bi-{{ link.icon }}"></i>
+              <span>{{ link.name }}</span>
+            {% else %}
+              {{ link.name }}
+            {% endif %}
+          {% else %}
+            {{ link.name }}
+          {% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% if config.extra.nav.show_feed %}
+    <a id="feed" href="{{ get_url(path='') }}/{{ config.feed_filename }}">
+      {% if config.extra.nav.icons %}
+        <i class="bi bi-rss"></i>
+        <span class="link-name">Feed</span>
+      {% else %}
+        Feed
+      {% endif %}
+    </a>
+    {% endif %}
+  </nav>
+</header>

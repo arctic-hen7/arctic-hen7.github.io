@@ -1,0 +1,14 @@
+#qrcode {
+  background-color: white;
+  float: right;
+  height: 155px;
+  margin: 3rem 0 0 0;
+  padding: 15px;
+  width: 155px;
+
+  @media screen and (max-width: 720px) {
+    & {
+      display: none;
+    }
+  }
+}

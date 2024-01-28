@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if page.extra.archive %}
+  <div class="statement-container archive">
+    <strong class="big">⚠ Archived</strong>
+    {{ page.extra.archive | markdown | safe }}
+  </div>
+{% endif %}
+{{ page.content | safe }}
+{% endblock content %}

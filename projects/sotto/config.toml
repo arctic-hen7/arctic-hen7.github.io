@@ -1,0 +1,30 @@
+title = "Sotto"
+author = "Sam Brew"
+base_url = "https://arctic-hen7.github.io/sotto"
+
+theme = "duckquill"
+
+[markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = false
+
+[extra]
+# Put all your custom variables here
+primary_color = "rgb(204, 161, 69)"
+primary_color_alpha = "rgb(204, 161, 69, 0.2)"
+issues_url = "https://github.com/arctic-hen7/arctic-hen7.github.io/issues"
+date_format = "%Y-%m-%d"
+
+[extra.nav]
+show_feed = false
+icons = true
+links = [
+    { url = "$BASE_URL/blog", name = "Posts", icon = "files" },
+    { url = "https://airtable.com/appZaSzaeT2dSinKb/pagh4Qclacy6hbv7e/form", name = "Survey", icon = "pencil-square" },
+    { url = "$BASE_URL/about", name = "About", icon = "info-circle" }
+]
+
+[extra.footer]
+show_copyright = true
+show_powered_by = true

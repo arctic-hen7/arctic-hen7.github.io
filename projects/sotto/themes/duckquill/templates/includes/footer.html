@@ -1,0 +1,13 @@
+<footer id="site-footer">
+  {% if config.extra.footer.show_copyright %}
+    <p>&copy; {{ config.author }}, {{ now() | date(format="%Y") }}</p>
+  {% endif %}
+
+  {% if config.extra.footer.show_source %}
+    <p><a href="{{ config.extra.source_url }}">Website source</a></p>
+  {% endif %}
+
+  {% if config.extra.footer.show_powered_by %}
+    <p><small>Powered by <a href="https://www.getzola.org">Zola</a> and <a href="https://daudix.codeberg.page/duckquill">Duckquill</a></small></p>
+  {% endif %}
+</footer>
