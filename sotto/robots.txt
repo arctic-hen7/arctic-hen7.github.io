@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+Allow: /
+Sitemap: https://arctic-hen7.github.io/sotto/sitemap.xml
